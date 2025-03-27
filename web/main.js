@@ -51,12 +51,11 @@ $(document).ready(function () {
                 }))
                 alert(`已通知 ${cls}-${num}${Name}`)
             })
-
         })
         console.log(data)
     }
-    var classNum = "";
-    var body = $("body");
+    let classNum = "";
+    let body = $("body");
     // body.append("<h1>npm</h1>");
     // body.append("<p>6</p>");
     body.css("background-color", "pink");
@@ -68,6 +67,5 @@ $(document).ready(function () {
         }))
         console.log(classNum);
         $("#btnGroup").empty();
-
     })
 });
