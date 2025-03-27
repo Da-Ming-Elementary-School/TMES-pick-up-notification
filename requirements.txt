@@ -1,0 +1,4 @@
+PyQt5==5.15.11
+PyQt6==6.8.1
+websockets==15.0.1
+colorlog==6.9.0
