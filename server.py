@@ -75,7 +75,7 @@ async def handler(websocket: ServerConnection):
 
 
 async def main():
-    async with serve(handler, "", 8001, ping_interval=None, ping_timeout=None) as server:
+    async with serve(handler, "", 8001, ping_timeout=None) as server:
         await asyncio.Future()
 
 
