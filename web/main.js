@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    const WS = new WebSocket("ws://localhost:8001");
     const storage = window.localStorage;
     let wsUrl = storage.getItem("wsUrl");
     if (wsUrl == null) {
@@ -8,7 +7,24 @@ $(document).ready(function () {
     }
 
     const WS = new WebSocket(wsUrl);
+    $("#wsUrlDisplay").text(wsUrl);
 
+    WS.onopen = function () {
+        $("#wsUrlDisplay").css("color", "green");
+    }
+
+    WS.onerror = function (e) {
+        console.error(e);
+        alert("與伺服器連接失敗。請嘗試重新整理網頁，或檢查伺服器位址是否正確。");
+        $("#wsUrlDisplay").css("color", "red");
+    }
+
+    WS.onclose = function (e) {
+        if (e.code > 1001 && e.code !== 1006) {
+            alert(`與伺服器的連線中斷。請嘗試重新整理網頁，或檢查伺服器位址是否正確。\n錯誤代碼：${e.code}`)
+        }
+        $("#wsUrlDisplay").css("color", "red");
+    }
 
     WS.onmessage = function (event) {
         const data = JSON.parse(event.data);
