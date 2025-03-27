@@ -41,9 +41,9 @@ $(document).ready(function () {
             butMode.value = clsNum + "-" + seatNum + name;
             $("#btnGroup").append(butMode);
             $(`#${clsNum}-${seatNum}`).click(function (event) {
-                const cls = this.id.slice(0,this.id.indexOf("-"))
-                const num = this.id.slice(this.id.indexOf("-") + 1,this.id.length)
-                const Name = this.value.slice(this.id.length , this.value.length)
+                const cls = this.id.slice(0, this.id.indexOf("-"))
+                const num = this.id.slice(this.id.indexOf("-") + 1, this.id.length)
+                const Name = this.value.slice(this.id.length, this.value.length)
                 WS.send(JSON.stringify({
                     "classNo": cls,
                     "seatNo": num,
