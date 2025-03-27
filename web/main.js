@@ -1,5 +1,13 @@
 $(document).ready(function () {
     const WS = new WebSocket("ws://localhost:8001");
+    const storage = window.localStorage;
+    let wsUrl = storage.getItem("wsUrl");
+    if (wsUrl == null) {
+        wsUrl = prompt("請輸入伺服器端的 IP 及端口 (如：ws://localhost:8001)");
+        storage.setItem("wsUrl", wsUrl);
+    }
+
+    const WS = new WebSocket(wsUrl);
 
 
     WS.onmessage = function (event) {
