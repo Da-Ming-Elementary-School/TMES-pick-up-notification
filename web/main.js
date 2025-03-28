@@ -1,10 +1,5 @@
 $(document).ready(function () {
-    const storage = window.localStorage;
-    let wsUrl = storage.getItem("wsUrl");
-    if(wsUrl == null) {
-        wsUrl = prompt("請輸入伺服器端的 IP 及端口 (如：ws://localhost:8001)");
-        storage.setItem("wsUrl", wsUrl);
-    }
+    let wsUrl = configServerUrl()
 
     const WS = new WebSocket(wsUrl);
     $("#wsUrlDisplay").text(wsUrl);
@@ -41,9 +36,9 @@ $(document).ready(function () {
             butMode.value = clsNum + "-" + seatNum + name;
             $("#btnGroup").append(butMode);
             $(`#${clsNum}-${seatNum}`).click(function (event) {
-                const cls = this.id.slice(0,this.id.indexOf("-"))
-                const num = this.id.slice(this.id.indexOf("-") + 1,this.id.length)
-                const Name = this.value.slice(this.id.length , this.value.length)
+                const cls = this.id.slice(0, this.id.indexOf("-"))
+                const num = this.id.slice(this.id.indexOf("-") + 1, this.id.length)
+                const Name = this.value.slice(this.id.length, this.value.length)
                 WS.send(JSON.stringify({
                     "classNo": cls,
                     "seatNo": num,
@@ -77,3 +72,20 @@ $(document).ready(function () {
         })
     })
 });
+
+$("#clearStorageUrl").on("click", function () {
+    window.localStorage.removeItem("wsUrl")
+    configServerUrl()
+    window.location.reload()
+})
+
+function configServerUrl() {
+    const storage = window.localStorage;
+    let wsUrl = storage.getItem("wsUrl");
+    if (wsUrl === null) {
+        wsUrl = prompt("請輸入伺服器端的 IP 及端口 (如：ws://localhost:8001)");
+        storage.setItem("wsUrl", wsUrl);
+    }
+
+    return wsUrl;
+}
