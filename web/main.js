@@ -1,10 +1,5 @@
 $(document).ready(function () {
-    const storage = window.localStorage;
-    let wsUrl = storage.getItem("wsUrl");
-    if (wsUrl == null) {
-        wsUrl = prompt("請輸入伺服器端的 IP 及端口 (如：ws://localhost:8001)");
-        storage.setItem("wsUrl", wsUrl);
-    }
+    let wsUrl = configServerUrl()
 
     const WS = new WebSocket(wsUrl);
     $("#wsUrlDisplay").text(wsUrl);
@@ -69,3 +64,20 @@ $(document).ready(function () {
         $("#btnGroup").empty();
     })
 });
+
+$("#clearStorageUrl").on("click", function () {
+    window.localStorage.removeItem("wsUrl")
+    configServerUrl()
+    window.location.reload()
+})
+
+function configServerUrl() {
+    const storage = window.localStorage;
+    let wsUrl = storage.getItem("wsUrl");
+    if (wsUrl === null) {
+        wsUrl = prompt("請輸入伺服器端的 IP 及端口 (如：ws://localhost:8001)");
+        storage.setItem("wsUrl", wsUrl);
+    }
+
+    return wsUrl;
+}
