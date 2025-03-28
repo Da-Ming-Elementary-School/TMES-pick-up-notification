@@ -6,6 +6,11 @@ $(document).ready(function () {
 
     WS.onopen = function () {
         $("#wsUrlDisplay").css("color", "green");
+        WS.send(JSON.stringify({
+            "type": "INIT",
+            "classNo": 777
+        }))
+        console.log("send")
     }
 
     WS.onerror = function (e) {
@@ -21,33 +26,57 @@ $(document).ready(function () {
         $("#wsUrlDisplay").css("color", "red");
     }
 
+
+
     WS.onmessage = function (event) {
         const data = JSON.parse(event.data);
-        const clsArray = data["students"];
-        $.each(clsArray, function (index, value) {
-            console.log(value);
-            const clsNum = value["classNo"]
-            const seatNum = value["seatNo"]
-            const name = value["name"]
-            const butMode = document.createElement("input");
-            butMode.type = "button";
-            butMode.id = clsNum + "-" + seatNum;
-            butMode.className = "btn2";
-            butMode.value = clsNum + "-" + seatNum + name;
-            $("#btnGroup").append(butMode);
-            $(`#${clsNum}-${seatNum}`).click(function (event) {
-                const cls = this.id.slice(0, this.id.indexOf("-"))
-                const num = this.id.slice(this.id.indexOf("-") + 1, this.id.length)
-                const Name = this.value.slice(this.id.length, this.value.length)
-                WS.send(JSON.stringify({
-                    "classNo": cls,
-                    "seatNo": num,
-                    "name": Name
-                }))
-                alert(`已通知 ${cls}-${num}${Name}`)
-            })
-        })
         console.log(data)
+        const clsArray = data["students"];
+        $(".btn").on("click", function () {
+            const studentArray = clsArray[parseInt(this.id)]
+            if (data["type"] === "STUDENT_LIST") {
+                $.each(studentArray, function (index, value) {
+                    console.log(value);
+                    const clsNum = value["classNo"]
+                    const seatNum = value["seatNo"]
+                    const name = value["name"]
+                    const butMode = document.createElement("input");
+                    butMode.type = "button";
+                    butMode.id = clsNum + "-" + seatNum;
+                    butMode.className = "btn2";
+                    butMode.value = clsNum + "-" + seatNum + name;
+                    $("#btnGroup").append(butMode);
+                    $(`#${clsNum}-${seatNum}`).click(function (event) {
+                        const cls = this.id.slice(0, this.id.indexOf("-"))
+                        const num = this.id.slice(this.id.indexOf("-") + 1, this.id.length)
+                        const Name = this.value.slice(this.id.length, this.value.length)
+                        WS.send(JSON.stringify({
+                            "type": "CALL_FOR_STUDENT",
+                            "targetClassNo": parseInt(this.id),
+                            "students":{
+                            "classNo": cls,
+                            "seatNo": num,
+                            "name": Name
+                        }
+                        }))
+                        alert(`已通知 ${cls}-${num}${Name}`)
+                    })
+                })
+            }
+        })
+        if (data["type"] === "CALL_FOR_STUDENT"){
+            const date = new Date();
+            const dateStr = date.toLocaleDateString();
+            const timeStr = date.toLocaleTimeString();
+            const currentTime = dateStr + " " + timeStr;
+            const studentArray = data["students"];
+            $.each(studentArray, function (index, value) {
+                const clsNum = value["classNo"]
+                const seatNum = value["seatNo"]
+                const name = value["name"]
+                $("#student-call").prepend(`<div id="${clsNum}-${seatNum}" class="calledDiv"><h2>${clsNum}-${seatNum}${name}</h2><br><p>${currentTime}</p></div>`)
+            })
+        }
     }
     let classNum = "";
     let body = $("body");
@@ -56,10 +85,10 @@ $(document).ready(function () {
     body.css("background-color", "pink");
     $(".btn").click(function () {
         classNum = this.id;
-        WS.send(JSON.stringify({
-            "type": "INIT",
-            "classNo": classNum
-        }))
+        // WS.send(JSON.stringify({
+        //     "type": "INIT",
+        //     "classNo": classNum
+        // }))
         console.log(classNum);
         $("#btnGroup").empty();
         $("#btnGroup").prepend(`<button class="clsBtn" id="classroom-${classNum}">${classNum}教室端</button>`)
@@ -69,6 +98,10 @@ $(document).ready(function () {
             console.log(this.id);
             $(".btn").hide();
             $("#btnGroup").hide();
+            WS.send(JSON.stringify({
+                "type": "INIT",
+                "classNo": "7" + this.id.slice(this.id.indexOf("-") + 1, this.id.length)
+            }))
         })
     })
 });

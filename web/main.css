@@ -87,3 +87,19 @@
     margin-right: 10%;
     margin-left: 10%;
 }
+
+.calledDiv {
+    border: 1px solid black;
+    display: inline-block;
+    margin-left: 1%;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+.calledDiv h2,p {
+    text-align: center;
+}
+
+#header {
+    display: block;
+}
