@@ -30,6 +30,6 @@ class StudentList:
         for f in os.listdir(StudentList.STUDENT_LIST_DIR):
             if not f.startswith('class_'):
                 continue
-            class_no = int(f.replace('class_', ''))
+            class_no = int(f.replace('class_', '').replace('.json', ''))
             all_student_lists[class_no] = StudentList(class_no=class_no).get_student_list()
         return all_student_lists
