@@ -65,10 +65,9 @@ $(document).ready(function () {
             }
         })
         if (data["type"] === "CALL_FOR_STUDENT"){
+            $("#header").append("<button id='backhome'>回選單</button>")
             const date = new Date();
-            const dateStr = date.toLocaleDateString();
-            const timeStr = date.toLocaleTimeString();
-            const currentTime = dateStr + " " + timeStr;
+            const currentTime = date.toLocaleDateString() + " " + date.toLocaleTimeString();
             const studentArray = data["students"];
             $.each(studentArray, function (index, value) {
                 const clsNum = value["classNo"]
@@ -103,8 +102,13 @@ $(document).ready(function () {
                 "classNo": "7" + this.id.slice(this.id.indexOf("-") + 1, this.id.length)
             }))
         })
+        $("#backhome").click(function (){
+            location.reload();
+        })
     })
 });
+
+
 
 $("#clearStorageUrl").on("click", function () {
     window.localStorage.removeItem("wsUrl")
