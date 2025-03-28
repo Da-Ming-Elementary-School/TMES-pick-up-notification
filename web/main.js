@@ -10,7 +10,7 @@ $(document).ready(function () {
             "type": "INIT",
             "classNo": 777
         }))
-        console.log("send")
+        $("#header").prepend("<h1 id=\"title\" style=\"font-size: 5ex; \">我是標題-首頁</h1>")
     }
 
     WS.onerror = function (e) {
@@ -27,10 +27,8 @@ $(document).ready(function () {
     }
 
 
-
     WS.onmessage = function (event) {
         const data = JSON.parse(event.data);
-        console.log(data)
         const clsArray = data["students"];
         $(".btn").on("click", function () {
             const studentArray = clsArray[parseInt(this.id)]
@@ -53,28 +51,27 @@ $(document).ready(function () {
                         WS.send(JSON.stringify({
                             "type": "CALL_FOR_STUDENT",
                             "targetClassNo": parseInt(this.id),
-                            "students":{
-                            "classNo": cls,
-                            "seatNo": num,
-                            "name": Name
-                        }
+                            "students": {
+                                "classNo": cls,
+                                "seatNo": num,
+                                "name": Name
+                            }
                         }))
                         alert(`已通知 ${cls}-${num}${Name}`)
                     })
                 })
             }
         })
-        if (data["type"] === "CALL_FOR_STUDENT"){
-            $("#header").append("<button id='backhome'>回選單</button>")
+        if (data["type"] === "CALL_FOR_STUDENT") {
             const date = new Date();
             const currentTime = date.toLocaleDateString() + " " + date.toLocaleTimeString();
-            const studentArray = data["students"];
-            $.each(studentArray, function (index, value) {
-                const clsNum = value["classNo"]
-                const seatNum = value["seatNo"]
-                const name = value["name"]
-                $("#student-call").prepend(`<div id="${clsNum}-${seatNum}" class="calledDiv"><h2>${clsNum}-${seatNum}${name}</h2><br><p>${currentTime}</p></div>`)
-            })
+            const studentDic = data["students"];
+
+            console.log(studentDic)
+            const clsNum = studentDic["classNo"]
+            const seatNum = studentDic["seatNo"]
+            const name = studentDic["name"]
+            $("#student-call").prepend(`<div id="${clsNum}-${seatNum}" class="calledDiv"><h2>${clsNum}-${seatNum}${name}</h2><p>${currentTime}</p></div>`)
         }
     }
     let classNum = "";
@@ -94,20 +91,23 @@ $(document).ready(function () {
         //$("#header").append(`<h1 id='header-cls'>${classNum}教室端</h1>`);
         //$("#header-cls").hide();
         $(".clsBtn").click(function () {
+            //$("#header").append("<button id='backhome'>回選單</button>")
+            $("#title").remove();
+            $("#header").prepend(`<h1 id=\"title" style=\"font-size: 5ex; \">我是標題-${this.id.slice(this.id.indexOf("-") + 1, this.id.length)}教室</h1>`);
             console.log(this.id);
             $(".btn").hide();
             $("#btnGroup").hide();
             WS.send(JSON.stringify({
                 "type": "INIT",
-                "classNo": "7" + this.id.slice(this.id.indexOf("-") + 1, this.id.length)
+                "classNo": parseInt(this.id.slice(this.id.indexOf("-") + 1, this.id.length))
             }))
         })
-        $("#backhome").click(function (){
-            location.reload();
+        $("#backhome").click(function () {
+            location.reload(true);
         })
     })
-});
 
+});
 
 
 $("#clearStorageUrl").on("click", function () {
