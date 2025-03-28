@@ -45,16 +45,17 @@ async def handler(websocket: ServerConnection):
                 if client_is_stored:
                     CONNECTED_CLIENTS.pop(k)
                 CONNECTED_CLIENTS[client_id] = websocket
-                # return student list
-                student_list_callback: dict = {}
-                try:
-                    student_list = json_assistant.StudentList.get_all_student_lists()
-                    student_list_callback["students"] = student_list
-                    await send_message(student_list_callback, "STUDENT_LIST", websocket)
-                except Exception as e:
-                    error_message = f"{type(e).__name__}: {e}"
-                    logging.error(error_message)
-                    await send_message({"message": error_message}, "ERROR", websocket)
+                if client_id == 777:
+                    # return student list
+                    student_list_callback: dict = {}
+                    try:
+                        student_list = json_assistant.StudentList.get_all_student_lists()
+                        student_list_callback["students"] = student_list
+                        await send_message(student_list_callback, "STUDENT_LIST", websocket)
+                    except Exception as e:
+                        error_message = f"{type(e).__name__}: {e}"
+                        logging.error(error_message)
+                        await send_message({"message": error_message}, "ERROR", websocket)
             elif msg_type == "BROADCAST":
                 for key in CONNECTED_CLIENTS.keys():
                     if key == client_id:
@@ -66,6 +67,8 @@ async def handler(websocket: ServerConnection):
                 if target is None:
                     logging.error(f"Cannot find target for {client_id}")
                     await send_message({"message": f"{target_id} not found"}, "ERROR", websocket)
+                else:
+                    await send_message(data, "CALL_FOR_STUDENT", target)
             await send_message({"received": True}, "CALLBACK", websocket)
     except (ConnectionClosedError, ConnectionClosedOK):
         client_is_stored, k = data_is_stored(websocket)
