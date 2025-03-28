@@ -1,7 +1,7 @@
 $(document).ready(function () {
     const storage = window.localStorage;
     let wsUrl = storage.getItem("wsUrl");
-    if (wsUrl == null) {
+    if(wsUrl == null) {
         wsUrl = prompt("請輸入伺服器端的 IP 及端口 (如：ws://localhost:8001)");
         storage.setItem("wsUrl", wsUrl);
     }
@@ -67,5 +67,13 @@ $(document).ready(function () {
         }))
         console.log(classNum);
         $("#btnGroup").empty();
+        $("#btnGroup").prepend(`<button class="clsBtn" id="classroom-${classNum}">${classNum}教室端</button>`)
+        //$("#header").append(`<h1 id='header-cls'>${classNum}教室端</h1>`);
+        //$("#header-cls").hide();
+        $(".clsBtn").click(function () {
+            console.log(this.id);
+            $(".btn").hide();
+            $("#btnGroup").hide();
+        })
     })
 });
