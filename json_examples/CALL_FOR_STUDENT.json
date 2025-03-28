@@ -1,0 +1,10 @@
+{
+  "type": "CALL_FOR_STUDENT",
+  "targetClassNo": 305,
+  "attempts": 1,
+  "student": {
+    "classNo": 301,
+    "seatNo": 0,
+    "name": "王以翔"
+  }
+}

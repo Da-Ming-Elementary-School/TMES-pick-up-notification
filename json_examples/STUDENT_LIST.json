@@ -1,0 +1,12 @@
+{
+  "type": "STUDENT_LIST",
+  "students": {
+    "304": [
+      {
+        "classNo": 301,
+        "seatNo": 0,
+        "name": "王以翔"
+      }
+    ]
+  }
+}
