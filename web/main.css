@@ -89,11 +89,12 @@
 }
 
 .calledDiv {
-    border: 1px solid black;
+    border: 10px solid #ff0000;
     display: inline-block;
     margin-left: 1%;
     padding-left: 1%;
     padding-right: 1%;
+
 }
 
 .calledDiv h2, p {
@@ -191,4 +192,10 @@
 .clsBtn:hover,
 .clsBtn:focus {
     background-color: #00117e;
+}
+
+.confirmBtn {
+    text-align: center;
+    margin: 0 auto;
+    display: block;
 }
