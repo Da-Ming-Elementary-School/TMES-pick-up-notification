@@ -1,5 +1,6 @@
 # coding=utf-8
 import json
+import os
 from os import path
 
 
@@ -22,3 +23,13 @@ class StudentList:
 
     def get_student_list(self):
         return self.student_list
+
+    @staticmethod
+    def get_all_student_lists():
+        all_student_lists = {}
+        for f in os.listdir(StudentList.STUDENT_LIST_DIR):
+            if not f.startswith('class_'):
+                continue
+            class_no = int(f.replace('class_', ''))
+            all_student_lists[class_no] = StudentList(class_no=class_no).get_student_list()
+        return all_student_lists

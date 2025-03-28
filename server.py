@@ -48,7 +48,7 @@ async def handler(websocket: ServerConnection):
                 # return student list
                 student_list_callback: dict = {}
                 try:
-                    student_list = json_assistant.StudentList(client_id).get_student_list()
+                    student_list = json_assistant.StudentList.get_all_student_lists()
                     student_list_callback["students"] = student_list
                     await send_message(student_list_callback, "STUDENT_LIST", websocket)
                 except Exception as e:
