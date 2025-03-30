@@ -1,3 +1,17 @@
+@font-face {
+    font-family: "Huninn";
+    src: url("jf-openhuninn-2.1.ttf");
+}
+/*
+"open-huninn" by justfont. Licensed under SIL Open Font License 1.1.
+For more information, please check https://github.com/justfont/open-huninn-font
+*/
+
+
+* {
+    font-family: "Huninn", serif;
+}
+
 .btn {
     background-color: #EA4C89;
     border-radius: 8px;
@@ -6,7 +20,7 @@
     color: #FFFFFF;
     cursor: pointer;
     display: inline-block;
-    font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /*font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;*/
     font-size: 20px;
     font-weight: 500;
     height: 40px;
@@ -41,7 +55,7 @@
     color: #fff;
     cursor: pointer;
     display: inline-flex;
-    font-family: system-ui, -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /*font-family: system-ui, -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;*/
     font-size: 16px;
     font-weight: 600;
     justify-content: center;
@@ -97,17 +111,20 @@
     margin-bottom: 1%;
 }
 
+#student-call-banner {
+    width: 100%;
+    align-items: center;
+}
+
 .bigBannerDiv {
     border: 10px solid #ff0000;
-    display: inline-block;
-    width: 80%;
-    margin-left: 1%;
+    display: block;
     padding-left: 1%;
     padding-right: 1%;
     margin-bottom: 1%;
 }
 
-.bigBannerDiv h1, h2 {
+.bigBannerDiv h1, h3 {
     text-align: center;
 }
 
@@ -129,7 +146,7 @@
     color: #24292E;
     cursor: pointer;
     display: inline-block;
-    font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    /*font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";*/
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
@@ -184,7 +201,7 @@
     color: #FFFFFF;
     cursor: pointer;
     display: inline-block;
-    font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /*font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;*/
     font-size: 15px;
     font-weight: 500;
     height: 40px;
