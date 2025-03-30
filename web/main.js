@@ -122,6 +122,9 @@ function configServerUrl() {
         storage.setItem("wsUrl", wsUrl);
     }
 
+    if (wsUrl === null) {
+        return configServerUrl();
+    }
     return wsUrl;
 }
 
