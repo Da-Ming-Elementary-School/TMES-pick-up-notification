@@ -41,6 +41,9 @@ async def handler(websocket: ServerConnection):
             msg_type: str = data.get("type", "UNKNOWN")
             # process received data
             if msg_type == "INIT":
+                if client_id in CONNECTED_CLIENTS.keys():
+                    await send_message({"message": f"{client_id} is already connected"}, "ERROR", websocket)
+                    await websocket.close()
                 client_is_stored, k = data_is_stored(websocket)
                 if client_is_stored:
                     CONNECTED_CLIENTS.pop(k)
