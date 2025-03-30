@@ -105,10 +105,6 @@ $(document).ready(function () {
                 "classNo": parseInt(this.id.slice(this.id.indexOf("-") + 1, this.id.length))
             }))
         })
-        $("#backhome").click(function () {
-            window.location.reload();
-        })
-
     })
 
 })
