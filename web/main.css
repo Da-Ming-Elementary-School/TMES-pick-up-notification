@@ -107,6 +107,10 @@
     margin-bottom: 1%;
 }
 
+.bigBannerDiv h1, h2 {
+    text-align: center;
+}
+
 .calledDiv h2, p {
     text-align: center;
 }
