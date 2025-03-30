@@ -24,7 +24,7 @@ def data_is_stored(data) -> tuple[bool, int | None]:
 
 async def send_message(data: dict,
                        message_type: Literal[
-                           "INIT", "ERROR", "CALLBACK", "BROADCAST", "STUDENT_LIST", "CALL_FOR_STUDENT"],
+                           "INIT", "ERROR", "CALLBACK", "BROADCAST", "STUDENT_LIST", "CALL_FOR_STUDENT", "UNDO"],
                        target: ServerConnection):
     data["type"] = message_type
     data_str = dumps(data)
@@ -61,13 +61,14 @@ async def handler(websocket: ServerConnection):
                     if key == client_id:
                         continue
                     await send_message(data, "BROADCAST", CONNECTED_CLIENTS.get(key))
-            elif msg_type == "CALL_FOR_STUDENT":
+            elif msg_type == "CALL_FOR_STUDENT" or msg_type == "UNDO":
+                msg_type: Literal["CALL_FOR_STUDENT", "UNDO"]
                 target_id = data.get("targetClassNo", -1)
-                if target_id == -1:
+                target = CONNECTED_CLIENTS.get(target_id, None)
+                if target_id is None:
                     logging.error(f"Cannot find target for {client_id}")
-                    await send_message({"message": f"{target_id} not found"}, "ERROR", websocket)
+                    await send_message({"message": f"{target_id} not found"}, msg_type, websocket)
                 else:
-                    target = CONNECTED_CLIENTS.get(target_id, None)
                     await send_message(data, "CALL_FOR_STUDENT", target)
             await send_message({"received": True}, "CALLBACK", websocket)
     except (ConnectionClosedError, ConnectionClosedOK):
