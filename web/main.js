@@ -44,20 +44,23 @@ $(document).ready(function () {
                     butMode.className = "btn2";
                     butMode.value = clsNum + "-" + seatNum + name;
                     $("#btnGroup").append(butMode);
-                    $(`#${clsNum}-${seatNum}`).click(function (event) {
+                    $(`#${clsNum}-${seatNum}`).click(function () {
                         const cls = this.id.slice(0, this.id.indexOf("-"));
                         const num = this.id.slice(this.id.indexOf("-") + 1, this.id.length);
                         const name = this.value.slice(this.id.length, this.value.length);
-                        WS.send(JSON.stringify({
-                            "type": "CALL_FOR_STUDENT",
-                            "targetClassNo": targetClsNo,
-                            "students": {
-                                "classNo": cls,
-                                "seatNo": num,
-                                "name": name
-                            }
-                        }))
-                        alert(`已通知 ${cls}-${num} ${name}`)
+                        let sendConfirm = confirm(`確定要呼叫${cls}-${num} ${name}?`)
+                        if (sendConfirm) {
+                            WS.send(JSON.stringify({
+                                "type": "CALL_FOR_STUDENT",
+                                "targetClassNo": targetClsNo,
+                                "students": {
+                                    "classNo": cls,
+                                    "seatNo": num,
+                                    "name": name
+                                }
+
+                            }))
+                        }
                     })
                 })
             }
@@ -84,11 +87,6 @@ $(document).ready(function () {
             )
         }
     }
-
-    $(".confirmBtn").click(function () {
-        $(`${this.id.slice(8,this.id.length)}`).css("border","10px solid #00dc01");
-        console.log(`${this.id.slice(8,this.id.length)}`)
-    })
 
     $("body").css("background-color", "pink");
     $(".btn").click(function () {
