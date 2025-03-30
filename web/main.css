@@ -95,7 +95,16 @@
     padding-left: 1%;
     padding-right: 1%;
     margin-bottom: 1%;
+}
 
+.bigBannerDiv {
+    border: 10px solid #ff0000;
+    display: inline-block;
+    width: 80%;
+    margin-left: 1%;
+    padding-left: 1%;
+    padding-right: 1%;
+    margin-bottom: 1%;
 }
 
 .calledDiv h2, p {

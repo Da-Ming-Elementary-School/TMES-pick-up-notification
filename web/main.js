@@ -76,6 +76,8 @@ $(document).ready(function () {
             for (let i = 0 ; document.getElementById("student-call").children.namedItem(`${clsNum}-${seatNum}-${i}`) != null && i === dupNum ; i++) {
                 dupNum++;
             }
+            setBigBanner(`${clsNum}-${seatNum} ${name}`, currentTime)
+
             $("#student-call").prepend(`<div id="${clsNum}-${seatNum}-${dupNum}" class="calledDiv"><h2>${clsNum}-${seatNum}${name}</h2><button id="confirmBtn${clsNum}-${seatNum}-${dupNum}" class="confirmBtn" onclick="function confirmBtn() {}">確認</button><p>${currentTime}</p></div>`)
             document.getElementById(`confirmBtn${clsNum}-${seatNum}-${dupNum}`).addEventListener("click", function () {
                 document.getElementById(`${this.id.slice(10,this.id.length)}`).style.borderColor = "#00dc01";
@@ -123,4 +125,24 @@ function configServerUrl() {
     }
 
     return wsUrl;
+}
+
+function setBigBanner(student, timestamp) {
+    const banner = $("#student-call-banner")
+    const randomId = guidGenerator()
+    banner.prepend(`<div class="bigBannerDiv" id="${randomId}"><h1>${student}</h1><p>${timestamp}</p></div>`)
+    const studentObj = $(`#${randomId}`)
+    console.log(studentObj)
+    setTimeout(function () {studentObj.fadeOut()}, 5000)
+}
+
+function sleep(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+}
+
+function guidGenerator() {
+    let S4 = function() {
+       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    };
+    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 }
