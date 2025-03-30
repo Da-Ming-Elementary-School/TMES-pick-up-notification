@@ -2,11 +2,12 @@
 import logging
 from colorlog import ColoredFormatter
 import os
+import sys
 import datetime
 import zoneinfo
 
 
-base_dir = os.path.abspath(os.path.dirname(__file__))
+base_dir = os.path.dirname(sys.argv[0])
 now_tz = zoneinfo.ZoneInfo("Asia/Taipei")
 
 
@@ -30,7 +31,11 @@ def create_logger() -> logging.Logger:
     handler = logging.StreamHandler()
     handler.setFormatter(formatter)
     logger.addHandler(handler)
-    log_path = os.path.join(base_dir, "logs",
+
+    log_dir_path = os.path.join(base_dir, "logs")
+    if not os.path.exists(log_dir_path):
+        os.makedirs(log_dir_path)
+    log_path = os.path.join(log_dir_path,
                             f"logs {datetime.datetime.now(tz=now_tz).strftime('%Y.%m.%d %H.%M.%S')}.log")
     with open(log_path, "w"):
         pass

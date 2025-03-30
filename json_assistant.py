@@ -2,10 +2,13 @@
 import json
 import os
 from os import path
+import sys
+
+BASE_DIR = os.path.dirname(sys.argv[0])
 
 
 class StudentList:
-    STUDENT_LIST_DIR = path.join(path.dirname(__file__), 'student_list')
+    STUDENT_LIST_DIR = path.join(BASE_DIR, 'student_list')
 
     def __init__(self, class_no: int):
         self.class_no: int = class_no
