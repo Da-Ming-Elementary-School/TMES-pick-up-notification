@@ -79,7 +79,7 @@ $(document).ready(function () {
             }
             setBigBanner(`${clsNum}-${seatNum} ${name}`, currentTime)
 
-            $("#student-call").prepend(`<div id="${clsNum}-${seatNum}-${dupNum}" class="calledDiv"><h2>${clsNum}-${seatNum}${name}</h2><button id="confirmBtn${clsNum}-${seatNum}-${dupNum}" class="confirmBtn" onclick="function confirmBtn() {}">確認</button><p>${currentTime}</p></div>`)
+            $("#student-call").prepend(`<div id="${clsNum}-${seatNum}-${dupNum}" class="calledDiv"><h2>${clsNum}-${seatNum}${name}</h2><button id="confirmBtn${clsNum}-${seatNum}-${dupNum}" class="btn3" style="margin: 0 auto; text-align: center; display: block" onclick="function confirmBtn() {}">確認</button><p>${currentTime}</p></div>`)
             document.getElementById(`confirmBtn${clsNum}-${seatNum}-${dupNum}`).addEventListener("click", function () {
                     document.getElementById(`${this.id.slice(10, this.id.length)}`).style.borderColor = "#00dc01";
                     this.style.visibility = "hidden";
