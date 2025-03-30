@@ -11,13 +11,13 @@ from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
 import logger
 import json_assistant
 
-CONNECTED_CLIENTS: dict[int, ServerConnection] = {}
+CONNECTED_CLIENTS: dict[int, list[ServerConnection]] = {}
 LOGGER = logger.create_logger()
 
 
 def data_is_stored(data) -> tuple[bool, int | None]:
     for k, v in CONNECTED_CLIENTS.items():
-        if data == v:
+        if data in v:
             return True, k
     return False, None
 
@@ -25,10 +25,13 @@ def data_is_stored(data) -> tuple[bool, int | None]:
 async def send_message(data: dict,
                        message_type: Literal[
                            "INIT", "ERROR", "CALLBACK", "BROADCAST", "STUDENT_LIST", "CALL_FOR_STUDENT", "UNDO"],
-                       target: ServerConnection):
+                       targets: ServerConnection | list[ServerConnection]):
     data["type"] = message_type
     data_str = dumps(data)
-    await target.send(data_str)
+    if isinstance(targets, ServerConnection):
+        targets = [targets]
+    for target in targets:
+        await target.send(data_str)
 
 
 async def handler(websocket: ServerConnection):
@@ -41,14 +44,13 @@ async def handler(websocket: ServerConnection):
             msg_type: str = data.get("type", "UNKNOWN")
             # process received data
             if msg_type == "INIT":
-                if client_id in CONNECTED_CLIENTS.keys():
-                    await send_message({"message": f"{client_id} is already connected"}, "ERROR", websocket)
-                    await websocket.close()
-                    return
                 client_is_stored, k = data_is_stored(websocket)
                 if client_is_stored:
-                    CONNECTED_CLIENTS.pop(k)
-                CONNECTED_CLIENTS[client_id] = websocket
+                    CONNECTED_CLIENTS[k].remove(websocket)
+                if client_id in CONNECTED_CLIENTS.keys():
+                    CONNECTED_CLIENTS[client_id].append(websocket)
+                else:
+                    CONNECTED_CLIENTS[client_id] = [websocket]
                 if client_id == 777:
                     # return student list
                     student_list_callback: dict = {}
@@ -73,12 +75,12 @@ async def handler(websocket: ServerConnection):
                     logging.error(f"Cannot find target for {client_id}")
                     await send_message({"message": f"{target_id} not found"}, msg_type, websocket)
                 else:
-                    await send_message(data, "CALL_FOR_STUDENT", target)
+                    await send_message(data, msg_type, target)
             await send_message({"received": True}, "CALLBACK", websocket)
     except (ConnectionClosedError, ConnectionClosedOK):
         client_is_stored, k = data_is_stored(websocket)
         if client_is_stored:
-            CONNECTED_CLIENTS.pop(k)
+            CONNECTED_CLIENTS[k].remove(websocket)
             logging.info(f"{k} is removed.")
 
 
