@@ -73,7 +73,7 @@ $(document).ready(function () {
             const seatNum = studentDic["seatNo"];
             const name = studentDic["name"];
             let dupNum = 0
-            for (var i = 0 ; document.getElementById("student-call").children.namedItem(`${clsNum}-${seatNum}-${i}`) != null && i === dupNum ; i++) {
+            for (let i = 0 ; document.getElementById("student-call").children.namedItem(`${clsNum}-${seatNum}-${i}`) != null && i === dupNum ; i++) {
                 dupNum++;
             }
             $("#student-call").prepend(`<div id="${clsNum}-${seatNum}-${dupNum}" class="calledDiv"><h2>${clsNum}-${seatNum}${name}</h2><button id="confirmBtn${clsNum}-${seatNum}-${dupNum}" class="confirmBtn" onclick="function confirmBtn() {}">確認</button><p>${currentTime}</p></div>`)
@@ -86,11 +86,10 @@ $(document).ready(function () {
         $(`${this.id.slice(8,this.id.length)}`).css("border","10px solid #00dc01");
         console.log(`${this.id.slice(8,this.id.length)}`)
     })
-    let classNum = "";
-    let body = $("body");
-    body.css("background-color", "pink");
+
+    $("body").css("background-color", "pink");
     $(".btn").click(function () {
-        classNum = this.id;
+        let classNum = this.id;
         console.log(classNum);
         $("#btnGroup").empty();
         $("#btnGroup").prepend(`<button class="clsBtn" id="classroom-${classNum}">${classNum}教室端</button>`)
