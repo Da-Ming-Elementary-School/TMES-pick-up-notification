@@ -10,8 +10,6 @@ $(document).ready(function () {
             "type": "INIT",
             "classNo": 777
         }))
-        $("#header").prepend("<h1 id=\"title\" style=\"font-size: 5ex; \">我是標題-首頁</h1>")
-
     }
 
     WS.onerror = function (e) {
