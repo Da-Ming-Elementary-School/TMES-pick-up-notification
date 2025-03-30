@@ -24,7 +24,7 @@ def data_is_stored(data) -> tuple[bool, int | None]:
 
 async def send_message(data: dict,
                        message_type: Literal[
-                           "INIT", "ERROR", "CALLBACK", "BROADCAST", "STUDENT_LIST", "CALL_FOR_STUDENT"],
+                           "INIT", "ERROR", "CALLBACK", "BROADCAST", "STUDENT_LIST", "CALL_FOR_STUDENT", "UNDO"],
                        target: ServerConnection):
     data["type"] = message_type
     data_str = dumps(data)
@@ -62,6 +62,7 @@ async def handler(websocket: ServerConnection):
                         continue
                     await send_message(data, "BROADCAST", CONNECTED_CLIENTS.get(key))
             elif msg_type == "CALL_FOR_STUDENT" or msg_type == "UNDO":
+                msg_type: Literal["CALL_FOR_STUDENT", "UNDO"]
                 target_id = data.get("targetClassNo", -1)
                 target = CONNECTED_CLIENTS.get(target_id, None)
                 if target_id is None:
