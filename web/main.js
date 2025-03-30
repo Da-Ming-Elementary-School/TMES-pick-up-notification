@@ -48,7 +48,7 @@ $(document).ready(function () {
                         const cls = this.id.slice(0, this.id.indexOf("-"));
                         const num = this.id.slice(this.id.indexOf("-") + 1, this.id.length);
                         const name = this.value.slice(this.id.length, this.value.length);
-                        let sendConfirm = confirm(`確定要呼叫${cls}-${num} ${name}?`)
+                        let sendConfirm = confirm(`確定要呼叫 ${cls}-${num} ${name}？`)
                         if (sendConfirm) {
                             WS.send(JSON.stringify({
                                 "type": "CALL_FOR_STUDENT",
