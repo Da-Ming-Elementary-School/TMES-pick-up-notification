@@ -145,7 +145,8 @@ For more information, please check https://github.com/justfont/open-huninn-font
 }
 
 #header {
-    display: block;
+    display: inline-block;
+    text-align: left;
 }
 
 .btn3 {
@@ -246,4 +247,8 @@ For more information, please check https://github.com/justfont/open-huninn-font
 #confirmBtn {
     text-align: center;
     margin: 0 auto;
+}
+
+#wsStatus {
+    text-align: left;
 }

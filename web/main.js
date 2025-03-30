@@ -13,6 +13,7 @@ $(document).ready(function () {
         document.getElementById("call-history").style.height = "0";
         document.getElementById("backtohome").style.visibility = "hidden";
         document.getElementById("backtohome").style.width = "0";
+        document.getElementById("backtohome").style.padding = "0";
     }
 
     WS.onerror = function (e) {
@@ -103,6 +104,8 @@ $(document).ready(function () {
             document.getElementById("call-history").style.visibility = "hidden";
             document.getElementById("call-history").style.height = "0";
             document.getElementById("backtohome").style.visibility = "visible";
+            document.getElementById("backtohome").style.padding = "6px 16px";
+            document.getElementById("backtohome").style.margin = "auto";
             document.getElementById("backtohome").style.width = "auto";
             $("#identityText").text(`目前身分：${classNum}`);
             console.log(this.id);
