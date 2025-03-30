@@ -101,14 +101,26 @@ For more information, please check https://github.com/justfont/open-huninn-font
     margin-right: 10%;
     margin-left: 10%;
 }
-
-.calledDiv, #call-history {
+.calledDiv {
     border: 10px solid #ff0000;
     display: inline-block;
     margin-left: 1%;
     padding-left: 1%;
     padding-right: 1%;
+    margin-bottom: 0;
+}
+
+.historyDiv {
+    border: 5px solid #000000;
+    display: inline-block;
+    margin-left: 1%;
+    padding-left: 1%;
+    padding-right: 1%;
     margin-bottom: 1%;
+}
+
+.historyDiv p {
+    text-align: left;
 }
 
 #student-call-banner {
@@ -133,7 +145,8 @@ For more information, please check https://github.com/justfont/open-huninn-font
 }
 
 #header {
-    display: block;
+    display: inline-block;
+    text-align: left;
 }
 
 .btn3 {
@@ -234,4 +247,8 @@ For more information, please check https://github.com/justfont/open-huninn-font
 #confirmBtn {
     text-align: center;
     margin: 0 auto;
+}
+
+#wsStatus {
+    text-align: left;
 }

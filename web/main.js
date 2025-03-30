@@ -9,7 +9,11 @@ $(document).ready(function () {
             "type": "INIT",
             "classNo": 777
         }))
-        $("#call-history").hide();
+        document.getElementById("call-history").style.visibility = "hidden";
+        document.getElementById("call-history").style.height = "0";
+        document.getElementById("backtohome").style.visibility = "hidden";
+        document.getElementById("backtohome").style.width = "0";
+        document.getElementById("backtohome").style.padding = "0";
     }
 
     WS.onerror = function (e) {
@@ -60,6 +64,7 @@ $(document).ready(function () {
                                 }
 
                             }))
+                            $("#call-history").prepend(`<div id="hisDiv-${cls}${seatNum}" class="historyDiv"><p>${cls}-${seatNum}${name} <button>撤銷呼叫</button></p> </div>`)
                         }
                     })
                 })
@@ -95,6 +100,13 @@ $(document).ready(function () {
         $("#btnGroup").empty();
         $("#btnGroup").prepend(`<button class="clsBtn" id="classroom-${classNum}">${classNum}教室端</button>`)
         $(".clsBtn").click(function () {
+            document.getElementById("called-history").style.visibility = "hidden";
+            document.getElementById("call-history").style.visibility = "hidden";
+            document.getElementById("call-history").style.height = "0";
+            document.getElementById("backtohome").style.visibility = "visible";
+            document.getElementById("backtohome").style.padding = "6px 16px";
+            document.getElementById("backtohome").style.margin = "auto";
+            document.getElementById("backtohome").style.width = "auto";
             $("#identityText").text(`目前身分：${classNum}`);
             console.log(this.id);
             $(".btn").hide();
@@ -108,13 +120,15 @@ $(document).ready(function () {
 
 })
 
-$("#called-history").click(function () {
-    const callBtn = $("#call-history");
-    if (callBtn.hidden) {
-        callBtn.show();
+document.getElementById("called-history").addEventListener("click", function () {
+    console.log(document.getElementById("call-history").checkVisibility({visibilityProperty: true}))
+    if (document.getElementById("call-history").checkVisibility({visibilityProperty: true}) === false) {
+        document.getElementById("call-history").style.visibility = "visible";
+        document.getElementById("call-history").style.height = "auto";
     }
-    else {
-        callBtn.hide();
+    else if (document.getElementById("call-history").checkVisibility({visibilityProperty: false}) === true) {
+        document.getElementById("call-history").style.visibility = "hidden";
+        document.getElementById("call-history").style.height = "0";
     }
 })
 

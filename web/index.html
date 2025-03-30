@@ -10,13 +10,12 @@
 </style>
 <h1>大明國小 課托學生呼叫系統</h1>
 <h4 id="identityText">目前身分：值班教師</h4>
-<div id="header" style="display: inline-block">
-    <p>伺服器位址：<code id="wsUrlDisplay"></code></p>
-    <p><button class="btn3" onclick="window.location.reload()">回首頁</button>  <button id="clearStorageUrl" class="btn3" style="text-align: center;margin: 0">重新設定伺服器位址</button>  <button id="called-history" class="btn3">呼叫歷史</button></p>
+<p id="wsStatus">伺服器位址：<code id="wsUrlDisplay"></code></p>
+<div id="header">
+    <p><button class="btn3" id="backtohome" onclick="window.location.reload()">回首頁</button>  <button id="clearStorageUrl" class="btn3" style="text-align: center;margin: 0">重新設定伺服器位址</button>  <button id="called-history" class="btn3">呼叫歷史</button></p>
 </div>
 <br>
 <div id="call-history">
-    <p>666</p>
 </div>
 <br>
 <div id="student-call-banner">
