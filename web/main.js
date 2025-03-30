@@ -80,11 +80,14 @@ $(document).ready(function () {
 
             $("#student-call").prepend(`<div id="${clsNum}-${seatNum}-${dupNum}" class="calledDiv"><h2>${clsNum}-${seatNum}${name}</h2><button id="confirmBtn${clsNum}-${seatNum}-${dupNum}" class="confirmBtn" onclick="function confirmBtn() {}">確認</button><p>${currentTime}</p></div>`)
             document.getElementById(`confirmBtn${clsNum}-${seatNum}-${dupNum}`).addEventListener("click", function () {
-                document.getElementById(`${this.id.slice(10,this.id.length)}`).style.borderColor = "#00dc01";
-                })
+                    document.getElementById(`${this.id.slice(10, this.id.length)}`).style.borderColor = "#00dc01";
+                    this.style.visibility = "hidden";
+                }
+            )
         }
     }
-    $(".comfirmBtn").click(function () {
+
+    $(".confirmBtn").click(function () {
         $(`${this.id.slice(8,this.id.length)}`).css("border","10px solid #00dc01");
         console.log(`${this.id.slice(8,this.id.length)}`)
     })
