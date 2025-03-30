@@ -63,11 +63,11 @@ async def handler(websocket: ServerConnection):
                     await send_message(data, "BROADCAST", CONNECTED_CLIENTS.get(key))
             elif msg_type == "CALL_FOR_STUDENT":
                 target_id = data.get("targetClassNo", -1)
-                if target_id == -1:
+                target = CONNECTED_CLIENTS.get(target_id, None)
+                if target_id is None:
                     logging.error(f"Cannot find target for {client_id}")
                     await send_message({"message": f"{target_id} not found"}, "ERROR", websocket)
                 else:
-                    target = CONNECTED_CLIENTS.get(target_id, None)
                     await send_message(data, "CALL_FOR_STUDENT", target)
             await send_message({"received": True}, "CALLBACK", websocket)
     except (ConnectionClosedError, ConnectionClosedOK):
