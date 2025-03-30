@@ -49,17 +49,17 @@ $(document).ready(function () {
                     $(`#${clsNum}-${seatNum}`).click(function (event) {
                         const cls = this.id.slice(0, this.id.indexOf("-"));
                         const num = this.id.slice(this.id.indexOf("-") + 1, this.id.length);
-                        const Name = this.value.slice(this.id.length, this.value.length);
+                        const name = this.value.slice(this.id.length, this.value.length);
                         WS.send(JSON.stringify({
                             "type": "CALL_FOR_STUDENT",
                             "targetClassNo": targetClsNo,
                             "students": {
                                 "classNo": cls,
                                 "seatNo": num,
-                                "name": Name
+                                "name": name
                             }
                         }))
-                        alert(`已通知 ${cls}-${num}${Name}`)
+                        alert(`已通知 ${cls}-${num} ${name}`)
                     })
                 })
             }
