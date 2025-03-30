@@ -72,17 +72,16 @@ $(document).ready(function () {
             const clsNum = studentDic["classNo"];
             const seatNum = studentDic["seatNo"];
             const name = studentDic["name"];
-            // const comfirmBtn = document.createElement("input");
-            // comfirmBtn.type = "button";
-            // comfirmBtn.className = "confirmBtn";
-            // comfirmBtn.id = "confirmBtn" + clsNum + "-" + seatNum;
-            // comfirmBtn.value = "確認";
             $("#student-call").prepend(`<div id="${clsNum}-${seatNum}" class="calledDiv"><h2>${clsNum}-${seatNum}${name}</h2><button id="confirmBtn${clsNum}-${seatNum}" class="confirmBtn" onclick="function confirmBtn() {}">確認</button><p>${currentTime}</p></div>`)
             document.getElementById(`confirmBtn${clsNum}-${seatNum}`).addEventListener("click", function () {
-                $(`${this.id.slice(10,this.id.length)}`).css("border","#00dc01");
-                console.log(`${this.id.slice(10,this.id.length)}`)})
+                document.getElementById(`${this.id.slice(10,this.id.length)}`).style.borderColor = "#00dc01";
+                })
         }
     }
+    $(".comfirmBtn").click(function () {
+        $(`${this.id.slice(8,this.id.length)}`).css("border","10px solid #00dc01");
+        console.log(`${this.id.slice(8,this.id.length)}`)
+    })
     let classNum = "";
     let body = $("body");
     body.css("background-color", "pink");
