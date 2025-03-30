@@ -1,6 +1,5 @@
 $(document).ready(function () {
     let wsUrl = configServerUrl()
-
     const WS = new WebSocket(wsUrl);
     $("#wsUrlDisplay").text(wsUrl);
 
@@ -10,6 +9,7 @@ $(document).ready(function () {
             "type": "INIT",
             "classNo": 777
         }))
+        $("#call-history").hide();
     }
 
     WS.onerror = function (e) {
@@ -106,6 +106,16 @@ $(document).ready(function () {
         })
     })
 
+})
+
+$("#called-history").click(function () {
+    const callBtn = $("#call-history");
+    if (callBtn.hidden) {
+        callBtn.show();
+    }
+    else {
+        callBtn.hide();
+    }
 })
 
 $("#clearStorageUrl").on("click", function () {
