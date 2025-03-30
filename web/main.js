@@ -72,8 +72,12 @@ $(document).ready(function () {
             const clsNum = studentDic["classNo"];
             const seatNum = studentDic["seatNo"];
             const name = studentDic["name"];
-            $("#student-call").prepend(`<div id="${clsNum}-${seatNum}" class="calledDiv"><h2>${clsNum}-${seatNum}${name}</h2><button id="confirmBtn${clsNum}-${seatNum}" class="confirmBtn" onclick="function confirmBtn() {}">確認</button><p>${currentTime}</p></div>`)
-            document.getElementById(`confirmBtn${clsNum}-${seatNum}`).addEventListener("click", function () {
+            let dupNum = 0
+            for (var i = 0 ; document.getElementById("student-call").children.namedItem(`${clsNum}-${seatNum}-${i}`) != null && i === dupNum ; i++) {
+                dupNum++;
+            }
+            $("#student-call").prepend(`<div id="${clsNum}-${seatNum}-${dupNum}" class="calledDiv"><h2>${clsNum}-${seatNum}${name}</h2><button id="confirmBtn${clsNum}-${seatNum}-${dupNum}" class="confirmBtn" onclick="function confirmBtn() {}">確認</button><p>${currentTime}</p></div>`)
+            document.getElementById(`confirmBtn${clsNum}-${seatNum}-${dupNum}`).addEventListener("click", function () {
                 document.getElementById(`${this.id.slice(10,this.id.length)}`).style.borderColor = "#00dc01";
                 })
         }
