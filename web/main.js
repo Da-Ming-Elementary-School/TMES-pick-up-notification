@@ -97,8 +97,7 @@ $(document).ready(function () {
         $("#btnGroup").empty();
         $("#btnGroup").prepend(`<button class="clsBtn" id="classroom-${classNum}">${classNum}教室端</button>`)
         $(".clsBtn").click(function () {
-            $("#title").remove();
-            $("#header").prepend(`<h1 id=\"title" style=\"font-size: 5ex; \">我是標題-${this.id.slice(this.id.indexOf("-") + 1, this.id.length)}教室</h1>`);
+            $("#identityText").text(`目前身分：${classNum}`);
             console.log(this.id);
             $(".btn").hide();
             $("#btnGroup").hide();
@@ -131,7 +130,7 @@ function configServerUrl() {
 function setBigBanner(student, timestamp) {
     const banner = $("#student-call-banner")
     const randomId = guidGenerator()
-    banner.prepend(`<div class="bigBannerDiv" id="${randomId}"><h1>${student}</h1><p>${timestamp}</p></div>`)
+    banner.prepend(`<div class="bigBannerDiv" id="${randomId}"><h1>${student}</h1><h3>${timestamp}</h3></div>`)
     const studentObj = $(`#${randomId}`)
     console.log(studentObj)
     setTimeout(function () {studentObj.fadeOut()}, 5000)
