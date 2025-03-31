@@ -1,3 +1,5 @@
+const sound = new Audio("notify.wav");
+
 $(document).ready(function () {
     let wsUrl = configServerUrl()
     let date = new Date();
@@ -106,7 +108,8 @@ $(document).ready(function () {
                     this.style.visibility = "hidden";
                 }
             )
-            new Audio("notify.wav").play()
+            sound.play()
+            sound.currentTime = 0
         }
     }
 
