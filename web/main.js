@@ -102,7 +102,7 @@ $(document).ready(function () {
             }
             setBigBanner(`${clsNum}-${seatNum} ${name}`, currentTime)
 
-            $("#student-call").prepend(`<div id="${clsNum}-${seatNum}-${dupNum}" class="calledDiv"><h2 id="calledTitle${clsNum}-${seatNum}-${dupNum}">${clsNum}-${seatNum}${name}</h2><button id="confirmBtn${clsNum}-${seatNum}-${dupNum}" class="btn3" style="margin: 0 auto; text-align: center; display: block" onclick="function confirmBtn() {}">確認</button><p id="calledTime${clsNum}-${seatNum}-${dupNum}">${currentTime}</p></div>`)
+            $("#student-call").prepend(`<div id="${clsNum}-${seatNum}-${dupNum}" class="calledDiv"><h2 id="calledTitle${clsNum}-${seatNum}-${dupNum}">${clsNum}-${seatNum}${name}</h2><p id="btnText${clsNum}-${seatNum}-${dupNum}"><button id="confirmBtn${clsNum}-${seatNum}-${dupNum}" class="btn3" style="margin: 0 auto; text-align: center; display: block" onclick="function confirmBtn() {}">確認</button></p><p id="calledTime${clsNum}-${seatNum}-${dupNum}">${currentTime}</p></div>`)
             document.getElementById(`confirmBtn${clsNum}-${seatNum}-${dupNum}`).addEventListener("click", function () {
                     document.getElementById(`${this.id.slice(10, this.id.length)}`).style.borderColor = "#00dc01";
                     this.style.visibility = "hidden";
@@ -123,11 +123,15 @@ $(document).ready(function () {
                 const title = document.getElementById(`calledTitle${clsNum}-${seatNum}-${dupNum}`)
                 const btn = document.getElementById(`confirmBtn${clsNum}-${seatNum}-${dupNum}`)
                 const time = document.getElementById(`calledTime${clsNum}-${seatNum}-${dupNum}`)
-                if (div !== null && title !== null && btn !== null && time !== null) {
+                const btnText = document.getElementById(`btnText${clsNum}-${seatNum}-${dupNum}`)
+                if (div !== null && title !== null && btn !== null && time !== null && btnText !== null) {
                     div.style.borderColor = "#ffe600";
                     title.style.textDecoration = "line-through";
                     btn.style.visibility = "hidden";
                     time.style.textDecoration = "line-through";
+                    btnText.textContent = "叫錯了！！";
+                    btnText.style.fontSize = "20px";
+                    btnText.style.height = "34px";
                     dupNum++;
                 }
             }
