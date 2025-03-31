@@ -74,40 +74,14 @@ $(document).ready(function () {
                             if (document.getElementById("call-history").children.namedItem(`hisDiv-${cls}${num}`) === null) {
                                 const time = new Date();
                                 const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
-                                $("#call-history").prepend(`<div id="hisDiv-${cls}${num}" class="historyDiv"><p>${cls}-${num}${name} <button class="btn3" id="historyBtn${cls}-${num}">撤銷呼叫</button></p><p>上次呼叫時間：</p><p id="historyTime${cls}-${num}">${currentTime}</p> </div>`)
-                                document.getElementById(`historyBtn${cls}-${num}`).addEventListener("click", function () {
-                                    document.getElementById(`hisDiv-${cls}${num}`).remove();
-                                    WS.send(JSON.stringify({
-                                        "type": "UNDO",
-                                        "targetClassNo": targetClsNo,
-                                        "student": {
-                                            "classNo": cls,
-                                            "seatNo": num,
-                                            "name": name
-                                        }
-                                    }))
-                                    alert(`已撤銷 ${cls}-${num}${name} 的呼叫`)
-                                })
+                                historyBtn(WS, targetClsNo, cls, num, name, currentTime)
                             }
                             else{
+                                const time = new Date();
+                                const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
                                 if(document.getElementById(`hisDiv-${cls}${num}`) != null) {
                                     document.getElementById(`hisDiv-${cls}${num}`).remove();
-                                    const time = new Date();
-                                    const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
-                                    $("#call-history").prepend(`<div id="hisDiv-${cls}${num}" class="historyDiv"><p>${cls}-${num}${name} <button class="btn3" id="historyBtn${cls}-${num}">撤銷呼叫</button></p><p>上次呼叫時間：</p><p id="historyTime${cls}-${num}">${currentTime}</p> </div>`)
-                                    document.getElementById(`historyBtn${cls}-${num}`).addEventListener("click", function () {
-                                        document.getElementById(`hisDiv-${cls}${num}`).remove();
-                                        WS.send(JSON.stringify({
-                                            "type": "UNDO",
-                                            "targetClassNo": targetClsNo,
-                                            "student": {
-                                                "classNo": cls,
-                                                "seatNo": num,
-                                                "name": name
-                                            }
-                                        }))
-                                        alert(`已撤銷 ${cls}-${num}${name} 的呼叫`)
-                                    })
+                                    historyBtn(WS, targetClsNo, cls, num, name, currentTime)
                                 }
                             }
                         }
@@ -208,6 +182,25 @@ $("#clearStorageUrl").on("click", function () {
     configServerUrl();
     window.location.reload();
 })
+
+function historyBtn(WS, targetClsNo, cls, num, name, currentTime){
+    $("#call-history").prepend(`<div id="hisDiv-${cls}${num}" class="historyDiv"><p>${cls}-${num}${name} <button class="btn3" id="historyBtn${cls}-${num}">撤銷呼叫</button></p><p>上次呼叫時間：</p><p id="historyTime${cls}-${num}">${currentTime}</p> </div>`)
+    document.getElementById(`historyBtn${cls}-${num}`).addEventListener("click", function () {
+        let sendConfirm = confirm(`確定要撤銷 ${cls}-${num} ${name} 的呼叫？`)
+        if (sendConfirm) {
+            document.getElementById(`hisDiv-${cls}${num}`).remove();
+            WS.send(JSON.stringify({
+                "type": "UNDO",
+                "targetClassNo": targetClsNo,
+                "student": {
+                    "classNo": cls,
+                    "seatNo": num,
+                    "name": name
+                }
+            }))
+        }
+    })
+}
 
 function configServerUrl() {
     const storage = window.localStorage;
