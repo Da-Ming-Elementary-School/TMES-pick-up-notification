@@ -44,11 +44,13 @@ class StudentList:
         try:
             student_list_obj = StudentList(class_no=class_no)
         except FileNotFoundError:
-            with open(path.join(StudentList.STUDENT_LIST_DIR, f"class_{class_no}.json"), mode="w", encoding="utf-8") as f:
+            with open(path.join(StudentList.STUDENT_LIST_DIR, f"class_{class_no}.json"), mode="w",
+                      encoding="utf-8") as f:
                 dump(StudentList.EMPTY_DATA, f, indent=4)
             student_list_obj = StudentList(class_no=class_no)
         student_list_data = student_list_obj.EMPTY_DATA
-        with open(path.join(StudentList.STUDENT_LIST_DIR, f"{class_no}.csv"), mode="r", newline="", encoding="utf-8") as f:
+        with open(path.join(StudentList.STUDENT_LIST_DIR, f"{class_no}.csv"), mode="r", newline="",
+                  encoding="utf-8-sig") as f:
             csv_reader = reader(f)
             i = 0
             for row in csv_reader:
