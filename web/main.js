@@ -36,7 +36,7 @@ $(document).ready(function () {
     WS.onmessage = function (event) {
         const data = JSON.parse(event.data);
         const clsArray = data["students"];
-        $(".btn").on("click", function () {
+        $(".classNoBtn").on("click", function () {
             const targetClsNo = parseInt(this.id);
             const studentArray = clsArray[parseInt(this.id)]
             if (data["type"] === "STUDENT_LIST") {
@@ -140,7 +140,7 @@ $(document).ready(function () {
     }
 
     $("body").css("background-color", "pink");
-    $(".btn").click(function () {
+    $(".classNoBtn").click(function () {
         let classNum = this.id;
         console.log(classNum);
         $("#btnGroup").empty();
@@ -155,7 +155,7 @@ $(document).ready(function () {
             document.getElementById("backtohome").style.width = "auto";
             $("#identityText").text(`目前身分：${classNum}`);
             console.log(this.id);
-            $(".btn").hide();
+            $(".classNoBtn").hide();
             $("#btnGroup").hide();
             WS.send(JSON.stringify({
                 "type": "INIT",
