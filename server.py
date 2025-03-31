@@ -1,6 +1,5 @@
 # coding=utf-8
 import asyncio
-import json
 from json import loads, dumps
 from typing import Literal
 import logging
@@ -71,8 +70,8 @@ async def handler(websocket: ServerConnection):
                 msg_type: Literal["CALL_FOR_STUDENT", "UNDO"]
                 target_id = data.get("targetClassNo", -1)
                 target = CONNECTED_CLIENTS.get(target_id, None)
-                if target_id is None:
-                    logging.error(f"Cannot find target for {client_id}")
+                if target is None:
+                    logging.error(f"Target {target_id} not found")
                     await send_message({"message": f"{target_id} not found"}, msg_type, websocket)
                 else:
                     await send_message(data, msg_type, target)
