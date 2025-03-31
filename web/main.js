@@ -75,11 +75,10 @@ $(document).ready(function () {
                                 const time = new Date();
                                 const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
                                 historyBtn(WS, targetClsNo, cls, num, name, currentTime)
-                            }
-                            else{
+                            } else {
                                 const time = new Date();
                                 const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
-                                if(document.getElementById(`hisDiv-${cls}${num}`) != null) {
+                                if (document.getElementById(`hisDiv-${cls}${num}`) != null) {
                                     document.getElementById(`hisDiv-${cls}${num}`).remove();
                                     historyBtn(WS, targetClsNo, cls, num, name, currentTime)
                                 }
@@ -167,13 +166,18 @@ $(document).ready(function () {
 })
 
 document.getElementById("called-history").addEventListener("click", function () {
-    console.log(document.getElementById("call-history").checkVisibility({visibilityProperty: true}))
-    if (document.getElementById("call-history").checkVisibility({visibilityProperty: true}) === false) {
-        document.getElementById("call-history").style.visibility = "visible";
-        document.getElementById("call-history").style.height = "auto";
-    } else if (document.getElementById("call-history").checkVisibility({visibilityProperty: false}) === true) {
-        document.getElementById("call-history").style.visibility = "hidden";
-        document.getElementById("call-history").style.height = "0";
+    let historyDiv = document.getElementById("call-history");
+    let historyBtn = document.getElementById("called-history");
+    if (historyDiv.checkVisibility({visibilityProperty: true}) === false) {
+        historyDiv.style.visibility = "visible";
+        historyDiv.style.height = "auto";
+        this.textContent = "X";
+        historyBtn.style.paddingcolor = "#ff0000";
+    } else if (historyDiv.checkVisibility({visibilityProperty: false}) === true) {
+        historyDiv.style.visibility = "hidden";
+        historyDiv.style.height = "0";
+        this.textContent = "呼叫歷史";
+        historyBtn.style.color = "#FAFBFC";
     }
 })
 
@@ -183,7 +187,7 @@ $("#clearStorageUrl").on("click", function () {
     window.location.reload();
 })
 
-function historyBtn(WS, targetClsNo, cls, num, name, currentTime){
+function historyBtn(WS, targetClsNo, cls, num, name, currentTime) {
     $("#call-history").prepend(`<div id="hisDiv-${cls}${num}" class="historyDiv"><p>${cls}-${num}${name} <button class="btn3" id="historyBtn${cls}-${num}">撤銷呼叫</button></p><p>上次呼叫時間：</p><p id="historyTime${cls}-${num}">${currentTime}</p> </div>`)
     document.getElementById(`historyBtn${cls}-${num}`).addEventListener("click", function () {
         let sendConfirm = confirm(`確定要撤銷 ${cls}-${num} ${name} 的呼叫？`)
