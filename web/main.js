@@ -1,4 +1,5 @@
-const sound = new Audio("notify.wav");
+const normalSound = new Audio("audio/notify.wav");
+const warningSound = new Audio("audio/warning.wav");
 
 $(document).ready(function () {
     let wsUrl = configServerUrl()
@@ -75,11 +76,10 @@ $(document).ready(function () {
                                 const time = new Date();
                                 const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
                                 historyBtn(WS, targetClsNo, cls, num, name, currentTime)
-                            }
-                            else{
+                            } else {
                                 const time = new Date();
                                 const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
-                                if(document.getElementById(`hisDiv-${cls}${num}`) != null) {
+                                if (document.getElementById(`hisDiv-${cls}${num}`) != null) {
                                     document.getElementById(`hisDiv-${cls}${num}`).remove();
                                     historyBtn(WS, targetClsNo, cls, num, name, currentTime)
                                 }
@@ -109,8 +109,8 @@ $(document).ready(function () {
                     this.style.visibility = "hidden";
                 }
             )
-            sound.play()
-            sound.currentTime = 0
+            normalSound.play()
+            normalSound.currentTime = 0
         } else if (data["type"] === "UNDO") {
             const studentDic = data["student"];
             const clsNum = studentDic["classNo"];
@@ -136,6 +136,8 @@ $(document).ready(function () {
                     dupNum++;
                 }
             }
+            warningSound.play()
+            warningSound.currentTime = 0
         }
     }
 
@@ -183,7 +185,7 @@ $("#clearStorageUrl").on("click", function () {
     window.location.reload();
 })
 
-function historyBtn(WS, targetClsNo, cls, num, name, currentTime){
+function historyBtn(WS, targetClsNo, cls, num, name, currentTime) {
     $("#call-history").prepend(`<div id="hisDiv-${cls}${num}" class="historyDiv"><p>${cls}-${num}${name} <button class="btn3" id="historyBtn${cls}-${num}">撤銷呼叫</button></p><p>上次呼叫時間：</p><p id="historyTime${cls}-${num}">${currentTime}</p> </div>`)
     document.getElementById(`historyBtn${cls}-${num}`).addEventListener("click", function () {
         let sendConfirm = confirm(`確定要撤銷 ${cls}-${num} ${name} 的呼叫？`)
