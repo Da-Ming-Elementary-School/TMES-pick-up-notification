@@ -12,7 +12,7 @@ For more information, please check https://github.com/justfont/open-huninn-font
     font-family: "Huninn", serif;
 }
 
-.btn {
+.classNoBtn {
     background-color: #EA4C89;
     border-radius: 8px;
     border-style: none;
@@ -39,8 +39,8 @@ For more information, please check https://github.com/justfont/open-huninn-font
     touch-action: manipulation;
 }
 
-.btn:hover,
-.btn:focus {
+.classNoBtn:hover,
+.classNoBtn:focus {
     background-color: #F082AC;
 }
 
