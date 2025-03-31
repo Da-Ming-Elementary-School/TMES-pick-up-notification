@@ -103,7 +103,7 @@ $(document).ready(function () {
             }
             setBigBanner(`${clsNum}-${seatNum} ${name}`, currentTime)
 
-            $("#student-call").prepend(`<div id="${clsNum}-${seatNum}-${dupNum}" class="calledDiv"><h2 id="calledTitle${clsNum}-${seatNum}-${dupNum}">${clsNum}-${seatNum}${name}</h2><p id="btnText${clsNum}-${seatNum}-${dupNum}"><button id="confirmBtn${clsNum}-${seatNum}-${dupNum}" class="btn3" style="margin: 0 auto; text-align: center; display: block" onclick="function confirmBtn() {}">確認</button></p><p id="calledTime${clsNum}-${seatNum}-${dupNum}">${currentTime}</p></div>`)
+            $("#student-call").prepend(`<div id="${clsNum}-${seatNum}-${dupNum}" class="calledDiv${clsNum}-${seatNum}"><h2 id="calledTitle${clsNum}-${seatNum}">${clsNum}-${seatNum}${name}</h2><p id="btnText${clsNum}-${seatNum}"><button id="confirmBtn${clsNum}-${seatNum}-${dupNum}" class="btn3" style="margin: 0 auto; text-align: center; display: block" onclick="function confirmBtn() {}">確認</button></p><p id="calledTime${clsNum}-${seatNum}">${currentTime}</p></div>`)
             document.getElementById(`confirmBtn${clsNum}-${seatNum}-${dupNum}`).addEventListener("click", function () {
                     document.getElementById(`${this.id.slice(10, this.id.length)}`).style.borderColor = "#00dc01";
                     this.style.visibility = "hidden";
@@ -119,26 +119,26 @@ $(document).ready(function () {
             const seatNum = studentDic["seatNo"];
             const name = studentDic["name"];
             let dupNum = 0
-            for (let i = 0; document.getElementById(`${clsNum}-${seatNum}-${i}`) != null; i++) {
-                const div = document.getElementById(`${clsNum}-${seatNum}-${dupNum}`)
-                const title = document.getElementById(`calledTitle${clsNum}-${seatNum}-${dupNum}`)
-                const btn = document.getElementById(`confirmBtn${clsNum}-${seatNum}-${dupNum}`)
-                const time = document.getElementById(`calledTime${clsNum}-${seatNum}-${dupNum}`)
-                const btnText = document.getElementById(`btnText${clsNum}-${seatNum}-${dupNum}`)
-                if (div !== null && title !== null && btn !== null && time !== null && btnText !== null) {
+            //for (let i = 0; document.getElementsByClassName(`calledDiv${clsNum}-${seatNum}`) != null; i++) {
+                const div = document.getElementById(document.getElementById("student-call").children.item(0).id)
+                const title = document.getElementById(document.getElementById("student-call").children.item(0).children.item(0).id)
+                const btn = document.getElementById(document.getElementById("student-call").children.item(0).children.item(1).children.item(0).id)
+                const clock = document.getElementById(document.getElementById("student-call").children.item(0).children.item(2).id)
+                const btnText = document.getElementById(document.getElementById("student-call").children.item(0).children.item(1).id)
+                console.log(document.getElementById("student-call").children.item(0).children.item(1))
+                if (div !== null && title !== null && btn !== null && btnText !== null) {
                     div.style.borderColor = "#ffe600";
                     title.style.textDecoration = "line-through";
                     btn.style.visibility = "hidden";
-                    time.style.textDecoration = "line-through";
+                    clock.style.textDecoration = "line-through";
                     btnText.textContent = "呼叫錯誤！！";
                     btnText.style.color = "#ff0000";
                     btnText.style.fontWeight = "bold";
                     btnText.style.fontSize = "20px";
                     btnText.style.height = "34px";
                     btnText.style.margin = "0 auto";
-                    dupNum++;
                 }
-            }
+            //}
             setUndoBanner(`${clsNum}-${seatNum} ${name}`, currentTime)
             warningSound.play()
             warningSound.currentTime = 0

@@ -101,7 +101,7 @@ For more information, please check https://github.com/justfont/open-huninn-font
     margin-right: 10%;
     margin-left: 10%;
 }
-.calledDiv {
+#student-call div {
     border: 10px solid #ff0000;
     display: inline-block;
     margin-left: 1%;
@@ -148,7 +148,7 @@ For more information, please check https://github.com/justfont/open-huninn-font
     text-align: center;
 }
 
-.calledDiv h2, p {
+#student-call div h2, p {
     text-align: center;
 }
 
