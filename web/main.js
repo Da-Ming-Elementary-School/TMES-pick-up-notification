@@ -90,6 +90,7 @@ $(document).ready(function () {
                     this.style.visibility = "hidden";
                 }
             )
+            new Audio("notify.wav").play()
         }
     }
 
