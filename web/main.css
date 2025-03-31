@@ -136,7 +136,15 @@ For more information, please check https://github.com/justfont/open-huninn-font
     margin-bottom: 1%;
 }
 
-.bigBannerDiv h1, h3 {
+.undoBannerDiv {
+    border: 10px solid #ffe600;
+    display: block;
+    padding-left: 1%;
+    padding-right: 1%;
+    margin-bottom: 1%;
+}
+
+.bigBannerDiv, .undoBannerDiv h1, h2, h3, h5 {
     text-align: center;
 }
 

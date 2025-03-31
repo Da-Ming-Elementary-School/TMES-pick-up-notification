@@ -112,9 +112,12 @@ $(document).ready(function () {
             normalSound.play()
             normalSound.currentTime = 0
         } else if (data["type"] === "UNDO") {
+            const time = new Date();
+            const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
             const studentDic = data["student"];
             const clsNum = studentDic["classNo"];
             const seatNum = studentDic["seatNo"];
+            const name = studentDic["name"];
             let dupNum = 0
             for (let i = 0; document.getElementById(`${clsNum}-${seatNum}-${i}`) != null; i++) {
                 const div = document.getElementById(`${clsNum}-${seatNum}-${dupNum}`)
@@ -136,6 +139,7 @@ $(document).ready(function () {
                     dupNum++;
                 }
             }
+            setUndoBanner(`${clsNum}-${seatNum} ${name}`, currentTime)
             warningSound.play()
             warningSound.currentTime = 0
         }
@@ -227,6 +231,17 @@ function setBigBanner(student, timestamp) {
     const banner = $("#student-call-banner")
     const randomId = guidGenerator()
     banner.prepend(`<div class="bigBannerDiv" id="${randomId}"><h1>${student}</h1><h3>${timestamp}</h3></div>`)
+    const studentObj = $(`#${randomId}`)
+    console.log(studentObj)
+    setTimeout(function () {
+        studentObj.fadeOut()
+    }, 5000)
+}
+
+function setUndoBanner(student, timestamp) {
+    const banner = $("#student-call-banner")
+    const randomId = guidGenerator()
+    banner.prepend(`<div class="undoBannerDiv" id="${randomId}"><h1 style="color: #ff0000">有一則錯誤呼叫！！</h1><h2>${student}</h2><h5>${timestamp}</h5></div>`)
     const studentObj = $(`#${randomId}`)
     console.log(studentObj)
     setTimeout(function () {
