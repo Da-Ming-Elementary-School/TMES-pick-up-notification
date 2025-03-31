@@ -103,14 +103,20 @@ $(document).ready(function () {
             }
             setBigBanner(`${clsNum}-${seatNum} ${name}`, currentTime)
 
-            $("#student-call").prepend(`<div id="${clsNum}-${seatNum}-${dupNum}" class="calledDiv${clsNum}-${seatNum}"><h2 id="calledTitle${clsNum}-${seatNum}">${clsNum}-${seatNum}${name}</h2><p id="btnText${clsNum}-${seatNum}"><button id="confirmBtn${clsNum}-${seatNum}-${dupNum}" class="btn3" style="margin: 0 auto; text-align: center; display: block" onclick="function confirmBtn() {}">確認</button></p><p id="calledTime${clsNum}-${seatNum}">${currentTime}</p></div>`)
+            $("#student-call").prepend(`<div id="${clsNum}-${seatNum}-${dupNum}" class="calledDiv${clsNum}-${seatNum}"><h2 id="calledTitle${clsNum}-${seatNum}">${clsNum}-${seatNum}${name}</h2><p id="btnText${clsNum}-${seatNum}-${dupNum}"><button id="confirmBtn${clsNum}-${seatNum}-${dupNum}" class="btn3" style="margin: 0 auto; text-align: center; display: block" onclick="function confirmBtn() {}">確認</button></p><p id="calledTime${clsNum}-${seatNum}">${currentTime}</p></div>`)
             document.getElementById(`confirmBtn${clsNum}-${seatNum}-${dupNum}`).addEventListener("click", function () {
-                    document.getElementById(`${this.id.slice(10, this.id.length)}`).style.borderColor = "#00dc01";
                     this.style.visibility = "hidden";
+                    document.getElementById(`${this.id.slice(10, this.id.length)}`).style.borderColor = "#00dc01";
+                    document.getElementById(`btnText${this.id.slice(10, this.id.length)}`).textContent = "已確認！！"
+                    const btnTextStyle = document.getElementById(`btnText${this.id.slice(10, this.id.length)}`).style;
+                    btnTextStyle.fontSize = "20px";
+                    btnTextStyle.fontWeight = "bold";
+                    btnTextStyle.color = "#000000";
+                    btnTextStyle.height = "34px";
                 }
             )
-            normalSound.play()
-            normalSound.currentTime = 0
+            normalSound.play();
+            normalSound.currentTime = 0;
         } else if (data["type"] === "UNDO") {
             const time = new Date();
             const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
@@ -120,12 +126,12 @@ $(document).ready(function () {
             const name = studentDic["name"];
             let dupNum = 0
             //for (let i = 0; document.getElementsByClassName(`calledDiv${clsNum}-${seatNum}`) != null; i++) {
-                const div = document.getElementById(document.getElementById("student-call").children.item(0).id)
-                const title = document.getElementById(document.getElementById("student-call").children.item(0).children.item(0).id)
-                const btn = document.getElementById(document.getElementById("student-call").children.item(0).children.item(1).children.item(0).id)
-                const clock = document.getElementById(document.getElementById("student-call").children.item(0).children.item(2).id)
-                const btnText = document.getElementById(document.getElementById("student-call").children.item(0).children.item(1).id)
-                console.log(document.getElementById("student-call").children.item(0).children.item(1))
+                const studentCall = document.getElementById("student-call").children.item(0);
+                const div = document.getElementById(studentCall.id);
+                const title = document.getElementById(studentCall.children.item(0).id);
+                const btnText = document.getElementById(studentCall.children.item(1).id);
+                const btn = document.getElementById(studentCall.children.item(1).children.item(0).id);
+                const clock = document.getElementById(studentCall.children.item(2).id);
                 if (div !== null && title !== null && btn !== null && btnText !== null) {
                     div.style.borderColor = "#ffe600";
                     title.style.textDecoration = "line-through";
@@ -178,13 +184,15 @@ document.getElementById("called-history").addEventListener("click", function () 
     if (historyDiv.checkVisibility({visibilityProperty: true}) === false) {
         historyDiv.style.visibility = "visible";
         historyDiv.style.height = "auto";
-        this.textContent = "X";
-        historyBtn.style.paddingcolor = "#ff0000";
+        historyBtn.textContent = "X";
+        historyBtn.style.backgroundColor = "#ff0000";
+        historyBtn.style.color = "#FFFFFF";
     } else if (historyDiv.checkVisibility({visibilityProperty: false}) === true) {
         historyDiv.style.visibility = "hidden";
         historyDiv.style.height = "0";
-        this.textContent = "呼叫歷史";
-        historyBtn.style.color = "#FAFBFC";
+        historyBtn.textContent = "呼叫歷史";
+        historyBtn.style.backgroundColor = "#FAFBFC";
+        historyBtn.style.color = "#000000";
     }
 })
 
@@ -246,7 +254,7 @@ function setUndoBanner(student, timestamp) {
     console.log(studentObj)
     setTimeout(function () {
         studentObj.fadeOut()
-    }, 5000)
+    }, 10000)
 }
 
 function sleep(time) {
