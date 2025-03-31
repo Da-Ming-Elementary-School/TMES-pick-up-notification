@@ -1,3 +1,5 @@
+const sound = new Audio("notify.wav");
+
 $(document).ready(function () {
     let wsUrl = configServerUrl()
     const WS = new WebSocket(wsUrl);
@@ -90,7 +92,8 @@ $(document).ready(function () {
                     this.style.visibility = "hidden";
                 }
             )
-            new Audio("notify.wav").play()
+            sound.play()
+            sound.currentTime = 0
         }
     }
 
