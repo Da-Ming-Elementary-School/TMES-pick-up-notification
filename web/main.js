@@ -36,7 +36,6 @@ $(document).ready(function () {
     WS.onmessage = function (event) {
         const data = JSON.parse(event.data);
         const clsArray = data["students"];
-        const currentTime = date.toLocaleDateString() + " " + date.toLocaleTimeString();
         $(".btn").on("click", function () {
             const targetClsNo = parseInt(this.id);
             const studentArray = clsArray[parseInt(this.id)]
@@ -69,35 +68,63 @@ $(document).ready(function () {
 
                             }))
                             let dupNum = 0
-                            for (let i = 0 ; document.getElementById("student-call").children.namedItem(`${cls}-${num}-${i}`) != null && i === dupNum ; i++) {
+                            for (let i = 0; document.getElementById("student-call").children.namedItem(`${cls}-${num}-${i}`) != null && i === dupNum; i++) {
                                 dupNum++;
                             }
-                            $("#call-history").prepend(`<div id="hisDiv-${cls}${num}" class="historyDiv"><p>${cls}-${num}${name} <button class="btn3" id="historyBtn${clsNum}-${seatNum}-${dupNum}">撤銷呼叫</button></p><p>${currentTime}</p> </div>`)
-                            document.getElementById(`historyBtn${cls}-${num}-${dupNum}`).addEventListener("click", function () {
-                                WS.send(JSON.stringify({
-                                    "type": "UNDO",
-                                    "targetClassNo": targetClsNo,
-                                    "student": {
-                                        "classNo": cls,
-                                        "seatNo": num,
-                                        "name": name
-                                    }
-                                }))
-                            })
+                            if (document.getElementById("call-history").children.namedItem(`hisDiv-${cls}${num}`) === null) {
+                                const time = new Date();
+                                const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
+                                $("#call-history").prepend(`<div id="hisDiv-${cls}${num}" class="historyDiv"><p>${cls}-${num}${name} <button class="btn3" id="historyBtn${cls}-${num}">撤銷呼叫</button></p><p>上次呼叫時間：</p><p id="historyTime${cls}-${num}">${currentTime}</p> </div>`)
+                                document.getElementById(`historyBtn${cls}-${num}`).addEventListener("click", function () {
+                                    document.getElementById(`hisDiv-${cls}${num}`).remove();
+                                    WS.send(JSON.stringify({
+                                        "type": "UNDO",
+                                        "targetClassNo": targetClsNo,
+                                        "student": {
+                                            "classNo": cls,
+                                            "seatNo": num,
+                                            "name": name
+                                        }
+                                    }))
+                                    alert(`已撤銷 ${cls}-${num}${name} 的呼叫`)
+                                })
+                            }
+                            else{
+                                if(document.getElementById(`hisDiv-${cls}${num}`) != null) {
+                                    document.getElementById(`hisDiv-${cls}${num}`).remove();
+                                    const time = new Date();
+                                    const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
+                                    $("#call-history").prepend(`<div id="hisDiv-${cls}${num}" class="historyDiv"><p>${cls}-${num}${name} <button class="btn3" id="historyBtn${cls}-${num}">撤銷呼叫</button></p><p>上次呼叫時間：</p><p id="historyTime${cls}-${num}">${currentTime}</p> </div>`)
+                                    document.getElementById(`historyBtn${cls}-${num}`).addEventListener("click", function () {
+                                        document.getElementById(`hisDiv-${cls}${num}`).remove();
+                                        WS.send(JSON.stringify({
+                                            "type": "UNDO",
+                                            "targetClassNo": targetClsNo,
+                                            "student": {
+                                                "classNo": cls,
+                                                "seatNo": num,
+                                                "name": name
+                                            }
+                                        }))
+                                        alert(`已撤銷 ${cls}-${num}${name} 的呼叫`)
+                                    })
+                                }
+                            }
                         }
                     })
                 })
             }
         })
         if (data["type"] === "CALL_FOR_STUDENT") {
-            const currentTime = date.toLocaleDateString() + " " + date.toLocaleTimeString();
+            const time = new Date();
+            const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
             const studentDic = data["students"];
             console.log(studentDic);
             const clsNum = studentDic["classNo"];
             const seatNum = studentDic["seatNo"];
             const name = studentDic["name"];
             let dupNum = 0
-            for (let i = 0 ; document.getElementById("student-call").children.namedItem(`${clsNum}-${seatNum}-${i}`) != null && i === dupNum ; i++) {
+            for (let i = 0; document.getElementById("student-call").children.namedItem(`${clsNum}-${seatNum}-${i}`) != null && i === dupNum; i++) {
                 dupNum++;
             }
             setBigBanner(`${clsNum}-${seatNum} ${name}`, currentTime)
@@ -110,15 +137,12 @@ $(document).ready(function () {
             )
             sound.play()
             sound.currentTime = 0
-        }
-        else if (data["type"] === "UNDO") {
-            const tagetClsNo = data["targetClassNo"];
+        } else if (data["type"] === "UNDO") {
             const studentDic = data["student"];
             const clsNum = studentDic["classNo"];
             const seatNum = studentDic["seatNo"];
-            const name = studentDic["name"];
             let dupNum = 0
-            for (let i = 0 ; document.getElementById(`${clsNum}-${seatNum}-${i}`) != null ; i++) {
+            for (let i = 0; document.getElementById(`${clsNum}-${seatNum}-${i}`) != null; i++) {
                 const div = document.getElementById(`${clsNum}-${seatNum}-${dupNum}`)
                 const title = document.getElementById(`calledTitle${clsNum}-${seatNum}-${dupNum}`)
                 const btn = document.getElementById(`confirmBtn${clsNum}-${seatNum}-${dupNum}`)
@@ -129,9 +153,12 @@ $(document).ready(function () {
                     title.style.textDecoration = "line-through";
                     btn.style.visibility = "hidden";
                     time.style.textDecoration = "line-through";
-                    btnText.textContent = "叫錯了！！";
+                    btnText.textContent = "呼叫錯誤！！";
+                    btnText.style.color = "#ff0000";
+                    btnText.style.fontWeight = "bold";
                     btnText.style.fontSize = "20px";
                     btnText.style.height = "34px";
+                    btnText.style.margin = "0 auto";
                     dupNum++;
                 }
             }
@@ -170,8 +197,7 @@ document.getElementById("called-history").addEventListener("click", function () 
     if (document.getElementById("call-history").checkVisibility({visibilityProperty: true}) === false) {
         document.getElementById("call-history").style.visibility = "visible";
         document.getElementById("call-history").style.height = "auto";
-    }
-    else if (document.getElementById("call-history").checkVisibility({visibilityProperty: false}) === true) {
+    } else if (document.getElementById("call-history").checkVisibility({visibilityProperty: false}) === true) {
         document.getElementById("call-history").style.visibility = "hidden";
         document.getElementById("call-history").style.height = "0";
     }
@@ -203,7 +229,9 @@ function setBigBanner(student, timestamp) {
     banner.prepend(`<div class="bigBannerDiv" id="${randomId}"><h1>${student}</h1><h3>${timestamp}</h3></div>`)
     const studentObj = $(`#${randomId}`)
     console.log(studentObj)
-    setTimeout(function () {studentObj.fadeOut()}, 5000)
+    setTimeout(function () {
+        studentObj.fadeOut()
+    }, 5000)
 }
 
 function sleep(time) {
@@ -211,8 +239,8 @@ function sleep(time) {
 }
 
 function guidGenerator() {
-    let S4 = function() {
-       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    let S4 = function () {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
     };
-    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+    return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 }
