@@ -124,27 +124,24 @@ $(document).ready(function () {
             const clsNum = studentDic["classNo"];
             const seatNum = studentDic["seatNo"];
             const name = studentDic["name"];
-            let dupNum = 0
-            //for (let i = 0; document.getElementsByClassName(`calledDiv${clsNum}-${seatNum}`) != null; i++) {
-                const studentCall = document.getElementById("student-call").children.item(0);
-                const div = document.getElementById(studentCall.id);
-                const title = document.getElementById(studentCall.children.item(0).id);
-                const btnText = document.getElementById(studentCall.children.item(1).id);
-                const btn = document.getElementById(studentCall.children.item(1).children.item(0).id);
-                const clock = document.getElementById(studentCall.children.item(2).id);
-                if (div !== null && title !== null && btn !== null && btnText !== null) {
-                    div.style.borderColor = "#ffe600";
-                    title.style.textDecoration = "line-through";
-                    btn.style.visibility = "hidden";
-                    clock.style.textDecoration = "line-through";
-                    btnText.textContent = "呼叫錯誤！！";
-                    btnText.style.color = "#ff0000";
-                    btnText.style.fontWeight = "bold";
-                    btnText.style.fontSize = "20px";
-                    btnText.style.height = "34px";
-                    btnText.style.margin = "0 auto";
-                }
-            //}
+            const studentCall = document.getElementById("student-call").children.item(0);
+            const div = document.getElementById(studentCall.id);
+            const title = document.getElementById(studentCall.children.item(0).id);
+            const btnText = document.getElementById(studentCall.children.item(1).id);
+            const btn = document.getElementById(studentCall.children.item(1).children.item(0).id);
+            const clock = document.getElementById(studentCall.children.item(2).id);
+            if (div !== null && title !== null && btn !== null && btnText !== null) {
+                div.style.borderColor = "#ffe600";
+                title.style.textDecoration = "line-through";
+                btn.style.visibility = "hidden";
+                clock.style.textDecoration = "line-through";
+                btnText.textContent = "呼叫錯誤！！";
+                btnText.style.color = "#ff0000";
+                btnText.style.fontWeight = "bold";
+                btnText.style.fontSize = "20px";
+                btnText.style.height = "34px";
+                btnText.style.margin = "0 auto";
+            }
             setUndoBanner(`${clsNum}-${seatNum} ${name}`, currentTime)
             warningSound.play()
             warningSound.currentTime = 0
