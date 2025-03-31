@@ -1,5 +1,6 @@
 $(document).ready(function () {
     let wsUrl = configServerUrl()
+    let date = new Date();
     const WS = new WebSocket(wsUrl);
     $("#wsUrlDisplay").text(wsUrl);
 
@@ -33,6 +34,7 @@ $(document).ready(function () {
     WS.onmessage = function (event) {
         const data = JSON.parse(event.data);
         const clsArray = data["students"];
+        const currentTime = date.toLocaleDateString() + " " + date.toLocaleTimeString();
         $(".btn").on("click", function () {
             const targetClsNo = parseInt(this.id);
             const studentArray = clsArray[parseInt(this.id)]
@@ -64,14 +66,28 @@ $(document).ready(function () {
                                 }
 
                             }))
-                            $("#call-history").prepend(`<div id="hisDiv-${cls}${seatNum}" class="historyDiv"><p>${cls}-${seatNum}${name} <button>撤銷呼叫</button></p> </div>`)
+                            let dupNum = 0
+                            for (let i = 0 ; document.getElementById("student-call").children.namedItem(`${cls}-${num}-${i}`) != null && i === dupNum ; i++) {
+                                dupNum++;
+                            }
+                            $("#call-history").prepend(`<div id="hisDiv-${cls}${num}" class="historyDiv"><p>${cls}-${num}${name} <button class="btn3" id="historyBtn${clsNum}-${seatNum}-${dupNum}">撤銷呼叫</button></p><p>${currentTime}</p> </div>`)
+                            document.getElementById(`historyBtn${cls}-${num}-${dupNum}`).addEventListener("click", function () {
+                                WS.send(JSON.stringify({
+                                    "type": "UNDO",
+                                    "targetClassNo": targetClsNo,
+                                    "student": {
+                                        "classNo": cls,
+                                        "seatNo": num,
+                                        "name": name
+                                    }
+                                }))
+                            })
                         }
                     })
                 })
             }
         })
         if (data["type"] === "CALL_FOR_STUDENT") {
-            const date = new Date();
             const currentTime = date.toLocaleDateString() + " " + date.toLocaleTimeString();
             const studentDic = data["students"];
             console.log(studentDic);

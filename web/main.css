@@ -252,3 +252,9 @@ For more information, please check https://github.com/justfont/open-huninn-font
 #wsStatus {
     text-align: left;
 }
+
+#call-history {
+    display: block;
+    width: 100%;
+    align-items: center;
+}
