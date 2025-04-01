@@ -1,6 +1,6 @@
 {
   "type": "UNDO",
-  "targetClassNo": 305,
+  "targetClassNo": "305",
   "student": {
     "classNo": 301,
     "seatNo": 0,
