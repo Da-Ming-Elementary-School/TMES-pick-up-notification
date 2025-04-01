@@ -2,12 +2,13 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta property="og:title" content="大明國小 課托學生呼叫系統" />
-    <meta property="og:type" content="website" />
-    <meta property="og:description" content="僅需開啟瀏覽器，即可呼叫各教室的學生" />
-    <meta property="og:image" content="https://da-ming-elementary-school.github.io/TMES-pick-up-notification/image/thumbnail.png" />
-    <meta property="og:image:type" content="image/png" />
-    <meta property="og:locale" content="zh_TW" />
+    <meta property="og:title" content="大明國小 課托學生呼叫系統"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:description" content="僅需開啟瀏覽器，即可呼叫各教室的學生"/>
+    <meta property="og:image"
+          content="https://da-ming-elementary-school.github.io/TMES-pick-up-notification/image/thumbnail.png"/>
+    <meta property="og:image:type" content="image/png"/>
+    <meta property="og:locale" content="zh_TW"/>
     <link rel="manifest" href="config/manifest.json">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1.0">
     <title>大明國小 課托學生呼叫系統</title>
@@ -20,7 +21,11 @@
 <h4 id="identityText">目前身分：值班教師</h4>
 <p id="wsStatus">伺服器位址：<code id="wsUrlDisplay"></code></p>
 <div id="header">
-    <p><button class="btn3" id="backtohome" onclick="window.location.reload()">回首頁</button>  <button id="clearStorageUrl" class="btn3" style="text-align: center;margin: 0">重新設定伺服器位址</button>  <button id="called-history" class="btn3">呼叫歷史</button></p>
+    <p>
+        <button class="btn3" id="backtohome" onclick="window.location.reload()">回首頁</button>
+        <button id="clearStorageUrl" class="btn3" style="text-align: center;margin: 0">重新設定伺服器位址</button>
+        <button id="called-history" class="btn3">呼叫歷史</button>
+    </p>
 </div>
 <br>
 <div id="call-history">
@@ -30,46 +35,49 @@
 </div>
 <div id="student-call">
 </div>
-<div class="btnGroup" id="G1">
-    <button class="classNoBtn" id='101'>101</button>
-    <button class="classNoBtn" id='102'>102</button>
-    <button class="classNoBtn" id="103">103</button>
-    <button class="classNoBtn" id="104">104</button>
+<div style="display: flex; width: 100%;align-items: center; justify-content: center;margin: auto 6px auto 6px;">
+    <div class="btnGroup" id="G1" style="border-right: 1px solid #4e4c4c;">
+        <button class="classNoBtn" id='101'>101</button>
+        <button class="classNoBtn" id='102'>102</button>
+        <button class="classNoBtn" id="103">103</button>
+        <button class="classNoBtn" id="104">104</button>
+    </div>
+    <div class="btnGroup" id="G2" style="border-left: 1px solid #4e4c4c;">
+        <button class="classNoBtn" id='201'>201</button>
+        <button class="classNoBtn" id='202'>202</button>
+        <button class="classNoBtn" id="203">203</button>
+        <button class="classNoBtn" id="204">204</button>
+    </div>
 </div>
 <br>
-<div class="btnGroup" id="G2">
-    <button class="classNoBtn" id='201'>201</button>
-    <button class="classNoBtn" id='202'>202</button>
-    <button class="classNoBtn" id="203">203</button>
-    <button class="classNoBtn" id="204">204</button>
+<div style="display: flex; width: 100%;align-items: center; justify-content: center;margin: auto 6px auto 6px;">
+    <div class="btnGroup" id="G3" style="border-right: 1px solid #4e4c4c;">
+        <button class="classNoBtn" id='301'>301</button>
+        <button class="classNoBtn" id='302'>302</button>
+        <button class="classNoBtn" id="303">303</button>
+        <button class="classNoBtn" id="304">304</button>
+    </div>
+    <div class="btnGroup" id="G4" style="border-left: 1px solid #4e4c4c;">
+        <button class="classNoBtn" id='401'>401</button>
+        <button class="classNoBtn" id='402'>402</button>
+        <button class="classNoBtn" id="403">403</button>
+        <button class="classNoBtn" id="404">404</button>
+    </div>
 </div>
 <br>
-<div class="btnGroup" id="G3">
-    <button class="classNoBtn" id='301'>301</button>
-    <button class="classNoBtn" id='302'>302</button>
-    <button class="classNoBtn" id="303">303</button>
-    <button class="classNoBtn" id="304">304</button>
-</div>
-<br>
-<div class="btnGroup" id="G4">
-    <button class="classNoBtn" id='401'>401</button>
-    <button class="classNoBtn" id='402'>402</button>
-    <button class="classNoBtn" id="403">403</button>
-    <button class="classNoBtn" id="404">404</button>
-</div>
-<br>
-<div class="btnGroup" id="G5">
-    <button class="classNoBtn" id='501'>501</button>
-    <button class="classNoBtn" id='502'>502</button>
-    <button class="classNoBtn" id="503">503</button>
-    <button class="classNoBtn" id="504">504</button>
-</div>
-<br>
-<div class="btnGroup" id="G6">
-    <button class="classNoBtn" id='601'>601</button>
-    <button class="classNoBtn" id='602'>602</button>
-    <button class="classNoBtn" id="603">603</button>
-    <button class="classNoBtn" id="604">604</button>
+<div style="display: flex; width: 100%;align-items: center; justify-content: center;margin: auto 6px auto 6px;">
+    <div class="btnGroup" id="G5"style="border-right: 1px solid #4e4c4c;">
+        <button class="classNoBtn" id='501'>501</button>
+        <button class="classNoBtn" id='502'>502</button>
+        <button class="classNoBtn" id="503">503</button>
+        <button class="classNoBtn" id="504">504</button>
+    </div>
+    <div class="btnGroup" id="G6" style="border-left: 1px solid #4e4c4c;">
+        <button class="classNoBtn" id='601'>601</button>
+        <button class="classNoBtn" id='602'>602</button>
+        <button class="classNoBtn" id="603">603</button>
+        <button class="classNoBtn" id="604">604</button>
+    </div>
 </div>
 <br>
 <div id="btnGroup" class="btnGroup2">
