@@ -7,6 +7,9 @@
 For more information, please check https://github.com/justfont/open-huninn-font
 */
 
+code {
+    font-family: monospace;
+}
 
 * {
     font-family: "Huninn", serif;
