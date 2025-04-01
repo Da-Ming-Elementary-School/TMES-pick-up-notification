@@ -7,6 +7,7 @@ document.getElementById("backtohome").style.width = "0";
 document.getElementById("backtohome").style.padding = "0";
 
 $(document).ready(function () {
+    console.info("Document is \"READY\"")
     let wsStatus = false;
     let wsUrl = configServerUrl(wsStatus)
     let WS = new WebSocket(wsUrl);
@@ -43,7 +44,13 @@ $(document).ready(function () {
         if (data["type"] === "CALLBACK") {
             return;
         }
-        const clsArray = data["students"];
+        let clsArray = null;
+        try {
+            clsArray = data["students"];
+        } catch (e) {
+            console.log(data)
+            return;
+        }
         $(".classNoBtn").on("click", function () {
             const targetClsNo = this.id;
             const studentArray = clsArray[targetClsNo]
