@@ -242,7 +242,14 @@ $("#clearStorageUrl").on("click", function () {
 })
 
 function historyBtn(WS, targetClsNo, cls, num, name, currentTime) {
-    $("#call-history").prepend(`<div id="hisDiv-${cls}${num}" class="historyDiv"><p style="height: 34px;margin:4px 0 0 0">${cls}-${num}${name} <button class="btn3" id="historyBtn${cls}-${num}">撤銷呼叫</button></p><p style="font-size: 10px; height: 10px;margin: 0">上次呼叫時間：</p><p id="historyTime${cls}-${num}" style="font-size: 10px; height: 10px;margin: 0 0 3px 0">${currentTime}</p> </div>`)
+    $("#call-history").prepend(
+`<div id="hisDiv-${cls}${num}" class="historyDiv">
+<p style="height: 18px;margin:4px 0 0 0;font-size: 20px">${targetClsNo}</p>
+<p style="height: 26px;margin:4px 0 0 0">${cls}-${num}${name}  <button class="btn3" id="historyBtn${cls}-${num}">撤銷呼叫</button></p>
+<p style="font-size: 10px; height: 10px;margin: 0">上次呼叫時間：</p>
+<p id="historyTime${cls}-${num}" style="font-size: 10px; height: 10px;margin: 0 0 3px 0">${currentTime}</p> 
+</div>`
+    )
     document.getElementById(`historyBtn${cls}-${num}`).addEventListener("click", function () {
         let sendConfirm = confirm(`確定要撤銷 ${formatStudentString(cls, num, name)} 的呼叫？`)
         if (sendConfirm) {
