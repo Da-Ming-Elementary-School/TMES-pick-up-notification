@@ -2,7 +2,7 @@
   "type": "CALL_FOR_STUDENT",
   "targetClassNo": "3A",
   "attempts": 1,
-  "student": {
+  "students": {
     "classNo": 301,
     "seatNo": 0,
     "name": "王以翔"
