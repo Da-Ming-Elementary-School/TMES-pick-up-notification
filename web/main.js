@@ -40,6 +40,9 @@ $(document).ready(function () {
 
     WS.onmessage = function (event) {
         const data = JSON.parse(event.data);
+        if (data["type"] === "CALLBACK") {
+            return;
+        }
         const clsArray = data["students"];
         $(".classNoBtn").on("click", function () {
             const targetClsNo = this.id;
