@@ -1,5 +1,10 @@
 const normalSound = new Audio("audio/notify.wav");
 const warningSound = new Audio("audio/warning.wav");
+document.getElementById("call-history").style.visibility = "hidden";
+document.getElementById("call-history").style.height = "0";
+document.getElementById("backtohome").style.visibility = "hidden";
+document.getElementById("backtohome").style.width = "0";
+document.getElementById("backtohome").style.padding = "0";
 
     $(document).ready(function () {
         let wsStatus = false;
@@ -14,11 +19,6 @@ const warningSound = new Audio("audio/warning.wav");
             "type": "INIT",
             "classNo": 777
         }))
-        document.getElementById("call-history").style.visibility = "hidden";
-        document.getElementById("call-history").style.height = "0";
-        document.getElementById("backtohome").style.visibility = "hidden";
-        document.getElementById("backtohome").style.width = "0";
-        document.getElementById("backtohome").style.padding = "0";
         wsStatus = true;
     }
 
