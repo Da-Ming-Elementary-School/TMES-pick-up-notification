@@ -17,7 +17,7 @@ $(document).ready(function () {
         $("#wsUrlDisplay").css("color", "green");
         WS.send(JSON.stringify({
             "type": "INIT",
-            "classNo": 777
+            "classNo": "777"
         }))
         wsStatus = true;
     }
@@ -42,8 +42,8 @@ $(document).ready(function () {
         const data = JSON.parse(event.data);
         const clsArray = data["students"];
         $(".classNoBtn").on("click", function () {
-            const targetClsNo = parseInt(this.id);
-            const studentArray = clsArray[parseInt(this.id)]
+            const targetClsNo = this.id;
+            const studentArray = clsArray[targetClsNo]
             if (data["type"] === "STUDENT_LIST") {
                 $.each(studentArray, function (index, value) {
                     console.log(value);
@@ -171,7 +171,7 @@ $(document).ready(function () {
             $("#btnGroup").hide();
             WS.send(JSON.stringify({
                 "type": "INIT",
-                "classNo": parseInt(this.id.slice(this.id.indexOf("-") + 1, this.id.length))
+                "classNo": this.id.slice(this.id.indexOf("-") + 1, this.id.length)
             }))
         })
     })
