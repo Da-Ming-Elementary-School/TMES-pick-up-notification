@@ -6,10 +6,10 @@ document.getElementById("backtohome").style.visibility = "hidden";
 document.getElementById("backtohome").style.width = "0";
 document.getElementById("backtohome").style.padding = "0";
 
-    $(document).ready(function () {
-        let wsStatus = false;
-        let wsUrl = configServerUrl(wsStatus)
-        let WS = new WebSocket(wsUrl);
+$(document).ready(function () {
+    let wsStatus = false;
+    let wsUrl = configServerUrl(wsStatus)
+    let WS = new WebSocket(wsUrl);
 
     $("#wsUrlDisplay").text(wsUrl);
 
@@ -225,16 +225,14 @@ function configServerUrl(status) {
     const storage = window.localStorage;
     let wsUrl = storage.getItem("wsUrl");
     if (wsUrl === null) {
+        wsUrl = prompt("請輸入伺服器端的 IP 及端口 (如：ws://localhost:8001)");
+        storage.setItem("wsUrl", wsUrl);
+    } else if (status === false && wsUrl != null) {
         wsUrl = `ws://${document.location.hostname}:8001`;
-    }
-    console.log(`wsUrl: ${wsUrl}`);
-    console.log(status)
-
-    if (status === false) {
+        storage.setItem("wsUrl", wsUrl);
         return configServerUrl();
     }
     return wsUrl;
-
 }
 
 function setBigBanner(student, timestamp) {
