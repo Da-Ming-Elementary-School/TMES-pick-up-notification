@@ -1,7 +1,7 @@
 {
   "name": "大明國小 課托學生呼叫系統",
   "short_name": "大明課托呼叫",
-  "start_url": "/",
+  "start_url": "/TMES-pick-up-notification/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
