@@ -10,11 +10,11 @@ from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
 import logger
 import json_assistant
 
-CONNECTED_CLIENTS: dict[int, list[ServerConnection]] = {}
+CONNECTED_CLIENTS: dict[str, list[ServerConnection]] = {}
 LOGGER = logger.create_logger()
 
 
-def data_is_stored(data) -> tuple[bool, int | None]:
+def data_is_stored(data) -> tuple[bool, str | None]:
     for k, v in CONNECTED_CLIENTS.items():
         if data in v:
             return True, k
@@ -39,7 +39,7 @@ async def handler(websocket: ServerConnection):
         async for data in websocket:
             # JSON string to dict
             data = loads(data)
-            client_id: int = data.get("classNo", -1)
+            client_id: str = data.get("classNo", -1)
             msg_type: str = data.get("type", "UNKNOWN")
             # process received data
             if msg_type == "INIT":
@@ -50,7 +50,7 @@ async def handler(websocket: ServerConnection):
                     CONNECTED_CLIENTS[client_id].append(websocket)
                 else:
                     CONNECTED_CLIENTS[client_id] = [websocket]
-                if client_id == 777:
+                if client_id == "777":
                     # return student list
                     student_list_callback: dict = {}
                     try:

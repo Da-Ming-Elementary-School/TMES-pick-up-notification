@@ -1,6 +1,6 @@
 {
   "type": "CALL_FOR_STUDENT",
-  "targetClassNo": 305,
+  "targetClassNo": "3A",
   "attempts": 1,
   "student": {
     "classNo": 301,
