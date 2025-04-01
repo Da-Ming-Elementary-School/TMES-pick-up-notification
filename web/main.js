@@ -52,15 +52,15 @@ $(document).ready(function () {
                     const name = value["name"];
                     const butMode = document.createElement("input");
                     butMode.type = "button";
-                    butMode.id = clsNum + "-" + seatNum;
+                    butMode.id = formatStudentString(clsNum, seatNum, null);
                     butMode.className = "btn2";
-                    butMode.value = clsNum + "-" + seatNum + name;
+                    butMode.value = formatStudentString(clsNum, seatNum, name);
                     $("#btnGroup").append(butMode);
-                    $(`#${clsNum}-${seatNum}`).click(function () {
+                    $(`#${formatStudentString(clsNum, seatNum, null)}`).click(function () {
                         const cls = this.id.slice(0, this.id.indexOf("-"));
                         const num = this.id.slice(this.id.indexOf("-") + 1, this.id.length);
                         const name = this.value.slice(this.id.length, this.value.length);
-                        let sendConfirm = confirm(`確定要呼叫 ${cls}-${num} ${name}？`)
+                        let sendConfirm = confirm(`確定要呼叫 ${formatStudentString(cls, num, name)}？`)
                         if (sendConfirm) {
                             WS.send(JSON.stringify({
                                 "type": "CALL_FOR_STUDENT",
@@ -73,7 +73,7 @@ $(document).ready(function () {
 
                             }))
                             let dupNum = 0
-                            for (let i = 0; document.getElementById("student-call").children.namedItem(`${cls}-${num}-${i}`) != null && i === dupNum; i++) {
+                            for (let i = 0; document.getElementById("student-call").children.namedItem(`${formatStudentString(cls, num, name)}-${i}`) != null && i === dupNum; i++) {
                                 dupNum++;
                             }
                             if (document.getElementById("call-history").children.namedItem(`hisDiv-${cls}${num}`) === null) {
@@ -105,10 +105,10 @@ $(document).ready(function () {
             for (let i = 0; document.getElementById("student-call").children.namedItem(`${clsNum}-${seatNum}-${i}`) != null && i === dupNum; i++) {
                 dupNum++;
             }
-            setBigBanner(`${clsNum}-${seatNum} ${name}`, currentTime)
+            setBigBanner(`${formatStudentString(clsNum, seatNum, name)}`, currentTime)
 
-            $("#student-call").prepend(`<div id="${clsNum}-${seatNum}-${dupNum}" class="calledDiv${clsNum}-${seatNum}"><h2 id="calledTitle${clsNum}-${seatNum}">${clsNum}-${seatNum}${name}</h2><p id="btnText${clsNum}-${seatNum}-${dupNum}"><button id="confirmBtn${clsNum}-${seatNum}-${dupNum}" class="btn3" style="margin: 0 auto; text-align: center; display: block" onclick="function confirmBtn() {}">確認</button></p><p id="calledTime${clsNum}-${seatNum}">${currentTime}</p></div>`)
-            document.getElementById(`confirmBtn${clsNum}-${seatNum}-${dupNum}`).addEventListener("click", function () {
+            $("#student-call").prepend(`<div id="${formatStudentString(clsNum, seatNum, null)}-${dupNum}" class="calledDiv${formatStudentString(clsNum, seatNum, null)}"><h2 id="calledTitle${formatStudentString(clsNum, seatNum, null)}">${formatStudentString(clsNum, seatNum, name)}</h2><p id="btnText${formatStudentString(clsNum, seatNum, null)}-${dupNum}"><button id="confirmBtn${formatStudentString(clsNum, seatNum, null)}-${dupNum}" class="btn3" style="margin: 0 auto; text-align: center; display: block" onclick="function confirmBtn() {}">確認</button></p><p id="calledTime${formatStudentString(clsNum, seatNum, null)}">${currentTime}</p></div>`)
+            document.getElementById(`confirmBtn${formatStudentString(clsNum, seatNum, null)}-${dupNum}`).addEventListener("click", function () {
                     this.style.visibility = "hidden";
                     document.getElementById(`${this.id.slice(10, this.id.length)}`).style.borderColor = "#00dc01";
                     document.getElementById(`btnText${this.id.slice(10, this.id.length)}`).textContent = "已確認！！"
@@ -129,7 +129,7 @@ $(document).ready(function () {
             const seatNum = studentDic["seatNo"];
             const name = studentDic["name"];
             document.getElementById("student-call").childNodes.forEach(function (value, key, parent) {
-                if (new RegExp(`${clsNum}-${seatNum}-*`).test(value.id)) {
+                if (new RegExp(`${formatStudentString(clsNum, seatNum, null)}-*`).test(value.id)) {
                     value.style.borderColor = "#ffe600";
                     value.childNodes.item(0).style.textDecoration = "line-through";
                     const btnText = value.childNodes.item(1);
@@ -145,7 +145,7 @@ $(document).ready(function () {
                     value.childNodes.item(2).style.textDecoration = "line-through";
                 }
             });
-            setUndoBanner(`${clsNum}-${seatNum} ${name}`, currentTime)
+            setUndoBanner(`${formatStudentString(clsNum, seatNum, name)}`, currentTime)
             warningSound.play()
             warningSound.currentTime = 0
         }
@@ -156,7 +156,7 @@ $(document).ready(function () {
         let classNum = this.id;
         console.log(classNum);
         $("#btnGroup").empty();
-        $("#btnGroup").prepend(`<button class="clsBtn" id="classroom-${classNum}">${classNum}教室端</button>`)
+        $("#btnGroup").prepend(`<button class="clsBtn" id="classroom-${classNum}">${classNum} 教室端</button>`)
         $(".clsBtn").click(function () {
             document.getElementById("called-history").style.visibility = "hidden";
             document.getElementById("call-history").style.visibility = "hidden";
@@ -205,7 +205,7 @@ $("#clearStorageUrl").on("click", function () {
 function historyBtn(WS, targetClsNo, cls, num, name, currentTime) {
     $("#call-history").prepend(`<div id="hisDiv-${cls}${num}" class="historyDiv"><p style="height: 34px;margin:4px 0 0 0">${cls}-${num}${name} <button class="btn3" id="historyBtn${cls}-${num}">撤銷呼叫</button></p><p style="font-size: 10px; height: 10px;margin: 0">上次呼叫時間：</p><p id="historyTime${cls}-${num}" style="font-size: 10px; height: 10px;margin: 0 0 3px 0">${currentTime}</p> </div>`)
     document.getElementById(`historyBtn${cls}-${num}`).addEventListener("click", function () {
-        let sendConfirm = confirm(`確定要撤銷 ${cls}-${num} ${name} 的呼叫？`)
+        let sendConfirm = confirm(`確定要撤銷 ${formatStudentString(cls, num, name)} 的呼叫？`)
         if (sendConfirm) {
             document.getElementById(`hisDiv-${cls}${num}`).remove();
             WS.send(JSON.stringify({
@@ -255,6 +255,18 @@ function setUndoBanner(student, timestamp) {
     setTimeout(function () {
         studentObj.fadeOut()
     }, 10000)
+}
+
+function formatStudentString(classNo, seatNo, name) {
+        if (name === null) {
+            name = ""
+        } else {
+            name = " " + name
+        }
+        if (!(typeof seatNo === "string") && seatNo < 10) {
+            return `${classNo}-0${seatNo}${name}`
+        }
+        return `${classNo}-${seatNo}${name}`
 }
 
 function sleep(time) {
