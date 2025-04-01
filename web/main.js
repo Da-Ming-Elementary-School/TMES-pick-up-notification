@@ -116,7 +116,7 @@ const warningSound = new Audio("audio/warning.wav");
                     btnTextStyle.fontSize = "20px";
                     btnTextStyle.fontWeight = "bold";
                     btnTextStyle.color = "#000000";
-                    btnTextStyle.height = "34px";
+                    btnTextStyle.height = "30px";
                 }
             )
             normalSound.play();
