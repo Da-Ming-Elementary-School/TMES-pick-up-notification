@@ -225,7 +225,7 @@ function configServerUrl(status) {
     const storage = window.localStorage;
     let wsUrl = storage.getItem("wsUrl");
     if (wsUrl === null) {
-        wsUrl = `ws://${document.location.hostname}:8000`;
+        wsUrl = `ws://${document.location.hostname}:8001`;
     }
     console.log(`wsUrl: ${wsUrl}`);
     console.log(status)
