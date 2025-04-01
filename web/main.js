@@ -50,12 +50,12 @@ $(document).ready(function () {
                     const clsNum = value["classNo"];
                     const seatNum = value["seatNo"];
                     const name = value["name"];
-                    const butMode = document.createElement("input");
-                    butMode.type = "button";
-                    butMode.id = formatStudentString(clsNum, seatNum, null);
-                    butMode.className = "btn2";
-                    butMode.value = formatStudentString(clsNum, seatNum, name);
-                    $("#btnGroup").append(butMode);
+                    const btnMode = document.createElement("input");
+                    btnMode.type = "button";
+                    btnMode.id = formatStudentString(clsNum, seatNum, null);
+                    btnMode.className = "btn2";
+                    btnMode.value = formatStudentString(clsNum, seatNum, name);
+                    $("#btnGroup").append(btnMode);
                     $(`#${formatStudentString(clsNum, seatNum, null)}`).click(function () {
                         const cls = this.id.slice(0, this.id.indexOf("-"));
                         const num = this.id.slice(this.id.indexOf("-") + 1, this.id.length);
