@@ -10,21 +10,34 @@
     <meta property="og:image:type" content="image/png"/>
     <meta property="og:locale" content="zh_TW"/>
     <link rel="manifest" href="config/manifest.json">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>大明國小 課托學生呼叫系統</title>
+    <link rel="stylesheet" href="material-components-web.min.css">
 </head>
 <body>
 <style>
     @import "main.css";
+    :root {
+        --mdc-theme-primary: #3f51b5;
+        --mdc-theme-secondary: #ff4081;
+        --mdc-theme-background: #f8f8f8;
+        --mdc-theme-surface: #ffffff;
+        --mdc-theme-text-primary: #212121;
+        --mdc-theme-text-secondary: #757575;
+    }
+    body {
+        background-color: var(--mdc-theme-background);
+        font-family: 'Roboto', serif;
+    }
 </style>
-<h1>大明國小 課托學生呼叫系統</h1>
-<h4 id="identityText">目前身分：值班教師</h4>
-<p id="wsStatus">伺服器位址：<code id="wsUrlDisplay"></code></p>
-<div id="header">
+<h1 class="mdc-typography mdc-typography--headline3" style="font-weight: bold">大明國小 課托學生呼叫系統</h1>
+<h4 class="mdc-typography mdc-typography--body2" id="identityText" style="font-weight: bold;margin-bottom: 0;margin-top: 0">目前身分：值班教師</h4>
+<p class="mdc-typography mdc-typography--body2" id="wsStatus" style="font-weight: bold;margin-bottom: 0;margin-top: 0">伺服器位址：<code id="wsUrlDisplay"></code></p>
+<div id="header" style="font-weight: bold;margin-bottom: 0;margin-top: 0">
     <p>
-        <button class="btn3" id="backtohome" onclick="window.location.reload()">回首頁</button>
-        <button id="clearStorageUrl" class="btn3" style="text-align: center;margin: 0">重新設定伺服器位址</button>
-        <button id="called-history" class="btn3">呼叫歷史</button>
+        <button class="mdc-button mdc-button--raised" id="backtohome" onclick="window.location.reload()" style="font-weight: bold;margin-bottom: 0;margin-top: 0">回首頁</button>
+        <button id="clearStorageUrl" class="mdc-button mdc-button--raised" style="font-weight: bold;text-align: center;margin: 0">重新設定伺服器位址</button>
+        <button id="called-history" class="mdc-button mdc-button--raised" style="font-weight: bold;margin-bottom: 0;margin-top: 0">呼叫歷史</button>
     </p>
 </div>
 <br>
@@ -87,6 +100,7 @@
 </div>
 <script src="jquery.js" charset="utf-8"></script>
 <script src="main.js"></script>
+<script src="material-components-web.min.js"></script>
 <script type="text/javascript">
 </script>
 

@@ -2,9 +2,6 @@ const normalSound = new Audio("audio/notify.wav");
 const warningSound = new Audio("audio/warning.wav");
 document.getElementById("call-history").style.visibility = "hidden";
 document.getElementById("call-history").style.height = "0";
-document.getElementById("backtohome").style.visibility = "hidden";
-document.getElementById("backtohome").style.width = "0";
-document.getElementById("backtohome").style.padding = "0";
 
 $(document).ready(function () {
     console.info("Document is \"READY\"")
@@ -137,7 +134,7 @@ $(document).ready(function () {
             }
             let classNum = this.id;
             console.log(classNum)
-            $("#btnGroup").prepend(`<button class="clsBtn" id="classroom-${classNum}">${classNum} 教室端</button><br>`)
+            $("#btnGroup").prepend(`<button class="mdc-button mdc-button--raised clsBtn" id="classroom-${classNum}" style="font-weight: bold">${classNum} 教室端</button><br>`)
             $(".clsBtn").click(function () {
                 document.getElementById("called-history").style.visibility = "hidden";
                 document.getElementById("call-history").style.visibility = "hidden";
@@ -214,7 +211,7 @@ $(document).ready(function () {
         }
     }
 
-    $("body").css("background-color", "pink");
+    $("body").css("background-color", "#c3c3c3");
 })
 
 document.getElementById("called-history").addEventListener("click", function () {
@@ -225,13 +222,11 @@ document.getElementById("called-history").addEventListener("click", function () 
         historyDiv.style.height = "auto";
         historyBtn.textContent = "X";
         historyBtn.style.backgroundColor = "#ff0000";
-        historyBtn.style.color = "#FFFFFF";
     } else if (historyDiv.checkVisibility({visibilityProperty: false}) === true) {
         historyDiv.style.visibility = "hidden";
         historyDiv.style.height = "0";
         historyBtn.textContent = "呼叫歷史";
-        historyBtn.style.backgroundColor = "#FAFBFC";
-        historyBtn.style.color = "#000000";
+        historyBtn.style.backgroundColor = "#3f51b5";
     }
 })
 
