@@ -7,6 +7,9 @@
 For more information, please check https://github.com/justfont/open-huninn-font
 */
 
+code {
+    font-family: monospace;
+}
 
 * {
     font-family: "Huninn", serif;
@@ -42,6 +45,24 @@ For more information, please check https://github.com/justfont/open-huninn-font
 .classNoBtn:hover,
 .classNoBtn:focus {
     background-color: #F082AC;
+}
+
+.classBtnLine {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    margin: auto 6px auto 6px;
+}
+
+.btnGroupL {
+    border-right: 1px solid #4e4c4c;
+    padding-right: 5px;
+}
+
+.btnGroupR {
+    border-left: 1px solid #4e4c4c;
+    padding-left: 5px;
 }
 
 .btn2 {
@@ -153,6 +174,7 @@ For more information, please check https://github.com/justfont/open-huninn-font
 }
 
 #header {
+    position: relative;
     display: inline-block;
     text-align: left;
 }
@@ -214,37 +236,37 @@ For more information, please check https://github.com/justfont/open-huninn-font
     display: none;
 }
 
-.clsBtn {
-    background-color: #1d57ec;
-    border-radius: 8px;
-    border-style: none;
-    box-sizing: border-box;
-    color: #FFFFFF;
-    cursor: pointer;
-    display: inline-block;
-    /*font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;*/
-    font-size: 15px;
-    font-weight: 500;
-    height: 40px;
-    line-height: 20px;
-    list-style: none;
-    margin: 0;
-    outline: none;
-    padding: 8px 10px;
-    position: relative;
-    text-align: center;
-    text-decoration: none;
-    transition: color 100ms;
-    vertical-align: baseline;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-}
+/*.clsBtn {*/
+/*    background-color: #1d57ec;*/
+/*    border-radius: 8px;*/
+/*    border-style: none;*/
+/*    box-sizing: border-box;*/
+/*    color: #FFFFFF;*/
+/*    cursor: pointer;*/
+/*    display: inline-block;*/
+/*    !*font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;*!*/
+/*    font-size: 15px;*/
+/*    font-weight: 500;*/
+/*    height: 40px;*/
+/*    line-height: 20px;*/
+/*    list-style: none;*/
+/*    margin: 0;*/
+/*    outline: none;*/
+/*    padding: 8px 10px;*/
+/*    position: relative;*/
+/*    text-align: center;*/
+/*    text-decoration: none;*/
+/*    transition: color 100ms;*/
+/*    vertical-align: baseline;*/
+/*    user-select: none;*/
+/*    -webkit-user-select: none;*/
+/*    touch-action: manipulation;*/
+/*}*/
 
-.clsBtn:hover,
-.clsBtn:focus {
-    background-color: #00117e;
-}
+/*.clsBtn:hover,*/
+/*.clsBtn:focus {*/
+/*    background-color: #00117e;*/
+/*}*/
 
 .confirmBtn {
     text-align: center;

@@ -2,11 +2,9 @@ const normalSound = new Audio("audio/notify.wav");
 const warningSound = new Audio("audio/warning.wav");
 document.getElementById("call-history").style.visibility = "hidden";
 document.getElementById("call-history").style.height = "0";
-document.getElementById("backtohome").style.visibility = "hidden";
-document.getElementById("backtohome").style.width = "0";
-document.getElementById("backtohome").style.padding = "0";
 
 $(document).ready(function () {
+    console.info("Document is \"READY\"")
     let wsStatus = false;
     let wsUrl = configServerUrl(wsStatus)
     let WS = new WebSocket(wsUrl);
@@ -40,13 +38,52 @@ $(document).ready(function () {
 
     WS.onmessage = function (event) {
         const data = JSON.parse(event.data);
+        // skip "CALLBACK" data
         if (data["type"] === "CALLBACK") {
             return;
         }
-        const clsArray = data["students"];
+        let clsArray = null;
+        try {
+            clsArray = data["students"];
+        } catch (e) {
+            console.log(data)
+            return;
+        }
+        // generate class buttons by using "clsArray"
+        let lastGradeNo = 0;
+        let classBtnContainer = $("#class-btn");
+        $.each(clsArray, function (index, value) {
+            const currentGradeNo = parseInt(index.slice(0, 1));
+            if (currentGradeNo % 2 === 1) {  // 1, 3, 5
+                if (lastGradeNo !== currentGradeNo) {
+                    classBtnContainer.append(
+                        `<div class="classBtnLine" id="btnL-${currentGradeNo}-${currentGradeNo+1}"></div><br>`
+                    )
+                    let btnLineContainer = $(`#btnL-${currentGradeNo}-${currentGradeNo+1}`);
+                    btnLineContainer.append(
+                        `<div class="btnGroupL" id="G${currentGradeNo}"></div>`
+                    )
+                }
+            } else {  // 2, 4, 6
+                if (lastGradeNo !== currentGradeNo) {
+                    let btnLineContainer = $(`#btnL-${currentGradeNo-1}-${currentGradeNo}`);
+                    btnLineContainer.append(
+                        `<div class="btnGroupR" id="G${currentGradeNo}"></div>`
+                    )
+                }
+            }
+            lastGradeNo = currentGradeNo
+            let btnGroupContainer = $(`#G${currentGradeNo}`)
+            btnGroupContainer.append(
+                `<button class="classNoBtn" id="${index}">${index}</button>`
+            )
+        }
+        )
+
         $(".classNoBtn").on("click", function () {
             const targetClsNo = this.id;
             const studentArray = clsArray[targetClsNo]
+            $("#btnGroup").empty();
             if (data["type"] === "STUDENT_LIST") {
                 $.each(studentArray, function (index, value) {
                     console.log(value);
@@ -95,6 +132,26 @@ $(document).ready(function () {
                     })
                 })
             }
+            let classNum = this.id;
+            console.log(classNum)
+            $("#btnGroup").prepend(`<button class="mdc-button mdc-button--raised clsBtn" id="classroom-${classNum}" style="font-weight: bold">${classNum} 教室端</button><br>`)
+            $(".clsBtn").click(function () {
+                document.getElementById("called-history").style.visibility = "hidden";
+                document.getElementById("call-history").style.visibility = "hidden";
+                document.getElementById("call-history").style.height = "0";
+                document.getElementById("backtohome").style.visibility = "visible";
+                document.getElementById("backtohome").style.padding = "6px 16px";
+                document.getElementById("backtohome").style.margin = "auto";
+                document.getElementById("backtohome").style.width = "auto";
+                $("#identityText").text(`目前身分：${classNum}`);
+                console.log(this.id);
+                $(".classNoBtn").hide();
+                $("#btnGroup").hide();
+                WS.send(JSON.stringify({
+                    "type": "INIT",
+                    "classNo": this.id.slice(this.id.indexOf("-") + 1, this.id.length)
+                }))
+            })
         })
         if (data["type"] === "CALL_FOR_STUDENT") {
             const time = new Date();
@@ -154,31 +211,7 @@ $(document).ready(function () {
         }
     }
 
-    $("body").css("background-color", "pink");
-    $(".classNoBtn").click(function () {
-        let classNum = this.id;
-        console.log(classNum);
-        $("#btnGroup").empty();
-        $("#btnGroup").prepend(`<button class="clsBtn" id="classroom-${classNum}">${classNum} 教室端</button>`)
-        $(".clsBtn").click(function () {
-            document.getElementById("called-history").style.visibility = "hidden";
-            document.getElementById("call-history").style.visibility = "hidden";
-            document.getElementById("call-history").style.height = "0";
-            document.getElementById("backtohome").style.visibility = "visible";
-            document.getElementById("backtohome").style.padding = "6px 16px";
-            document.getElementById("backtohome").style.margin = "auto";
-            document.getElementById("backtohome").style.width = "auto";
-            $("#identityText").text(`目前身分：${classNum}`);
-            console.log(this.id);
-            $(".classNoBtn").hide();
-            $("#btnGroup").hide();
-            WS.send(JSON.stringify({
-                "type": "INIT",
-                "classNo": this.id.slice(this.id.indexOf("-") + 1, this.id.length)
-            }))
-        })
-    })
-
+    $("body").css("background-color", "#c3c3c3");
 })
 
 document.getElementById("called-history").addEventListener("click", function () {
@@ -189,13 +222,11 @@ document.getElementById("called-history").addEventListener("click", function () 
         historyDiv.style.height = "auto";
         historyBtn.textContent = "X";
         historyBtn.style.backgroundColor = "#ff0000";
-        historyBtn.style.color = "#FFFFFF";
     } else if (historyDiv.checkVisibility({visibilityProperty: false}) === true) {
         historyDiv.style.visibility = "hidden";
         historyDiv.style.height = "0";
         historyBtn.textContent = "呼叫歷史";
-        historyBtn.style.backgroundColor = "#FAFBFC";
-        historyBtn.style.color = "#000000";
+        historyBtn.style.backgroundColor = "#3f51b5";
     }
 })
 
@@ -206,7 +237,14 @@ $("#clearStorageUrl").on("click", function () {
 })
 
 function historyBtn(WS, targetClsNo, cls, num, name, currentTime) {
-    $("#call-history").prepend(`<div id="hisDiv-${cls}${num}" class="historyDiv"><p style="height: 34px;margin:4px 0 0 0">${cls}-${num}${name} <button class="btn3" id="historyBtn${cls}-${num}">撤銷呼叫</button></p><p style="font-size: 10px; height: 10px;margin: 0">上次呼叫時間：</p><p id="historyTime${cls}-${num}" style="font-size: 10px; height: 10px;margin: 0 0 3px 0">${currentTime}</p> </div>`)
+    $("#call-history").prepend(
+`<div id="hisDiv-${cls}${num}" class="historyDiv">
+<p style="height: 18px;margin:4px 0 0 0;font-size: 20px">${targetClsNo}</p>
+<p style="height: 26px;margin:4px 0 0 0">${cls}-${num}${name}  <button class="btn3" id="historyBtn${cls}-${num}">撤銷呼叫</button></p>
+<p style="font-size: 10px; height: 10px;margin: 0">上次呼叫時間：</p>
+<p id="historyTime${cls}-${num}" style="font-size: 10px; height: 10px;margin: 0 0 3px 0">${currentTime}</p> 
+</div>`
+    )
     document.getElementById(`historyBtn${cls}-${num}`).addEventListener("click", function () {
         let sendConfirm = confirm(`確定要撤銷 ${formatStudentString(cls, num, name)} 的呼叫？`)
         if (sendConfirm) {
