@@ -166,7 +166,7 @@ $(document).ready(function () {
         let classNum = this.id;
         console.log(classNum);
         $("#btnGroup").empty();
-        $("#btnGroup").prepend(`<button class="clsBtn" id="classroom-${classNum}">${classNum} 教室端</button>`)
+        $("#btnGroup").prepend(`<button class="clsBtn" id="classroom-${classNum}">${classNum} 教室端</button><br>`)
         $(".clsBtn").click(function () {
             document.getElementById("called-history").style.visibility = "hidden";
             document.getElementById("call-history").style.visibility = "hidden";
