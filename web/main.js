@@ -1,10 +1,11 @@
 const normalSound = new Audio("audio/notify.wav");
 const warningSound = new Audio("audio/warning.wav");
 
-$(document).ready(function () {
-    let wsUrl = configServerUrl()
-    let date = new Date();
-    const WS = new WebSocket(wsUrl);
+    $(document).ready(function () {
+        let wsStatus = false;
+        let wsUrl = configServerUrl(wsStatus)
+        let WS = new WebSocket(wsUrl);
+
     $("#wsUrlDisplay").text(wsUrl);
 
     WS.onopen = function () {
@@ -18,12 +19,14 @@ $(document).ready(function () {
         document.getElementById("backtohome").style.visibility = "hidden";
         document.getElementById("backtohome").style.width = "0";
         document.getElementById("backtohome").style.padding = "0";
+        wsStatus = true;
     }
 
     WS.onerror = function (e) {
         console.error(e);
         alert("與伺服器連接失敗。請嘗試重新整理網頁，或檢查伺服器位址是否正確。");
         $("#wsUrlDisplay").css("color", "red");
+        wsStatus = false;
     }
 
     WS.onclose = function (e) {
@@ -31,6 +34,7 @@ $(document).ready(function () {
             alert(`與伺服器的連線中斷。請嘗試重新整理網頁，或檢查伺服器位址是否正確。\n錯誤代碼：${e.code}`)
         }
         $("#wsUrlDisplay").css("color", "red");
+        wsStatus = false;
     }
 
 
@@ -217,18 +221,20 @@ function historyBtn(WS, targetClsNo, cls, num, name, currentTime) {
     })
 }
 
-function configServerUrl() {
+function configServerUrl(status) {
     const storage = window.localStorage;
     let wsUrl = storage.getItem("wsUrl");
     if (wsUrl === null) {
-        wsUrl = prompt("請輸入伺服器端的 IP 及端口 (如：ws://localhost:8001)");
-        storage.setItem("wsUrl", wsUrl);
+        wsUrl = `ws://${document.location.hostname}:8000`;
     }
+    console.log(`wsUrl: ${wsUrl}`);
+    console.log(status)
 
-    if (wsUrl === null) {
+    if (status === false) {
         return configServerUrl();
     }
     return wsUrl;
+
 }
 
 function setBigBanner(student, timestamp) {
