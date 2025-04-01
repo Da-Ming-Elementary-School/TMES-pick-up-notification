@@ -1,4 +1,5 @@
 # coding=utf-8
+from copy import deepcopy
 from json import load, dump
 from csv import reader
 import os
@@ -12,8 +13,8 @@ class StudentList:
     STUDENT_LIST_DIR = path.join(BASE_DIR, 'student_list')
     EMPTY_DATA = {"students": []}
 
-    def __init__(self, class_no: int):
-        self.class_no: int = class_no
+    def __init__(self, class_no: str):
+        self.class_no: str = class_no
         self.file_path: str = path.join(self.STUDENT_LIST_DIR, f'class_{class_no}.json')
         if not path.exists(self.file_path):
             raise FileNotFoundError(f'{self.file_path} not found')
@@ -32,15 +33,17 @@ class StudentList:
     @staticmethod
     def get_all_student_lists():
         all_student_lists = {}
-        for f in os.listdir(StudentList.STUDENT_LIST_DIR):
-            if not f.startswith('class_'):
+        for file in os.listdir(StudentList.STUDENT_LIST_DIR):
+            if not file.startswith('class_'):
                 continue
-            class_no = f.replace('class_', '').replace('.json', '')
-            all_student_lists[class_no] = StudentList(class_no=int(class_no)).get_student_list()
+            class_no = file.replace('class_', '').replace('.json', '')
+            all_student_lists[class_no] = StudentList(class_no=class_no).get_student_list()
+        with open("all_student_lists.json", "w", encoding="utf-8") as f:
+            dump(all_student_lists, f, indent=4, ensure_ascii=False)
         return all_student_lists
 
     @staticmethod
-    def read_student_lists_from_csv(class_no: int):
+    def read_student_lists_from_csv(class_no: str):
         try:
             student_list_obj = StudentList(class_no=class_no)
         except FileNotFoundError:
@@ -48,7 +51,7 @@ class StudentList:
                       encoding="utf-8") as f:
                 dump(StudentList.EMPTY_DATA, f, indent=4)
             student_list_obj = StudentList(class_no=class_no)
-        student_list_data = student_list_obj.EMPTY_DATA
+        student_list_data = deepcopy(student_list_obj.EMPTY_DATA)
         with open(path.join(StudentList.STUDENT_LIST_DIR, f"{class_no}.csv"), mode="r", newline="",
                   encoding="utf-8-sig") as f:
             csv_reader = reader(f)
@@ -69,4 +72,8 @@ class StudentList:
 
 
 if __name__ == '__main__':
-    StudentList.read_student_lists_from_csv(class_no=int(input("輸入班級編號：")))
+    for f in os.listdir(StudentList.STUDENT_LIST_DIR):
+        if not f.endswith(".csv"):
+            continue
+        print(f)
+        StudentList.read_student_lists_from_csv(class_no=f[:2])
