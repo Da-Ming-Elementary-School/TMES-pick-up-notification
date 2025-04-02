@@ -303,6 +303,17 @@ function formatStudentString(classNo, seatNo, name) {
         return `${classNo}-${seatNo}${name}`
 }
 
+function fullScreen(element) {
+    document.fullscreenEnabled = document.fullscreenEnabled || document.mozFullScreenEnabled || document.documentElement.webkitRequestFullScreen;
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+    } else if (element.webkitRequestFullScreen) {
+        element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+    }
+}
+
 function sleep(time) {
     return new Promise(resolve => setTimeout(resolve, time));
 }
