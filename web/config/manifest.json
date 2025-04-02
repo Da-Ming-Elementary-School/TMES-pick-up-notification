@@ -10,6 +10,11 @@
       "src": "./web/image/thumbnail.png",
       "sizes": "970x531",
       "type": "image/png"
+    },
+    {
+      "src": "./web/favicon.ico",
+      "sizes": "256x256",
+      "type": "image/ico"
     }
   ]
 }
