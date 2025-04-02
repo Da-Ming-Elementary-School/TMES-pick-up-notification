@@ -14,6 +14,7 @@
     <title>大明學生呼叫系統</title>
     <link rel="stylesheet" href="material-components-web.min.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body class="blur-background">
 <style>
@@ -33,6 +34,12 @@
 
 </style>
 <button onclick="window.location.reload()" style="background:none; border: none;height: fit-content;margin-top: 10px;margin-left: 10px;margin-bottom: 20px"><img src="image/Logo.png" alt="Logo" height="80"></button>
+<div class="search-container">
+        <label>
+            <input type="text" placeholder="Search.." name="search" id="searchBar">
+        </label>
+        <button type="submit" id="submitBtn"><i class="fa fa-search"></i></button>
+</div>
 <!--<h1 class="mdc-typography mdc-typography&#45;&#45;headline3" style="font-weight: bold">大明國小 課托學生呼叫系統</h1>-->
 <h4 class="mdc-typography mdc-typography--body2" id="identityText" style="font-weight: bold;margin-bottom: 0;margin-top: 0;margin-left: 15px">目前身分：值班教師</h4>
 

@@ -38,6 +38,7 @@ $(document).ready(function () {
 
 
     WS.onmessage = function (event) {
+        console.info(event.data);
         const data = JSON.parse(event.data);
         // skip "CALLBACK" data
         if (data["type"] === "CALLBACK") {
@@ -211,9 +212,51 @@ $(document).ready(function () {
             warningSound.currentTime = 0
         }
     }
-
-    //$("body").css("background-color", "#c3c3c3");
+    document.getElementById("submitBtn").addEventListener("click", function () {
+        const value = document.getElementById("searchBar").value;
+        let classNo = null;
+        let seatNo = null;
+        let name = "";
+        let run = false;
+        if (isAllChinese(value)){
+            name = value;
+            run = true;
+        }
+        else if (countDigits(value) >= 4 && hasChinese(value)){
+            classNo = value.slice(0,3);
+            seatNo = value.slice(3,countDigits(value));
+            name = value.slice(countDigits(value), value.length);
+            run = true;
+        }
+        else if (countDigits(value) >= 4 && !hasChinese(value)){
+            classNo = value.slice(0,3);
+            seatNo = value.slice(3,countDigits(value));
+            run = true;
+        }
+        else if (countDigits(value) === 3 && hasChinese(value)){
+            run = true;
+        }
+        else if (countDigits(value) === 2 && hasChinese(value)) {
+            run = true;
+        }
+        else {
+            run = false;
+        }
+        if (run) {
+            console.log(classNo + name + seatNo);
+            WS.send(JSON.stringify({
+                "type": "SEARCH",
+                "student": {
+                    "classNo": classNo,
+                    "seatNo": seatNo,
+                    "name": name
+                }
+            }))
+        }
+    })
 })
+
+
 
 document.getElementById("called-history").addEventListener("click", function () {
     let historyDiv = document.getElementById("call-history");
@@ -349,4 +392,17 @@ function guidGenerator() {
         return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
     };
     return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+}
+
+function isAllChinese(str) {
+    return /^[\u4e00-\u9fff]+$/.test(str);
+}
+
+function countDigits(str) {
+    const match = str.match(/\d/g); // \d 代表數字，g 表示全域匹配
+    return match ? match.length : 0;
+}
+
+function hasChinese(str) {
+    return /[\u4e00-\u9fff]/.test(str);
 }
