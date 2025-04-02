@@ -6,6 +6,12 @@
 "open-huninn" by justfont. Licensed under SIL Open Font License 1.1.
 For more information, please check https://github.com/justfont/open-huninn-font
 */
+.blur-background {
+    background: linear-gradient(135deg, rgba(197, 121, 162, 0.8), rgba(114, 162, 191, 0.8));
+    backdrop-filter: blur(10px);
+    height: 100%;
+}
+
 
 code {
     font-family: monospace;

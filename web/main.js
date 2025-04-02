@@ -212,7 +212,7 @@ $(document).ready(function () {
         }
     }
 
-    $("body").css("background-color", "#c3c3c3");
+    //$("body").css("background-color", "#c3c3c3");
 })
 
 document.getElementById("called-history").addEventListener("click", function () {
