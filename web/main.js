@@ -2,6 +2,7 @@ const normalSound = new Audio("audio/notify.wav");
 const warningSound = new Audio("audio/warning.wav");
 document.getElementById("call-history").style.visibility = "hidden";
 document.getElementById("call-history").style.height = "0";
+let isFullScreen = false;
 
 $(document).ready(function () {
     console.info("Document is \"READY\"")
@@ -305,12 +306,37 @@ function formatStudentString(classNo, seatNo, name) {
 
 function fullScreen(element) {
     document.fullscreenEnabled = document.fullscreenEnabled || document.mozFullScreenEnabled || document.documentElement.webkitRequestFullScreen;
-    if (element.requestFullscreen) {
-        element.requestFullscreen();
-    } else if (element.mozRequestFullScreen) {
-        element.mozRequestFullScreen();
-    } else if (element.webkitRequestFullScreen) {
-        element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+    fullscreenBtn.childNodes.item(0).src = "image/fullscreen-exit.svg";
+    //fullscreenBtn.append("<img src=\"image/fullscreen-exit.svg\" alt=\"full screen-exit\" height=\"30\">")
+    if(window.innerHeight !== screen.height) {
+        if (element.requestFullscreen && isFullScreen === false) {
+            element.requestFullscreen();
+            isFullScreen = true;
+        } else if (element.mozRequestFullScreen && isFullScreen === false) {
+            element.mozRequestFullScreen();
+            isFullScreen = true;
+        } else if (element.webkitRequestFullScreen && isFullScreen === false) {
+            element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+            isFullScreen = true;
+        }
+        else if (isFullScreen) {
+            closeFullscreen()
+            fullscreenBtn.childNodes.item(0).src = "image/fullscreen.svg";
+        }
+    }
+}
+
+function closeFullscreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+        isFullScreen = false;
+    } else if (document.webkitExitFullscreen) { /* Safari */
+        document.webkitExitFullscreen();
+        isFullScreen = false;
+    } else if (document.msExitFullscreen) { /* IE11 */
+        document.msExitFullscreen();
+        isFullScreen = false;
     }
 }
 
