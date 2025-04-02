@@ -43,6 +43,17 @@ class StudentList:
         return all_student_lists
 
     @staticmethod
+    def index_all_student_lists():
+        index_by_student = {}
+        all_student_lists = StudentList.get_all_student_lists()
+        for class_no, student_list in all_student_lists.items():
+            for student in student_list:
+                index_by_student[
+                    "%d-%02d %s" % (student["classNo"], student["seatNo"], student["name"])
+                ] = {"targetClassNo": class_no, "student": student}
+        return index_by_student
+
+    @staticmethod
     def read_student_lists_from_csv(class_no: str):
         try:
             student_list_obj = StudentList(class_no=class_no)
@@ -72,8 +83,11 @@ class StudentList:
 
 
 if __name__ == '__main__':
-    for f in os.listdir(StudentList.STUDENT_LIST_DIR):
-        if not f.endswith(".csv"):
-            continue
-        print(f)
-        StudentList.read_student_lists_from_csv(class_no=f[:2])
+    # for f in os.listdir(StudentList.STUDENT_LIST_DIR):
+    #     if not f.endswith(".csv"):
+    #         continue
+    #     print(f)
+    #     StudentList.read_student_lists_from_csv(class_no=f[:2])
+    from pprint import pprint
+
+    pprint(StudentList.index_all_student_lists())
