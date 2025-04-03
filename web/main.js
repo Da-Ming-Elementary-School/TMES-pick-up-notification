@@ -243,6 +243,10 @@ $(document).ready(function () {
             name = value.slice(countDigits(value), value.length);
             run = true;
         }
+        else if (countDigits(value) === 0 && hasChinese(value)) {
+            name = value;
+            run = true;
+        }
         else {
             run = false;
         }
