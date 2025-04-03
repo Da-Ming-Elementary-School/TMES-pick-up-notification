@@ -218,33 +218,29 @@ $(document).ready(function () {
         let seatNo = null;
         let name = "";
         let run = false;
-        if (isAllChinese(value)){
+        if (isAllChinese(value)){ //王大明
             name = value;
             run = true;
         }
-        else if (countDigits(value) >= 4 && countDigits(value) <= 6 && hasChinese(value)){
+        else if (countDigits(value) >= 4 && countDigits(value) <= 6 && hasChinese(value)){ //1015王大明 or 10105王大明
             classNo = value.slice(0,3);
             seatNo = value.slice(3,countDigits(value));
             name = value.slice(countDigits(value), value.length);
             run = true;
         }
-        else if (countDigits(value) >= 4 && countDigits(value) <= 6 && !hasChinese(value)){
+        else if (countDigits(value) >= 4 && countDigits(value) <= 6 && !hasChinese(value)){ //1015 or 10105
             classNo = value.slice(0,3);
             seatNo = value.slice(3,countDigits(value));
             run = true;
         }
-        else if (countDigits(value) === 3 && hasChinese(value)){
+        else if (countDigits(value) === 3 && hasChinese(value)){ //101王大明
             classNo = value.slice(0,3);
             name = value.slice(countDigits(value), value.length);
             run = true;
         }
-        else if (countDigits(value) === 2 && hasChinese(value)) {
+        else if (countDigits(value) <= 2 && countDigits(value) > 0 && hasChinese(value)) { //5王大明 or 05王大明
             seatNo = value.slice(0,2);
             name = value.slice(countDigits(value), value.length);
-            run = true;
-        }
-        else if (countDigits(value) === 0 && hasChinese(value)) {
-            name = value;
             run = true;
         }
         else {
