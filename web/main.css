@@ -322,3 +322,37 @@ code {
     font-size: 17px;
     border: none;
 }
+
+.search-container input[type=text]::-webkit-input-placeholder {
+}
+
+#searchText {
+    color: #4e4c4c;
+    font-size: 9px;
+    position: absolute;
+    right: 25px;
+    top: 60px;
+}
+
+@media screen and (max-width: 600px) {
+    .search-container input[type=text] {
+        float: left;
+        display: block;
+        text-align: left;
+        width: 80%;
+        margin: 0 0 0 15px;
+        padding: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .search-container button {
+        float: left;
+        margin-right: 0;
+        margin-top: 0;
+    }
+    #searchText {
+        top: 85px;
+        right: 55px;
+        font-size: 11px;
+    }
+}
