@@ -212,6 +212,7 @@ $(document).ready(function () {
             warningSound.currentTime = 0
         }
     }
+
     document.getElementById("submitBtn").addEventListener("click", function () {
         const value = replaceSymbols(document.getElementById("searchBar").value);
         let classNo = null;
