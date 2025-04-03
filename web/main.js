@@ -228,7 +228,7 @@ $(document).ready(function () {
             name = value.slice(countDigits(value), value.length);
             run = true;
         }
-        else if (countDigits(value) >= 4 && countDigits(value) <= 6 &&!hasChinese(value)){
+        else if (countDigits(value) >= 4 && countDigits(value) <= 6 && !hasChinese(value)){
             classNo = value.slice(0,3);
             seatNo = value.slice(3,countDigits(value));
             run = true;
