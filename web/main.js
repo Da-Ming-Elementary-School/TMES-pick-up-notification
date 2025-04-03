@@ -250,7 +250,7 @@ $(document).ready(function () {
             console.log(classNo + name + seatNo);
             WS.send(JSON.stringify({
                 "type": "SEARCH",
-                "student": {
+                "criteria": {
                     "classNo": classNo,
                     "seatNo": seatNo,
                     "name": name
