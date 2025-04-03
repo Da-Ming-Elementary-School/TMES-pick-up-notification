@@ -36,11 +36,11 @@
 <button onclick="window.location.reload()" style="background:none; border: none;height: fit-content;margin-top: 10px;margin-left: 10px;margin-bottom: 20px"><img src="image/Logo.png" alt="Logo" height="80"></button>
 <div class="search-container">
             <label>
-                <input type="text" placeholder="搜尋.." name="search" id="searchBar">
+                <input type="text" placeholder="搜尋...(記得加空格)" name="search" id="searchBar">
             </label>
             <button type="submit" id="submitBtn"><i class="fa fa-search"></i></button>
 </div>
-<p id="searchText">（可填入：10125王大明、10125、25王大明、101王大明）</p>
+<p id="searchText">（可填入：101 25 王大明、101 25、王大明、101 王大明）</p>
 <!--<h1 class="mdc-typography mdc-typography&#45;&#45;headline3" style="font-weight: bold">大明國小 課托學生呼叫系統</h1>-->
 <h4 class="mdc-typography mdc-typography--body2" id="identityText" style="font-weight: bold;margin-bottom: 0;margin-top: 0;margin-left: 15px">目前身分：值班教師</h4>
 
@@ -50,6 +50,7 @@
         <button class="mdc-button mdc-button--raised" id="backtohome" onclick="window.location.reload()" style="font-weight: bold;margin-bottom: 0;margin-top: 0">回首頁</button>
         <button id="clearStorageUrl" class="mdc-button mdc-button--raised" style="font-weight: bold;text-align: center;margin: 0">重新設定伺服器位址</button>
         <button id="called-history" class="mdc-button mdc-button--raised" style="font-weight: bold;margin-bottom: 0;margin-top: 0">呼叫歷史</button>
+        <button id="teacherLogin" class="mdc-button mdc-button--raised" style="font-weight: bold;margin-bottom: 0;margin-top: 0">值班教師登入</button>
     </p>
 </div>
 <br>
@@ -116,8 +117,8 @@
 <script type="text/javascript">
 </script>
 
-<!--<footer style="text-align: center;">-->
-<!--    © 2025 Allen Wei, Michael Xu and Da-Ming Elementary School. All Rights Reserved.-->
-<!--</footer>-->
+<footer style="text-align: center;position: fixed;bottom: 10px;left: 0;right: 0;font-size: 10px;color: #4e4c4c">
+    © 2025 Allen Wei, Michael Xu and Da-Ming Elementary School. All Rights Reserved.
+</footer>
 </body>
 </html>

@@ -214,50 +214,63 @@ $(document).ready(function () {
     }
 
     document.getElementById("submitBtn").addEventListener("click", function () {
-        const value = replaceSymbols(document.getElementById("searchBar").value);
-        let classNo = null;
-        let seatNo = null;
-        let name = "";
-        let run = false;
-        if (isAllChinese(value)){ //王大明
-            name = value;
-            run = true;
-        }
-        else if (countDigits(value) >= 4 && countDigits(value) <= 6 && hasChinese(value)){ //1015王大明 or 10105王大明
-            classNo = value.slice(0,3);
-            seatNo = value.slice(3,countDigits(value));
-            name = value.slice(countDigits(value), value.length);
-            run = true;
-        }
-        else if (countDigits(value) >= 4 && countDigits(value) <= 6 && !hasChinese(value)){ //1015 or 10105
-            classNo = value.slice(0,3);
-            seatNo = value.slice(3,countDigits(value));
-            run = true;
-        }
-        else if (countDigits(value) === 3 && hasChinese(value)){ //101王大明
-            classNo = value.slice(0,3);
-            name = value.slice(countDigits(value), value.length);
-            run = true;
-        }
-        else if (countDigits(value) <= 2 && countDigits(value) > 0 && hasChinese(value)) { //5王大明 or 05王大明
-            seatNo = value.slice(0,2);
-            name = value.slice(countDigits(value), value.length);
-            run = true;
-        }
-        else {
-            run = false;
-        }
-        if (run) {
-            console.log(classNo + name + seatNo);
-            WS.send(JSON.stringify({
-                "type": "SEARCH",
-                "criteria": {
-                    "classNo": classNo,
-                    "seatNo": seatNo,
-                    "name": name
-                }
-            }))
-        }
+        const value = removeUnwantedChars(document.getElementById("searchBar").value);
+        WS.send(JSON.stringify({
+            "type": "SEARCH",
+            "criteria": [
+                value.split(" ")
+            ]
+        }))
+        // const value = replaceSymbols(document.getElementById("searchBar").value);
+        // let classNo = null;
+        // let seatNo = null;
+        // let name = null;
+        // let run = false;
+        // if (isAllChinese(value)){ //王大明
+        //     name = value;
+        //     run = true;
+        // }
+        // else if (countDigits(value) >= 4 && countDigits(value) <= 6 && hasChinese(value)){ //1015王大明 or 10105王大明
+        //     classNo = value.slice(0,3);
+        //     seatNo = value.slice(3,countDigits(value));
+        //     name = value.slice(countDigits(value), value.length);
+        //     run = true;
+        // }
+        // else if (countDigits(value) >= 4 && countDigits(value) <= 6 && !hasChinese(value)){ //1015 or 10105
+        //     classNo = value.slice(0,3);
+        //     seatNo = value.slice(3,countDigits(value));
+        //     run = true;
+        // }
+        // else if (countDigits(value) === 3 && hasChinese(value)){ //101王大明
+        //     classNo = value.slice(0,3);
+        //     name = value.slice(countDigits(value), value.length);
+        //     run = true;
+        // }
+        // else if (countDigits(value) <= 2 && countDigits(value) > 0 && hasChinese(value)) { //5王大明 or 05王大明
+        //     seatNo = value.slice(0,2);
+        //     name = value.slice(countDigits(value), value.length);
+        //     run = true;
+        // }
+        // else {
+        //     run = false;
+        // }
+        // if (run) {
+        //     console.log(classNo + name + seatNo);
+        //     WS.send(JSON.stringify({
+        //         "type": "SEARCH",
+        //         "criteria": [
+        //             classNo, seatNo, name
+        //         ]
+        //     }))
+        // }
+    })
+
+    document.getElementById("teacherLogin").addEventListener("click", function () {
+        const password = prompt("請輸入密碼：")
+        WS.send(JSON.stringify({
+            "type": "PASSWORD",
+            "value": password
+        }))
     })
 })
 
@@ -419,4 +432,8 @@ function replaceSymbols(str) {
     else {
         return str;
     }
+}
+
+function removeUnwantedChars(str) {
+    return str.replace(/[^\d\u4e00-\u9fa5\s]/g, '');
 }
