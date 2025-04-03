@@ -213,7 +213,7 @@ $(document).ready(function () {
         }
     }
     document.getElementById("submitBtn").addEventListener("click", function () {
-        const value = document.getElementById("searchBar").value;
+        const value = replaceSymbols(document.getElementById("searchBar").value);
         let classNo = null;
         let seatNo = null;
         let name = "";
@@ -222,21 +222,25 @@ $(document).ready(function () {
             name = value;
             run = true;
         }
-        else if (countDigits(value) >= 4 && hasChinese(value)){
+        else if (countDigits(value) >= 4 && countDigits(value) <= 6 && hasChinese(value)){
             classNo = value.slice(0,3);
             seatNo = value.slice(3,countDigits(value));
             name = value.slice(countDigits(value), value.length);
             run = true;
         }
-        else if (countDigits(value) >= 4 && !hasChinese(value)){
+        else if (countDigits(value) >= 4 && countDigits(value) <= 6 &&!hasChinese(value)){
             classNo = value.slice(0,3);
             seatNo = value.slice(3,countDigits(value));
             run = true;
         }
         else if (countDigits(value) === 3 && hasChinese(value)){
+            classNo = value.slice(0,3);
+            name = value.slice(countDigits(value), value.length);
             run = true;
         }
         else if (countDigits(value) === 2 && hasChinese(value)) {
+            seatNo = value.slice(0,2);
+            name = value.slice(countDigits(value), value.length);
             run = true;
         }
         else {
@@ -405,4 +409,13 @@ function countDigits(str) {
 
 function hasChinese(str) {
     return /[\u4e00-\u9fff]/.test(str);
+}
+
+function replaceSymbols(str) {
+    if (/[^\w\s]/.test(str)){
+        return str.replace(/[^\w\s]/g, '');
+    }
+    else {
+        return str;
+    }
 }
