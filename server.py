@@ -3,7 +3,7 @@ import asyncio
 from json import loads, dumps
 from typing import Literal
 import logging
-import websockets
+from pprint import pprint
 from websockets.asyncio.server import serve, ServerConnection
 from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
 
@@ -12,6 +12,7 @@ import json_assistant
 
 CONNECTED_CLIENTS: dict[str, list[ServerConnection]] = {}
 LOGGER = logger.create_logger()
+INDEX: dict = {}
 
 
 def data_is_stored(data) -> tuple[bool, str | None]:
@@ -44,6 +45,8 @@ async def handler(websocket: ServerConnection):
             # process received data
             if msg_type == "INIT":
                 client_is_stored, k = data_is_stored(websocket)
+                closed = asyncio.ensure_future(websocket.wait_closed())
+                closed.add_done_callback(lambda _: remove_ws(websocket))
                 if client_is_stored:
                     CONNECTED_CLIENTS[k].remove(websocket)
                 if client_id in CONNECTED_CLIENTS.keys():
@@ -61,6 +64,7 @@ async def handler(websocket: ServerConnection):
                         error_message = f"{type(e).__name__}: {e}"
                         logging.error(error_message)
                         await send_message({"message": error_message}, "ERROR", websocket)
+                pprint(CONNECTED_CLIENTS)
             elif msg_type == "BROADCAST":
                 for key in CONNECTED_CLIENTS.keys():
                     if key == client_id:
@@ -76,11 +80,25 @@ async def handler(websocket: ServerConnection):
                 else:
                     await send_message(data, msg_type, target)
             await send_message({"received": True}, "CALLBACK", websocket)
-    except (ConnectionClosedError, ConnectionClosedOK):
-        client_is_stored, k = data_is_stored(websocket)
-        if client_is_stored:
-            CONNECTED_CLIENTS[k].remove(websocket)
-            logging.info(f"{k} is removed.")
+    except (ConnectionClosedError, ConnectionClosedOK) as e:
+        logging.error(f"{type(e).__name__}: {e}")
+        remove_ws(websocket)
+
+
+def remove_ws(websocket: ServerConnection):
+    global CONNECTED_CLIENTS
+    client_is_stored, k = data_is_stored(websocket)
+    if client_is_stored:
+        CONNECTED_CLIENTS[k].remove(websocket)
+        logging.info(f"{k} is removed.")
+        logging.info(websocket.local_address)
+    pprint(CONNECTED_CLIENTS)
+
+
+def search(criteria: dict):
+    search_results = []
+    for k, v in criteria.items():
+        pass
 
 
 async def main():
