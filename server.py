@@ -84,6 +84,8 @@ async def handler(websocket: ServerConnection):
 
 
 async def main():
+    global INDEX
+    INDEX = json_assistant.StudentList.index_all_student_lists()
     async with serve(handler, "", 8001, ping_timeout=None) as server:
         await asyncio.Future()
 
