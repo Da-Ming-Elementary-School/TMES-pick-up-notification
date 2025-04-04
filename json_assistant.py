@@ -1,10 +1,13 @@
 # coding=utf-8
+import time
 from copy import deepcopy
 from json import load, dump
-from csv import reader
+from csv import reader, DictReader, DictWriter
 import os
 from os import path
 import sys
+from pprint import pprint
+from itertools import tee
 
 BASE_DIR = os.path.dirname(sys.argv[0])
 
@@ -49,7 +52,7 @@ class StudentList:
         for class_no, student_list in all_student_lists.items():
             for student in student_list:
                 index_by_student[
-                    "%d-%02d %s" % (student["classNo"], student["seatNo"], student["name"])
+                    "%d%02d%s" % (student["classNo"], student["seatNo"], student["name"])
                 ] = {"targetClassNo": class_no, "student": student}
         return index_by_student
 
@@ -81,13 +84,32 @@ class StudentList:
                 print(row)
         student_list_obj.write_data(student_list_data)
 
+    @staticmethod
+    def search_seat_no_from_name(class_no: str):
+        with open(path.join(StudentList.STUDENT_LIST_DIR, f"全校班級名條.csv"), mode="r", newline="",
+                  encoding="utf-8-sig") as f:
+            school_data = list(DictReader(f))
+            with open(path.join(StudentList.STUDENT_LIST_DIR, f"{class_no}.csv"), mode="r", newline="",
+                      encoding="utf-8-sig") as f1:
+                old_class_data = DictReader(f1)
+                with open(path.join(StudentList.STUDENT_LIST_DIR, "new_data", f"{class_no}.csv"), mode="w", newline="",
+                          encoding="utf-8-sig") as f2:
+                    new_class_data = DictWriter(f2, fieldnames=old_class_data.fieldnames)
+                    for row in old_class_data:
+                        for student in school_data:
+                            if row["姓名"] == student["姓名"]:
+                                row["座號"] = student["座號"]
+                                new_class_data.writerow(row)
+                                break
+
 
 if __name__ == '__main__':
+    start_time = time.time()
     # for f in os.listdir(StudentList.STUDENT_LIST_DIR):
-    #     if not f.endswith(".csv"):
+    #     if not f.endswith(".csv") or len(f) > 6:
     #         continue
     #     print(f)
     #     StudentList.read_student_lists_from_csv(class_no=f[:2])
-    from pprint import pprint
 
     pprint(StudentList.index_all_student_lists())
+    print("Done. Time Taken:", time.time() - start_time)
