@@ -225,13 +225,14 @@ $(document).ready(function () {
                 const name = student["name"];
                 const optMode = document.createElement("option");
                 optMode.value = classNo + "-" + seatNo;
-                optMode.id = "opt" + classNo + "-" + seatNo;
+                optMode.id = name;
                 optMode.className = targetClassNo;
                 optMode.text = classNo + "-" + seatNo + " " + name;
                 document.getElementById("resultSelect").append(optMode);
             })
             let select = document.querySelector("#resultSelect");
-            select.addEventListener("change", function () {
+            select.addEventListener("change", function (){
+                if (select.options[select.selectedIndex].value !== 0) {
                 const targetClass = select.options[select.selectedIndex].className;
                 const student = select.options[select.selectedIndex].value;
                 const sendConfirm = confirm(`確定要呼叫 ${select.options[select.selectedIndex].text}?`);
@@ -242,22 +243,25 @@ $(document).ready(function () {
                         "students": {
                             "classNo": student.slice(0, student.indexOf("-")),
                             "seatNo": student.slice(student.indexOf("-") + 1, student.length),
-                            "name": select.options[select.selectedIndex].text.slice(student.indexOf(" ") + 1, student.length),
+                            "name": select.options[select.selectedIndex].id
                         }
                     }))
                 }
-            })
+            }})
         }
     }
 
     document.getElementById("submitBtn").addEventListener("click", function () {
         const value = removeUnwantedChars(document.getElementById("searchBar").value);
+        const resultSelect = $("#resultSelect")
+        resultSelect.empty();
+        resultSelect.append("<option value='0'>請選擇正確的搜尋結果</option>");
+        removeAllListeners(document.querySelector("#resultSelect"),"change");
         if (value !== "") {
             WS.send(JSON.stringify({
                 "type": "SEARCH",
                 "criteria": value.split(" ")
             }))
-            console.log(value.split(" "))
             document.getElementById("searchResult").style.visibility = "visible";
             document.getElementById("searchResult").style.height = "auto";
         }
@@ -337,6 +341,25 @@ $("#clearStorageUrl").on("click", function () {
     configServerUrl();
     window.location.reload();
 })
+
+// function sendSearchStudent(WS,select) {
+//     if (select.options[select.selectedIndex].value !== 0) {
+//     const targetClass = select.options[select.selectedIndex].className;
+//     const student = select.options[select.selectedIndex].value;
+//     const sendConfirm = confirm(`確定要呼叫 ${select.options[select.selectedIndex].text}?`);
+//     if (sendConfirm) {
+//         WS.send(JSON.stringify({
+//             "type": "CALL_FOR_STUDENT",
+//             "targetClassNo": targetClass,
+//             "students": {
+//                 "classNo": student.slice(0, student.indexOf("-")),
+//                 "seatNo": student.slice(student.indexOf("-") + 1, student.length),
+//                 "name": select.options[select.selectedIndex].id
+//             }
+//         }))
+//     }
+//
+// }
 
 function historyBtn(WS, targetClsNo, cls, num, name, currentTime) {
     $("#call-history").prepend(`<div id="hisDiv-${cls}${num}" class="historyDiv"><p style="height: 34px;margin:4px 0 0 0">${cls}-${num}${name} <button class="btn3" id="historyBtn${cls}-${num}">撤銷呼叫</button></p><p style="font-size: 10px; height: 10px;margin: 0">上次呼叫時間：</p><p id="historyTime${cls}-${num}" style="font-size: 10px; height: 10px;margin: 0 0 3px 0">${currentTime}</p> </div>`)
@@ -439,6 +462,11 @@ function closeFullscreen() {
         document.msExitFullscreen();
         isFullScreen = false;
     }
+}
+
+function removeAllListeners(target, event) {
+    let cloned = target.cloneNode(true);
+    target.parentNode.replaceChild(cloned, target);
 }
 
 function sleep(time) {
