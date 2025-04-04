@@ -74,8 +74,8 @@ async def handler(websocket: ServerConnection):
             elif msg_type == "CALL_FOR_STUDENT" or msg_type == "UNDO":
                 msg_type: Literal["CALL_FOR_STUDENT", "UNDO"]
                 target_id = data.get("targetClassNo", -1)
-                target = CONNECTED_CLIENTS.get(target_id, None)
-                if target is None:
+                target = CONNECTED_CLIENTS.get(target_id, [])
+                if len(target) == 0:
                     logging.error(f"Target {target_id} not found")
                     await send_message({"message": f"Target {target_id} not found"}, "ERROR", websocket)
                 else:
