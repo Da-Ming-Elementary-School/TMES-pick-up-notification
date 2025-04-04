@@ -24,7 +24,8 @@ def data_is_stored(data) -> tuple[bool, str | None]:
 
 async def send_message(data: dict,
                        message_type: Literal[
-                           "INIT", "ERROR", "CALLBACK", "BROADCAST", "STUDENT_LIST", "CALL_FOR_STUDENT", "UNDO"],
+                           "INIT", "ERROR", "CALLBACK", "BROADCAST", "STUDENT_LIST", "CALL_FOR_STUDENT", "UNDO",
+                           "SEARCH_RESULT"],
                        targets: ServerConnection | list[ServerConnection]):
     data["type"] = message_type
     data_str = dumps(data)
@@ -79,6 +80,8 @@ async def handler(websocket: ServerConnection):
                     await send_message({"message": f"Target {target_id} not found"}, msg_type, websocket)
                 else:
                     await send_message(data, msg_type, target)
+            elif msg_type == "SEARCH":
+                await send_message({"results": search(data["criteria"])}, "SEARCH_RESULT", websocket)
             await send_message({"received": True}, "CALLBACK", websocket)
     except (ConnectionClosedError, ConnectionClosedOK) as e:
         logging.error(f"{type(e).__name__}: {e}")
@@ -95,15 +98,35 @@ def remove_ws(websocket: ServerConnection):
     pprint(CONNECTED_CLIENTS)
 
 
-def search(criteria: dict):
+def search(criteria: list[str]) -> list[dict]:
     search_results = []
-    for k, v in criteria.items():
-        pass
+    if criteria[0] in INDEX.keys():
+        return [INDEX[criteria]]
+    search_attempt = 0
+    temp = []
+    for word in criteria:
+        if word == "":
+            continue
+        search_attempt += 1
+        if search_attempt > 1:
+            db = temp
+        else:
+            db = INDEX.keys()
+        temp2 = []
+        for k in db:
+            if word in k:
+                temp2.append(k)
+        temp = temp2
+    for i in temp:
+        search_results.append(INDEX[i])
+    return search_results
 
 
 async def main():
     global INDEX
     INDEX = json_assistant.StudentList.index_all_student_lists()
+    # while True:
+    #     pprint(search(input("輸入關鍵字 (以空格分隔)：").split(" ")))
     async with serve(handler, "", 8001, ping_timeout=None) as server:
         await asyncio.Future()
 
