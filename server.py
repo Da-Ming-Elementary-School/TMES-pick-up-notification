@@ -77,7 +77,7 @@ async def handler(websocket: ServerConnection):
                 target = CONNECTED_CLIENTS.get(target_id, None)
                 if target is None:
                     logging.error(f"Target {target_id} not found")
-                    await send_message({"message": f"Target {target_id} not found"}, msg_type, websocket)
+                    await send_message({"message": f"Target {target_id} not found"}, "ERROR", websocket)
                 else:
                     await send_message(data, msg_type, target)
             elif msg_type == "SEARCH":

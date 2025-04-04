@@ -85,9 +85,10 @@ $(document).ready(function () {
         )
 
         $(".classNoBtn").on("click", function () {
+            const btnGroup = $("#btnGroup");
             const targetClsNo = this.id;
             const studentArray = clsArray[targetClsNo]
-            $("#btnGroup").empty();
+            btnGroup.empty();
             if (data["type"] === "STUDENT_LIST") {
                 $.each(studentArray, function (index, value) {
                     console.log(value);
@@ -114,7 +115,6 @@ $(document).ready(function () {
                                     "seatNo": num,
                                     "name": name
                                 }
-
                             }))
                             let dupNum = 0
                             for (let i = 0; document.getElementById("student-call").children.namedItem(`${formatStudentString(cls, num, name)}-${i}`) != null && i === dupNum; i++) {
@@ -132,21 +132,20 @@ $(document).ready(function () {
                                     historyBtn(WS, targetClsNo, cls, num, name, currentTime)
                                 }
                             }
+                            showBanner();
                         }
                     })
                 })
             }
             let classNum = this.id;
             console.log(classNum)
-            $("#btnGroup").prepend(`<button class="mdc-button mdc-button--raised clsBtn" id="classroom-${classNum}" style="font-weight: bold">${classNum} 教室端</button><br>`)
+            btnGroup.prepend(`<button class="mdc-button mdc-button--raised clsBtn" id="classroom-${classNum}" style="font-weight: bold">${classNum} 教室端</button><br>`)
             $(".clsBtn").click(function () {
                 document.getElementById("called-history").style.visibility = "hidden";
                 document.getElementById("call-history").style.visibility = "hidden";
                 document.getElementById("call-history").style.height = "0";
-                document.getElementById("backtohome").style.visibility = "visible";
-                document.getElementById("backtohome").style.padding = "6px 16px";
-                document.getElementById("backtohome").style.margin = "auto";
-                document.getElementById("backtohome").style.width = "auto";
+                document.getElementById("teacherLogin").style.height = "0";
+                document.getElementById("teacherLogin").style.visibility = "hidden";
                 $("#identityText").text(`目前身分：${classNum}`);
                 console.log(this.id);
                 $(".classNoBtn").hide();
@@ -232,22 +231,32 @@ $(document).ready(function () {
             })
             let select = document.querySelector("#resultSelect");
             select.addEventListener("change", function (){
-                if (select.options[select.selectedIndex].value !== 0) {
-                const targetClass = select.options[select.selectedIndex].className;
-                const student = select.options[select.selectedIndex].value;
-                const sendConfirm = confirm(`確定要呼叫 ${select.options[select.selectedIndex].text}?`);
-                if (sendConfirm) {
-                    WS.send(JSON.stringify({
-                        "type": "CALL_FOR_STUDENT",
-                        "targetClassNo": targetClass,
-                        "students": {
-                            "classNo": student.slice(0, student.indexOf("-")),
-                            "seatNo": student.slice(student.indexOf("-") + 1, student.length),
-                            "name": select.options[select.selectedIndex].id
-                        }
-                    }))
+                if (select.options[select.selectedIndex].value !== "0") {
+                    const targetClass = select.options[select.selectedIndex].className;
+                    const student = select.options[select.selectedIndex].value;
+                    const sendConfirm = confirm(`確定要呼叫 ${select.options[select.selectedIndex].text}?`);
+                    if (sendConfirm) {
+                        WS.send(JSON.stringify({
+                            "type": "CALL_FOR_STUDENT",
+                            "targetClassNo": targetClass,
+                            "students": {
+                                "classNo": student.slice(0, student.indexOf("-")),
+                                "seatNo": student.slice(student.indexOf("-") + 1, student.length),
+                                "name": select.options[select.selectedIndex].id
+                            }
+                        }))
+                        document.getElementById("searchResult").style.visibility = "hidden";
+                        document.getElementById("searchResult").style.height = "0";
+                        showBanner();
+                    }
                 }
-            }})
+            })
+        }
+        else if (data["type"] === "ERROR") {
+            document.getElementById("successBox").classList.remove("show");
+            const cls = data["message"];
+            console.log(cls.toString().slice(7,9));
+            alert(`班級 ${cls.toString().slice(7,9)} 尚未開啟接收端，請以其他方式通知！`)
         }
     }
 
@@ -310,11 +319,11 @@ $(document).ready(function () {
     })
 
     document.getElementById("teacherLogin").addEventListener("click", function () {
-        const password = prompt("請輸入密碼：")
-        WS.send(JSON.stringify({
-            "type": "PASSWORD",
-            "value": password
-        }))
+        // const password = prompt("請輸入密碼：")
+        // WS.send(JSON.stringify({
+        //     "type": "PASSWORD",
+        //     "value": password
+        // }))
     })
 })
 
@@ -504,4 +513,14 @@ function replaceSymbols(str) {
 
 function removeUnwantedChars(str) {
     return str.replace(/[^\d\u4e00-\u9fa5\s]/g, '');
+}
+
+function showBanner() {
+    const banner = document.getElementById("successBox");
+
+    banner.classList.add("show");
+
+    setTimeout(() => {
+        banner.classList.remove("show");
+    }, 1300);
 }

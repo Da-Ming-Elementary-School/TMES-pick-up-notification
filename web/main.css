@@ -336,6 +336,27 @@ code {
     top: 67px;
 }
 
+#successBox {
+    position: fixed;
+    top: -100px; /* 初始在畫面上方看不到 */
+    left: 50%;
+    transform: translateX(-50%);
+    transition: top 0.5s ease, opacity 0.5s ease;
+    z-index: 1000;
+}
+
+#successBox.show {
+    top: 30px;      /* 滑下位置 */
+}
+
+#successMessage {
+    color: #cccccc;
+    padding: 10px;
+    background-color: rgba(0,0,0,0.6);
+    border-radius: 10px;
+    width: fit-content;
+}
+
 @media screen and (max-width: 600px) {
     .search-container input[type=text] {
         float: none;
