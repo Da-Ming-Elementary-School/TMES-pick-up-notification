@@ -1,8 +1,6 @@
 {
   "type": "SEARCH",
-  "criteria": {
-    "classNo": 301,
-    "seatNo": 0,
-    "name": "王以翔"
-  }
+  "criteria": [
+    "301", "王以翔", "WTF"
+  ]
 }
