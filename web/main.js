@@ -2,6 +2,8 @@ const normalSound = new Audio("audio/notify.wav");
 const warningSound = new Audio("audio/warning.wav");
 document.getElementById("call-history").style.visibility = "hidden";
 document.getElementById("call-history").style.height = "0";
+document.getElementById("searchResult").style.visibility = "hidden";
+document.getElementById("searchResult").style.height = "0";
 let isFullScreen = false;
 
 $(document).ready(function () {
@@ -211,17 +213,54 @@ $(document).ready(function () {
             warningSound.play()
             warningSound.currentTime = 0
         }
+        //{"results": [{"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 4, "name": "\u5433*\u627f"}}], "type": "SEARCH_RESULT"}
+        //{"results": [{"targetClassNo": "1B", "student": {"classNo": 104, "seatNo": 4, "name": "\u6797*\u7693"}}, {"targetClassNo": "5D", "student": {"classNo": 504, "seatNo": 4, "name": "\u9ad8*\u598d"}}, {"targetClassNo": "3D", "student": {"classNo": 304, "seatNo": 4, "name": "\u5289*\u5ef7"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 2, "name": "\u738b*\u6db5"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 3, "name": "\u856d*\u4e88"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 4, "name": "\u5433*\u627f"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 5, "name": "\u5ed6*\u68e0"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 6, "name": "\u9673*\u5609"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 7, "name": "\u8b5a*\u84c1"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 8, "name": "\u9ec3*\u73c8"}}], "type": "SEARCH_RESULT"}
+        else if (data["type"] === "SEARCH_RESULT") {
+            const results = data["results"];
+            $.each(results, function (index, value) {
+                const targetClassNo = value["targetClassNo"];
+                const student = value["student"];
+                const classNo = student["classNo"];
+                const seatNo = student["seatNo"];
+                const name = student["name"];
+                const optMode = document.createElement("option");
+                optMode.value = classNo + "-" + seatNo;
+                optMode.id = "opt" + classNo + "-" + seatNo;
+                optMode.className = targetClassNo;
+                optMode.text = classNo + "-" + seatNo + " " + name;
+                document.getElementById("resultSelect").append(optMode);
+            })
+            let select = document.querySelector("#resultSelect");
+            select.addEventListener("change", function () {
+                const targetClass = select.options[select.selectedIndex].className;
+                const student = select.options[select.selectedIndex].value;
+                const sendConfirm = confirm(`確定要呼叫 ${select.options[select.selectedIndex].text}?`);
+                if (sendConfirm) {
+                    WS.send(JSON.stringify({
+                        "type": "CALL_FOR_STUDENT",
+                        "targetClassNo": targetClass,
+                        "students": {
+                            "classNo": student.slice(0, student.indexOf("-")),
+                            "seatNo": student.slice(student.indexOf("-") + 1, student.length),
+                            "name": select.options[select.selectedIndex].text.slice(student.indexOf(" ") + 1, student.length),
+                        }
+                    }))
+                }
+            })
+        }
     }
 
     document.getElementById("submitBtn").addEventListener("click", function () {
         const value = removeUnwantedChars(document.getElementById("searchBar").value);
-        WS.send(JSON.stringify({
-            "type": "SEARCH",
-            "criteria": [
-                value.split(" ")
-            ]
-        }))
-        console.log(value.split(" "))
+        if (value !== "") {
+            WS.send(JSON.stringify({
+                "type": "SEARCH",
+                "criteria": value.split(" ")
+            }))
+            console.log(value.split(" "))
+            document.getElementById("searchResult").style.visibility = "visible";
+            document.getElementById("searchResult").style.height = "auto";
+        }
         // const value = replaceSymbols(document.getElementById("searchBar").value);
         // let classNo = null;
         // let seatNo = null;
