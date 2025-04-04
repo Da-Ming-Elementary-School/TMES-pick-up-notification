@@ -221,6 +221,7 @@ $(document).ready(function () {
                 value.split(" ")
             ]
         }))
+        console.log(value.split(" "))
         // const value = replaceSymbols(document.getElementById("searchBar").value);
         // let classNo = null;
         // let seatNo = null;
