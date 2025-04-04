@@ -15,17 +15,38 @@ $(document).ready(function () {
     $("#wsUrlDisplay").text(wsUrl);
     WS.onopen = function () {
         $("#wsUrlDisplay").css("color", "green");
-        let cls = ["1A","1B","1C","1D","2A","2B","2C","3A","3B","3C","3D","4A","4B","4C","5A","5B","5C","5D","6A","6B","6C"]
-        let path = window.location.hash.slice(window.location.hash.length-2,window.location.hash.length);
-        if (cls.indexOf(path.toUpperCase()) === -1) {
+        let cls = ["1A", "1B", "1C", "1D", "2A", "2B", "2C", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "5A", "5B", "5C", "5D", "6A", "6B", "6C"]
+        let path = window.location.hash.slice(window.location.hash.length - 2, window.location.hash.length);
+        console.log(path);
+        if (cls.indexOf(path.toUpperCase()) < "") {
             WS.send(JSON.stringify({
                 "type": "INIT",
                 "classNo": "777"
             }))
+            console.log(path);
+        } else if (cls.indexOf(path.toUpperCase()) !== -1) {
+            document.getElementById("search-container").style.visibility = "hidden";
+            document.getElementById("searchText").style.visibility = "hidden";
+            urlPath(WS);
+            console.log(path);
         }
-        else if (cls.indexOf(path.toUpperCase()) !== -1) {
-            $(window).on('hashchange', urlPath(WS));
-        }
+        $(window).on('hashchange', function () {
+            let cls = ["1A", "1B", "1C", "1D", "2A", "2B", "2C", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "5A", "5B", "5C", "5D", "6A", "6B", "6C"]
+            let path = window.location.hash.slice(window.location.hash.length - 2, window.location.hash.length);
+            console.log(path);
+            if (cls.indexOf(path.toUpperCase()) < "") {
+                WS.send(JSON.stringify({
+                    "type": "INIT",
+                    "classNo": "777"
+                }))
+                console.log(path);
+            } else if (cls.indexOf(path.toUpperCase()) !== -1) {
+                document.getElementById("search-container").style.visibility = "hidden";
+                document.getElementById("searchText").style.visibility = "hidden";
+                urlPath(WS);
+                console.log(path);
+            }
+        });
         wsStatus = true;
 
     }
@@ -64,31 +85,31 @@ $(document).ready(function () {
         let lastGradeNo = 0;
         let classBtnContainer = $("#class-btn");
         $.each(clsArray, function (index, value) {
-            const currentGradeNo = parseInt(index.slice(0, 1));
-            if (currentGradeNo % 2 === 1) {  // 1, 3, 5
-                if (lastGradeNo !== currentGradeNo) {
-                    classBtnContainer.append(
-                        `<div class="classBtnLine" id="btnL-${currentGradeNo}-${currentGradeNo+1}"></div><br>`
-                    )
-                    let btnLineContainer = $(`#btnL-${currentGradeNo}-${currentGradeNo+1}`);
-                    btnLineContainer.append(
-                        `<div class="btnGroupL" id="G${currentGradeNo}"></div>`
-                    )
+                const currentGradeNo = parseInt(index.slice(0, 1));
+                if (currentGradeNo % 2 === 1) {  // 1, 3, 5
+                    if (lastGradeNo !== currentGradeNo) {
+                        classBtnContainer.append(
+                            `<div class="classBtnLine" id="btnL-${currentGradeNo}-${currentGradeNo + 1}"></div><br>`
+                        )
+                        let btnLineContainer = $(`#btnL-${currentGradeNo}-${currentGradeNo + 1}`);
+                        btnLineContainer.append(
+                            `<div class="btnGroupL" id="G${currentGradeNo}"></div>`
+                        )
+                    }
+                } else {  // 2, 4, 6
+                    if (lastGradeNo !== currentGradeNo) {
+                        let btnLineContainer = $(`#btnL-${currentGradeNo - 1}-${currentGradeNo}`);
+                        btnLineContainer.append(
+                            `<div class="btnGroupR" id="G${currentGradeNo}"></div>`
+                        )
+                    }
                 }
-            } else {  // 2, 4, 6
-                if (lastGradeNo !== currentGradeNo) {
-                    let btnLineContainer = $(`#btnL-${currentGradeNo-1}-${currentGradeNo}`);
-                    btnLineContainer.append(
-                        `<div class="btnGroupR" id="G${currentGradeNo}"></div>`
-                    )
-                }
+                lastGradeNo = currentGradeNo
+                let btnGroupContainer = $(`#G${currentGradeNo}`)
+                btnGroupContainer.append(
+                    `<button class="classNoBtn" id="${index}">${index}</button>`
+                )
             }
-            lastGradeNo = currentGradeNo
-            let btnGroupContainer = $(`#G${currentGradeNo}`)
-            btnGroupContainer.append(
-                `<button class="classNoBtn" id="${index}">${index}</button>`
-            )
-        }
         )
 
         $(".classNoBtn").on("click", function () {
@@ -153,6 +174,8 @@ $(document).ready(function () {
                 document.getElementById("call-history").style.height = "0";
                 document.getElementById("teacherLogin").style.height = "0";
                 document.getElementById("teacherLogin").style.visibility = "hidden";
+                document.getElementById("search-container").style.visibility = "hidden";
+                document.getElementById("searchText").style.visibility = "hidden";
                 $("#identityText").text(`目前身分：${classNum}`);
                 console.log(this.id);
                 $(".classNoBtn").hide();
@@ -219,7 +242,7 @@ $(document).ready(function () {
             warningSound.play()
             warningSound.currentTime = 0
         }
-        //{"results": [{"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 4, "name": "\u5433*\u627f"}}], "type": "SEARCH_RESULT"}
+            //{"results": [{"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 4, "name": "\u5433*\u627f"}}], "type": "SEARCH_RESULT"}
         //{"results": [{"targetClassNo": "1B", "student": {"classNo": 104, "seatNo": 4, "name": "\u6797*\u7693"}}, {"targetClassNo": "5D", "student": {"classNo": 504, "seatNo": 4, "name": "\u9ad8*\u598d"}}, {"targetClassNo": "3D", "student": {"classNo": 304, "seatNo": 4, "name": "\u5289*\u5ef7"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 2, "name": "\u738b*\u6db5"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 3, "name": "\u856d*\u4e88"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 4, "name": "\u5433*\u627f"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 5, "name": "\u5ed6*\u68e0"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 6, "name": "\u9673*\u5609"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 7, "name": "\u8b5a*\u84c1"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 8, "name": "\u9ec3*\u73c8"}}], "type": "SEARCH_RESULT"}
         else if (data["type"] === "SEARCH_RESULT") {
             const results = data["results"];
@@ -237,7 +260,7 @@ $(document).ready(function () {
                 document.getElementById("resultSelect").append(optMode);
             })
             let select = document.querySelector("#resultSelect");
-            select.addEventListener("change", function (){
+            select.addEventListener("change", function () {
                 if (select.options[select.selectedIndex].value !== "0") {
                     const targetClass = select.options[select.selectedIndex].className;
                     const student = select.options[select.selectedIndex].value;
@@ -258,12 +281,11 @@ $(document).ready(function () {
                     }
                 }
             })
-        }
-        else if (data["type"] === "ERROR") {
+        } else if (data["type"] === "ERROR") {
             document.getElementById("successBox").classList.remove("show");
             const cls = data["message"];
-            console.log(cls.toString().slice(7,9));
-            alert(`班級 ${cls.toString().slice(7,9)} 尚未開啟接收端，請以其他方式通知！`)
+            console.log(cls.toString().slice(7, 9));
+            alert(`班級 ${cls.toString().slice(7, 9)} 尚未開啟接收端，請以其他方式通知！`)
         }
     }
 
@@ -272,7 +294,7 @@ $(document).ready(function () {
         const resultSelect = $("#resultSelect")
         resultSelect.empty();
         resultSelect.append("<option value='0'>請選擇正確的搜尋結果</option>");
-        removeAllListeners(document.querySelector("#resultSelect"),"change");
+        removeAllListeners(document.querySelector("#resultSelect"), "change");
         if (value !== "") {
             WS.send(JSON.stringify({
                 "type": "SEARCH",
@@ -335,7 +357,6 @@ $(document).ready(function () {
 })
 
 
-
 document.getElementById("called-history").addEventListener("click", function () {
     let historyDiv = document.getElementById("call-history");
     let historyBtn = document.getElementById("called-history");
@@ -396,7 +417,9 @@ function historyBtn(WS, targetClsNo, cls, num, name, currentTime) {
     })
 
 }
+
 $(document).ready(configServerUrl);
+
 function configServerUrl(status) {
     const storage = window.localStorage;
     let wsUrl = storage.getItem("wsUrl");
@@ -434,15 +457,15 @@ function setUndoBanner(student, timestamp) {
 }
 
 function formatStudentString(classNo, seatNo, name) {
-        if (name === null) {
-            name = ""
-        } else {
-            name = " " + name
-        }
-        if (!(typeof seatNo === "string") && seatNo < 10) {
-            return `${classNo}-0${seatNo}${name}`
-        }
-        return `${classNo}-${seatNo}${name}`
+    if (name === null) {
+        name = ""
+    } else {
+        name = " " + name
+    }
+    if (!(typeof seatNo === "string") && seatNo < 10) {
+        return `${classNo}-0${seatNo}${name}`
+    }
+    return `${classNo}-${seatNo}${name}`
 }
 
 function fullScreen(element) {
@@ -450,7 +473,7 @@ function fullScreen(element) {
     const fullscreenBtn = document.getElementById("fullscreenBtn");
     fullscreenBtn.childNodes.item(0).src = "image/fullscreen-exit.svg";
     //fullscreenBtn.append("<img src=\"image/fullscreen-exit.svg\" alt=\"full screen-exit\" height=\"30\">")
-    if(window.innerHeight !== screen.height) {
+    if (window.innerHeight !== screen.height) {
         if (element.requestFullscreen && isFullScreen === false) {
             element.requestFullscreen();
             isFullScreen = true;
@@ -460,8 +483,7 @@ function fullScreen(element) {
         } else if (element.webkitRequestFullScreen && isFullScreen === false) {
             element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
             isFullScreen = true;
-        }
-        else if (isFullScreen) {
+        } else if (isFullScreen) {
             closeFullscreen()
             fullscreenBtn.childNodes.item(0).src = "image/fullscreen.svg";
         }
@@ -511,10 +533,9 @@ function hasChinese(str) {
 }
 
 function replaceSymbols(str) {
-    if (/[^\w\s\p{Unified_Ideograph}]/u.test(str)){
+    if (/[^\w\s\p{Unified_Ideograph}]/u.test(str)) {
         return str.replace(/[^\w\s\p{Unified_Ideograph}]/gu, '');
-    }
-    else {
+    } else {
         return str;
     }
 }
@@ -533,10 +554,10 @@ function showBanner() {
     }, 1300);
 }
 
-function urlPath(WS){
-    let cls = ["1A","1B","1C","1D","2A","2B","2C","3A","3B","3C","3D","4A","4B","4C","5A","5B","5C","5D","6A","6B","6C"]
-    let path = window.location.hash.slice(window.location.hash.length-2,window.location.hash.length);
-    if (cls.indexOf(path.toUpperCase()) !== -1){
+function urlPath(WS) {
+    let cls = ["1A", "1B", "1C", "1D", "2A", "2B", "2C", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "5A", "5B", "5C", "5D", "6A", "6B", "6C"]
+    let path = window.location.hash.slice(window.location.hash.length - 2, window.location.hash.length);
+    if (cls.indexOf(path.toUpperCase()) !== -1) {
         const classNum = cls[cls.indexOf(path.toUpperCase())]
         document.getElementById("called-history").style.visibility = "hidden";
         document.getElementById("call-history").style.visibility = "hidden";
@@ -546,14 +567,13 @@ function urlPath(WS){
         $("#identityText").text(`目前身分：${classNum}`);
         $(".classNoBtn").hide();
         $("#btnGroup").hide();
-        setTimeout(()=>{
+        setTimeout(() => {
             WS.send(JSON.stringify({
                 "type": "INIT",
                 "classNo": classNum
-            }),3000)
+            }), 3000)
         })
-    }
-    else {
+    } else {
 
     }
 }
