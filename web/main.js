@@ -6,21 +6,28 @@ document.getElementById("searchResult").style.visibility = "hidden";
 document.getElementById("searchResult").style.height = "0";
 let isFullScreen = false;
 
+
 $(document).ready(function () {
-    console.info("Document is \"READY\"")
     let wsStatus = false;
     let wsUrl = configServerUrl(wsStatus)
     let WS = new WebSocket(wsUrl);
-
+    console.info("Document is \"READY\"")
     $("#wsUrlDisplay").text(wsUrl);
-
     WS.onopen = function () {
         $("#wsUrlDisplay").css("color", "green");
-        WS.send(JSON.stringify({
-            "type": "INIT",
-            "classNo": "777"
-        }))
+        let cls = ["1A","1B","1C","1D","2A","2B","2C","3A","3B","3C","3D","4A","4B","4C","5A","5B","5C","5D","6A","6B","6C"]
+        let path = window.location.hash.slice(window.location.hash.length-2,window.location.hash.length);
+        if (cls.indexOf(path.toUpperCase()) === -1) {
+            WS.send(JSON.stringify({
+                "type": "INIT",
+                "classNo": "777"
+            }))
+        }
+        else if (cls.indexOf(path.toUpperCase()) !== -1) {
+            $(window).on('hashchange', urlPath(WS));
+        }
         wsStatus = true;
+
     }
 
     WS.onerror = function (e) {
@@ -387,8 +394,9 @@ function historyBtn(WS, targetClsNo, cls, num, name, currentTime) {
             }))
         }
     })
-}
 
+}
+$(document).ready(configServerUrl);
 function configServerUrl(status) {
     const storage = window.localStorage;
     let wsUrl = storage.getItem("wsUrl");
@@ -503,8 +511,8 @@ function hasChinese(str) {
 }
 
 function replaceSymbols(str) {
-    if (/[^\w\s]/.test(str)){
-        return str.replace(/[^\w\s]/g, '');
+    if (/[^\w\s\p{Unified_Ideograph}]/u.test(str)){
+        return str.replace(/[^\w\s\p{Unified_Ideograph}]/gu, '');
     }
     else {
         return str;
@@ -523,4 +531,29 @@ function showBanner() {
     setTimeout(() => {
         banner.classList.remove("show");
     }, 1300);
+}
+
+function urlPath(WS){
+    let cls = ["1A","1B","1C","1D","2A","2B","2C","3A","3B","3C","3D","4A","4B","4C","5A","5B","5C","5D","6A","6B","6C"]
+    let path = window.location.hash.slice(window.location.hash.length-2,window.location.hash.length);
+    if (cls.indexOf(path.toUpperCase()) !== -1){
+        const classNum = cls[cls.indexOf(path.toUpperCase())]
+        document.getElementById("called-history").style.visibility = "hidden";
+        document.getElementById("call-history").style.visibility = "hidden";
+        document.getElementById("call-history").style.height = "0";
+        document.getElementById("teacherLogin").style.height = "0";
+        document.getElementById("teacherLogin").style.visibility = "hidden";
+        $("#identityText").text(`目前身分：${classNum}`);
+        $(".classNoBtn").hide();
+        $("#btnGroup").hide();
+        setTimeout(()=>{
+            WS.send(JSON.stringify({
+                "type": "INIT",
+                "classNo": classNum
+            }),3000)
+        })
+    }
+    else {
+
+    }
 }

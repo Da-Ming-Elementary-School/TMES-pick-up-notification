@@ -57,7 +57,7 @@
 <p class="mdc-typography mdc-typography--body2" id="wsStatus" style="font-weight: bold;margin-bottom: 0;margin-top: 0;margin-left: 15px">伺服器位址：<code id="wsUrlDisplay"></code></p>
 <div id="header" style="font-weight: bold;margin-bottom: 0;margin-top: 0;margin-left: 15px">
     <p>
-        <button class="mdc-button mdc-button--raised" id="backtohome" onclick="window.location.reload()" style="font-weight: bold;margin-bottom: 0;margin-top: 0">回首頁</button>
+        <button class="mdc-button mdc-button--raised" id="backtohome" onclick="location.href = ''" style="font-weight: bold;margin-bottom: 0;margin-top: 0">回首頁</button>
         <button id="clearStorageUrl" class="mdc-button mdc-button--raised" style="font-weight: bold;text-align: center;margin: 0">重新設定伺服器位址</button>
         <button id="called-history" class="mdc-button mdc-button--raised" style="font-weight: bold;margin-bottom: 0;margin-top: 0">呼叫歷史</button>
         <button id="teacherLogin" class="mdc-button mdc-button--raised" style="font-weight: bold;margin-bottom: 0;margin-top: 0">值班教師登入</button>
@@ -120,11 +120,12 @@
 </div>
 <div id="btnGroup" class="btnGroup2">
 </div>
-<button id="fullscreenBtn" onclick="fullScreen(document.documentElement)" style="background:none; border: none;height: fit-content;position: fixed;bottom: 10px;right: 10px;"><img src="image/fullscreen.svg" alt="fullscreen" height="30" width="30"></button>
+<button id="fullscreenBtn" onclick="fullScreen(document.documentElement)" style="background:none; border: none;height: fit-content;position: absolute;bottom: 10px;right: 10px;"><img src="image/fullscreen.svg" alt="fullscreen" height="30" width="30"></button>
 <script src="jquery.js" charset="utf-8"></script>
 <script src="main.js"></script>
 <script src="material-components-web.min.js"></script>
 <script type="text/javascript">
+
 </script>
 
 <footer style="text-align: center;position: page;bottom: 10px;left: 0;right: 0;font-size: 10px;color: #4e4c4c">
