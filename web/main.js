@@ -373,6 +373,12 @@ document.getElementById("called-history").addEventListener("click", function () 
     }
 })
 
+document.getElementById("searchBar").addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+        document.getElementById("submitBtn").click()
+    }
+})
+
 $("#clearStorageUrl").on("click", function () {
     window.localStorage.removeItem("wsUrl");
     configServerUrl();
