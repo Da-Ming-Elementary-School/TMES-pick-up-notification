@@ -15,37 +15,10 @@ $(document).ready(function () {
     $("#wsUrlDisplay").text(wsUrl);
     WS.onopen = function () {
         $("#wsUrlDisplay").css("color", "green");
-        let cls = ["1A", "1B", "1C", "1D", "2A", "2B", "2C", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "5A", "5B", "5C", "5D", "6A", "6B", "6C"]
-        let path = window.location.hash.slice(window.location.hash.length - 2, window.location.hash.length);
-        console.log(path);
-        if (cls.indexOf(path.toUpperCase()) < "") {
-            WS.send(JSON.stringify({
-                "type": "INIT",
-                "classNo": "777"
-            }))
-            console.log(path);
-        } else if (cls.indexOf(path.toUpperCase()) !== -1) {
-            document.getElementById("search-container").style.visibility = "hidden";
-            document.getElementById("searchText").style.visibility = "hidden";
-            urlPath(WS);
-            console.log(path);
-        }
+        initToClassroomClient(WS)
+
         $(window).on('hashchange', function () {
-            let cls = ["1A", "1B", "1C", "1D", "2A", "2B", "2C", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "5A", "5B", "5C", "5D", "6A", "6B", "6C"]
-            let path = window.location.hash.slice(window.location.hash.length - 2, window.location.hash.length);
-            console.log(path);
-            if (cls.indexOf(path.toUpperCase()) < "") {
-                WS.send(JSON.stringify({
-                    "type": "INIT",
-                    "classNo": "777"
-                }))
-                console.log(path);
-            } else if (cls.indexOf(path.toUpperCase()) !== -1) {
-                document.getElementById("search-container").style.visibility = "hidden";
-                document.getElementById("searchText").style.visibility = "hidden";
-                urlPath(WS);
-                console.log(path);
-            }
+            initToClassroomClient(WS)
         });
         wsStatus = true;
 
@@ -59,7 +32,7 @@ $(document).ready(function () {
     }
 
     WS.onclose = function (e) {
-        if (e.code > 1001 && e.code !== 1006) {
+        if (e.code > 1001 && wsStatus) {
             alert(`與伺服器的連線中斷。請嘗試重新整理網頁，或檢查伺服器位址是否正確。\n錯誤代碼：${e.code}`)
         }
         $("#wsUrlDisplay").css("color", "red");
@@ -472,6 +445,24 @@ function formatStudentString(classNo, seatNo, name) {
         return `${classNo}-0${seatNo}${name}`
     }
     return `${classNo}-${seatNo}${name}`
+}
+
+function initToClassroomClient(WS) {
+    const cls = ["1A", "1B", "1C", "1D", "2A", "2B", "2C", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "5A", "5B", "5C", "5D", "6A", "6B", "6C"]
+    const path = window.location.hash.slice(window.location.hash.length - 2, window.location.hash.length);
+    console.log(path);
+    if (cls.indexOf(path.toUpperCase()) < "") {
+        WS.send(JSON.stringify({
+            "type": "INIT",
+            "classNo": "777"
+        }))
+        console.log(path);
+    } else if (cls.indexOf(path.toUpperCase()) !== -1) {
+        document.getElementById("search-container").style.visibility = "hidden";
+        document.getElementById("searchHint").style.visibility = "hidden";
+        urlPath(WS);
+        console.log(path);
+    }
 }
 
 function fullScreen(element) {
