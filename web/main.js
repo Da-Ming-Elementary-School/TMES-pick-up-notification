@@ -4,6 +4,7 @@ document.getElementById("call-history").style.visibility = "hidden";
 document.getElementById("call-history").style.height = "0";
 document.getElementById("searchResult").style.visibility = "hidden";
 document.getElementById("searchResult").style.height = "0";
+document.getElementById("teacherLogin").style.visibility = "hidden";
 let isFullScreen = false;
 
 
@@ -117,22 +118,7 @@ $(document).ready(function () {
                                     "name": name
                                 }
                             }))
-                            let dupNum = 0
-                            for (let i = 0; document.getElementById("student-call").children.namedItem(`${formatStudentString(cls, num, name)}-${i}`) != null && i === dupNum; i++) {
-                                dupNum++;
-                            }
-                            if (document.getElementById("call-history").children.namedItem(`hisDiv-${cls}${num}`) === null) {
-                                const time = new Date();
-                                const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
-                                historyBtn(WS, targetClsNo, cls, num, name, currentTime)
-                            } else {
-                                const time = new Date();
-                                const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
-                                if (document.getElementById(`hisDiv-${cls}${num}`) != null) {
-                                    document.getElementById(`hisDiv-${cls}${num}`).remove();
-                                    historyBtn(WS, targetClsNo, cls, num, name, currentTime)
-                                }
-                            }
+                            historyBtn(WS, targetClsNo, cls, num, name);
                             showBanner();
                         }
                     })
@@ -141,23 +127,8 @@ $(document).ready(function () {
             let classNum = this.id;
             console.log(classNum)
             btnGroup.prepend(`<a href="${location.origin}${location.pathname}#${classNum}"  class="mdc-button mdc-button--raised clsBtn" id="classroom-${classNum}" style="font-weight: bold">${classNum} 教室端</a><br>`)
-            // $(".clsBtn").on("click", function () {
-            //     document.getElementById("called-history").style.visibility = "hidden";
-            //     document.getElementById("call-history").style.visibility = "hidden";
-            //     document.getElementById("call-history").style.height = "0";
-            //     document.getElementById("teacherLogin").style.height = "0";
-            //     document.getElementById("teacherLogin").style.visibility = "hidden";
-            //     document.getElementById("search-container").style.visibility = "hidden";
-            //     $("#identityText").text(`目前身分：${classNum}`);
-            //     console.log(this.id);
-            //     $(".classNoBtn").hide();
-            //     $("#btnGroup").hide();
-            //     WS.send(JSON.stringify({
-            //         "type": "INIT",
-            //         "classNo": this.id.slice(this.id.indexOf("-") + 1, this.id.length)
-            //     }))
-            // })
         })
+
         if (data["type"] === "CALL_FOR_STUDENT") {
             const time = new Date();
             const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
@@ -213,10 +184,7 @@ $(document).ready(function () {
             setUndoBanner(`${formatStudentString(clsNum, seatNum, name)}`, currentTime)
             warningSound.play()
             warningSound.currentTime = 0
-        }
-            //{"results": [{"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 4, "name": "\u5433*\u627f"}}], "type": "SEARCH_RESULT"}
-        //{"results": [{"targetClassNo": "1B", "student": {"classNo": 104, "seatNo": 4, "name": "\u6797*\u7693"}}, {"targetClassNo": "5D", "student": {"classNo": 504, "seatNo": 4, "name": "\u9ad8*\u598d"}}, {"targetClassNo": "3D", "student": {"classNo": 304, "seatNo": 4, "name": "\u5289*\u5ef7"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 2, "name": "\u738b*\u6db5"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 3, "name": "\u856d*\u4e88"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 4, "name": "\u5433*\u627f"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 5, "name": "\u5ed6*\u68e0"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 6, "name": "\u9673*\u5609"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 7, "name": "\u8b5a*\u84c1"}}, {"targetClassNo": "4C", "student": {"classNo": 404, "seatNo": 8, "name": "\u9ec3*\u73c8"}}], "type": "SEARCH_RESULT"}
-        else if (data["type"] === "SEARCH_RESULT") {
+        } else if (data["type"] === "SEARCH_RESULT") {
             const results = data["results"];
             $.each(results, function (index, value) {
                 const targetClassNo = value["targetClassNo"];
@@ -237,16 +205,20 @@ $(document).ready(function () {
                     const targetClass = select.options[select.selectedIndex].className;
                     const student = select.options[select.selectedIndex].value;
                     const sendConfirm = confirm(`確定要呼叫 ${select.options[select.selectedIndex].text}？`);
+                    const cls = student.slice(0, student.indexOf("-"));
+                    const seatNo = student.slice(student.indexOf("-") + 1, student.length);
+                    const name = select.options[select.selectedIndex].id;
                     if (sendConfirm) {
                         WS.send(JSON.stringify({
                             "type": "CALL_FOR_STUDENT",
                             "targetClassNo": targetClass,
                             "students": {
-                                "classNo": student.slice(0, student.indexOf("-")),
-                                "seatNo": student.slice(student.indexOf("-") + 1, student.length),
-                                "name": select.options[select.selectedIndex].id
+                                "classNo": cls,
+                                "seatNo": seatNo,
+                                "name": name
                             }
                         }))
+                        historyBtn(WS, targetClass, cls, seatNo, name);
                         document.getElementById("searchResult").style.visibility = "hidden";
                         document.getElementById("searchResult").style.height = "0";
                         showBanner();
@@ -256,7 +228,6 @@ $(document).ready(function () {
         } else if (data["type"] === "ERROR") {
             document.getElementById("successBox").classList.remove("show");
             const cls = data["message"];
-            console.log(cls.toString().slice(7, 9));
             alert(`班級 ${cls.toString().slice(7, 9)} 尚未開啟接收端，請以其他方式通知！`)
         }
     }
@@ -276,48 +247,6 @@ $(document).ready(function () {
             document.getElementById("searchResult").style.visibility = "visible";
             document.getElementById("searchResult").style.height = "auto";
         }
-        // const value = replaceSymbols(document.getElementById("searchBar").value);
-        // let classNo = null;
-        // let seatNo = null;
-        // let name = null;
-        // let run = false;
-        // if (isAllChinese(value)){ //王大明
-        //     name = value;
-        //     run = true;
-        // }
-        // else if (countDigits(value) >= 4 && countDigits(value) <= 6 && hasChinese(value)){ //1015王大明 or 10105王大明
-        //     classNo = value.slice(0,3);
-        //     seatNo = value.slice(3,countDigits(value));
-        //     name = value.slice(countDigits(value), value.length);
-        //     run = true;
-        // }
-        // else if (countDigits(value) >= 4 && countDigits(value) <= 6 && !hasChinese(value)){ //1015 or 10105
-        //     classNo = value.slice(0,3);
-        //     seatNo = value.slice(3,countDigits(value));
-        //     run = true;
-        // }
-        // else if (countDigits(value) === 3 && hasChinese(value)){ //101王大明
-        //     classNo = value.slice(0,3);
-        //     name = value.slice(countDigits(value), value.length);
-        //     run = true;
-        // }
-        // else if (countDigits(value) <= 2 && countDigits(value) > 0 && hasChinese(value)) { //5王大明 or 05王大明
-        //     seatNo = value.slice(0,2);
-        //     name = value.slice(countDigits(value), value.length);
-        //     run = true;
-        // }
-        // else {
-        //     run = false;
-        // }
-        // if (run) {
-        //     console.log(classNo + name + seatNo);
-        //     WS.send(JSON.stringify({
-        //         "type": "SEARCH",
-        //         "criteria": [
-        //             classNo, seatNo, name
-        //         ]
-        //     }))
-        // }
     })
 
     document.getElementById("teacherLogin").addEventListener("click", function () {
@@ -358,26 +287,12 @@ $("#clearStorageUrl").on("click", function () {
     window.location.reload();
 })
 
-// function sendSearchStudent(WS,select) {
-//     if (select.options[select.selectedIndex].value !== 0) {
-//     const targetClass = select.options[select.selectedIndex].className;
-//     const student = select.options[select.selectedIndex].value;
-//     const sendConfirm = confirm(`確定要呼叫 ${select.options[select.selectedIndex].text}?`);
-//     if (sendConfirm) {
-//         WS.send(JSON.stringify({
-//             "type": "CALL_FOR_STUDENT",
-//             "targetClassNo": targetClass,
-//             "students": {
-//                 "classNo": student.slice(0, student.indexOf("-")),
-//                 "seatNo": student.slice(student.indexOf("-") + 1, student.length),
-//                 "name": select.options[select.selectedIndex].id
-//             }
-//         }))
-//     }
-//
-// }
-
-function historyBtn(WS, targetClsNo, cls, num, name, currentTime) {
+function historyBtn(WS, targetClsNo, cls, num, name) {
+    if (document.getElementById(`hisDiv-${cls}${num}`) != null) {
+        document.getElementById(`hisDiv-${cls}${num}`).remove();
+    }
+    const time = new Date();
+    const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
     $("#call-history").prepend(`<div id="hisDiv-${cls}${num}" class="historyDiv"><p style="height: 34px;margin:4px 0 0 0">${cls}-${num}${name} <button class="btn3" id="historyBtn${cls}-${num}">撤銷呼叫</button></p><p style="font-size: 10px; height: 10px;margin: 0">上次呼叫時間：</p><p id="historyTime${cls}-${num}" style="font-size: 10px; height: 10px;margin: 0 0 3px 0">${currentTime}</p> </div>`)
     document.getElementById(`historyBtn${cls}-${num}`).addEventListener("click", function () {
         let sendConfirm = confirm(`確定要撤銷 ${formatStudentString(cls, num, name)} 的呼叫？`)
@@ -516,27 +431,6 @@ function guidGenerator() {
     return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 }
 
-function isAllChinese(str) {
-    return /^[\u4e00-\u9fff]+$/.test(str);
-}
-
-function countDigits(str) {
-    const match = str.match(/\d/g); // \d 代表數字，g 表示全域匹配
-    return match ? match.length : 0;
-}
-
-function hasChinese(str) {
-    return /[\u4e00-\u9fff]/.test(str);
-}
-
-function replaceSymbols(str) {
-    if (/[^\w\s\p{Unified_Ideograph}]/u.test(str)) {
-        return str.replace(/[^\w\s\p{Unified_Ideograph}]/gu, '');
-    } else {
-        return str;
-    }
-}
-
 function removeUnwantedChars(str) {
     return str.replace(/[^\d\u4e00-\u9fa5\s]/g, '');
 }
@@ -570,7 +464,5 @@ function urlPath(WS) {
                 "classNo": classNum
             }), 3000)
         })
-    } else {
-
     }
 }
