@@ -264,7 +264,7 @@ $(document).ready(function () {
                 if (select.options[select.selectedIndex].value !== "0") {
                     const targetClass = select.options[select.selectedIndex].className;
                     const student = select.options[select.selectedIndex].value;
-                    const sendConfirm = confirm(`確定要呼叫 ${select.options[select.selectedIndex].text}?`);
+                    const sendConfirm = confirm(`確定要呼叫 ${select.options[select.selectedIndex].text}？`);
                     if (sendConfirm) {
                         WS.send(JSON.stringify({
                             "type": "CALL_FOR_STUDENT",
