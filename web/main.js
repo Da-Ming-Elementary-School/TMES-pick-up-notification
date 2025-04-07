@@ -79,88 +79,88 @@ $(document).ready(function () {
         if (data["type"] === "CALLBACK") {
             return;
         }
-        let clsArray = null;
-        try {
-            clsArray = data["students"];
-        } catch (e) {
-            console.log(data)
-            return;
-        }
-        // generate class buttons by using "clsArray"
-        let lastGradeNo = 0;
-        let classBtnContainer = $("#class-btn");
-        $.each(clsArray, function (index, value) {
-                const currentGradeNo = parseInt(index.slice(0, 1));
-                if (currentGradeNo % 2 === 1) {  // 1, 3, 5
-                    if (lastGradeNo !== currentGradeNo) {
-                        classBtnContainer.append(
-                            `<div class="classBtnLine" id="btnL-${currentGradeNo}-${currentGradeNo + 1}"></div><br>`
-                        )
-                        let btnLineContainer = $(`#btnL-${currentGradeNo}-${currentGradeNo + 1}`);
-                        btnLineContainer.append(
-                            `<div class="btnGroupL" id="G${currentGradeNo}"></div>`
-                        )
-                    }
-                } else {  // 2, 4, 6
-                    if (lastGradeNo !== currentGradeNo) {
-                        let btnLineContainer = $(`#btnL-${currentGradeNo - 1}-${currentGradeNo}`);
-                        btnLineContainer.append(
-                            `<div class="btnGroupR" id="G${currentGradeNo}"></div>`
-                        )
-                    }
-                }
-                lastGradeNo = currentGradeNo
-                let btnGroupContainer = $(`#G${currentGradeNo}`)
-                btnGroupContainer.append(
-                    `<button class="classNoBtn" id="${index}">${index}</button>`
-                )
+        if (data["type"] === "STUDENT_LIST") {
+            let clsArray = null;
+            try {
+                clsArray = data["students"];
+            } catch (e) {
+                console.log(data)
+                return;
             }
-        )
-
-        $(".classNoBtn").on("click", function () {
-            const btnGroup = $("#btnGroup");
-            const targetClsNo = this.id;
-            const studentArray = clsArray[targetClsNo]
-            btnGroup.empty();
-            if (data["type"] === "STUDENT_LIST") {
-                $.each(studentArray, function (index, value) {
-                    console.log(value);
-                    const clsNum = value["classNo"];
-                    const seatNum = value["seatNo"];
-                    const name = value["name"];
-                    const btnMode = document.createElement("input");
-                    btnMode.type = "button";
-                    btnMode.id = formatStudentString(clsNum, seatNum, null);
-                    btnMode.className = "btn2";
-                    btnMode.value = formatStudentString(clsNum, seatNum, name);
-                    $("#btnGroup").append(btnMode);
-                    $(`#${formatStudentString(clsNum, seatNum, null)}`).click(function () {
-                        const cls = this.id.slice(0, this.id.indexOf("-"));
-                        const num = this.id.slice(this.id.indexOf("-") + 1, this.id.length);
-                        const name = this.value.slice(this.id.length, this.value.length);
-                        let sendConfirm = confirm(`確定要呼叫 ${formatStudentString(cls, num, name)}？`)
-                        if (sendConfirm) {
-                            WS.send(JSON.stringify({
-                                "type": "CALL_FOR_STUDENT",
-                                "targetClassNo": targetClsNo,
-                                "students": {
-                                    "classNo": cls,
-                                    "seatNo": num,
-                                    "name": name
-                                }
-                            }))
-                            historyBtn(WS, targetClsNo, cls, num, name);
-                            showBanner("successBox");
+            // generate class buttons by using "clsArray"
+            let lastGradeNo = 0;
+            let classBtnContainer = $("#class-btn");
+            $.each(clsArray, function (index, value) {
+                    const currentGradeNo = parseInt(index.slice(0, 1));
+                    if (currentGradeNo % 2 === 1) {  // 1, 3, 5
+                        if (lastGradeNo !== currentGradeNo) {
+                            classBtnContainer.append(
+                                `<div class="classBtnLine" id="btnL-${currentGradeNo}-${currentGradeNo + 1}"></div><br>`
+                            )
+                            let btnLineContainer = $(`#btnL-${currentGradeNo}-${currentGradeNo + 1}`);
+                            btnLineContainer.append(
+                                `<div class="btnGroupL" id="G${currentGradeNo}"></div>`
+                            )
                         }
-                    })
-                })
-            }
-            let classNum = this.id;
-            console.log(classNum)
-            btnGroup.prepend(`<a href="${location.origin}${location.pathname}#${classNum}"  class="mdc-button mdc-button--raised clsBtn" id="classroom-${classNum}" style="font-weight: bold">${classNum} 教室端</a><br>`)
-        })
+                    } else {  // 2, 4, 6
+                        if (lastGradeNo !== currentGradeNo) {
+                            let btnLineContainer = $(`#btnL-${currentGradeNo - 1}-${currentGradeNo}`);
+                            btnLineContainer.append(
+                                `<div class="btnGroupR" id="G${currentGradeNo}"></div>`
+                            )
+                        }
+                    }
+                    lastGradeNo = currentGradeNo
+                    let btnGroupContainer = $(`#G${currentGradeNo}`)
+                    btnGroupContainer.append(
+                        `<button class="classNoBtn" id="${index}">${index}</button>`
+                    )
+                }
+            )
 
-        if (data["type"] === "CALL_FOR_STUDENT") {
+            $(".classNoBtn").on("click", function () {
+                const btnGroup = $("#btnGroup");
+                const targetClsNo = this.id;
+                const studentArray = clsArray[targetClsNo]
+                btnGroup.empty();
+                if (data["type"] === "STUDENT_LIST") {
+                    $.each(studentArray, function (index, value) {
+                        console.log(value);
+                        const clsNum = value["classNo"];
+                        const seatNum = value["seatNo"];
+                        const name = value["name"];
+                        const btnMode = document.createElement("input");
+                        btnMode.type = "button";
+                        btnMode.id = formatStudentString(clsNum, seatNum, null);
+                        btnMode.className = "btn2";
+                        btnMode.value = formatStudentString(clsNum, seatNum, name);
+                        $("#btnGroup").append(btnMode);
+                        $(`#${formatStudentString(clsNum, seatNum, null)}`).click(function () {
+                            const cls = this.id.slice(0, this.id.indexOf("-"));
+                            const num = this.id.slice(this.id.indexOf("-") + 1, this.id.length);
+                            const name = this.value.slice(this.id.length, this.value.length);
+                            let sendConfirm = confirm(`確定要呼叫 ${formatStudentString(cls, num, name)}？`)
+                            if (sendConfirm) {
+                                WS.send(JSON.stringify({
+                                    "type": "CALL_FOR_STUDENT",
+                                    "targetClassNo": targetClsNo,
+                                    "students": {
+                                        "classNo": cls,
+                                        "seatNo": num,
+                                        "name": name
+                                    }
+                                }))
+                                historyBtn(WS, targetClsNo, cls, num, name);
+                                showBanner("successBox");
+                            }
+                        })
+                    })
+                }
+                let classNum = this.id;
+                console.log(classNum)
+                btnGroup.prepend(`<a href="${location.origin}${location.pathname}#${classNum}"  class="mdc-button mdc-button--raised clsBtn" id="classroom-${classNum}" style="font-weight: bold">${classNum} 教室端</a><br>`)
+            })
+        } else if (data["type"] === "CALL_FOR_STUDENT") {
             const time = new Date();
             const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
             const studentDic = data["students"];
