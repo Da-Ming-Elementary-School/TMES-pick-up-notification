@@ -1,3 +1,5 @@
+buildPWAJson(document.location.hash.slice(1))
+
 const normalSound = new Audio("audio/notify.wav");
 const warningSound = new Audio("audio/warning.wav");
 document.getElementById("call-history").style.visibility = "hidden";
@@ -44,6 +46,7 @@ $(document).ready(function () {
     let wsUrl = configServerUrl(wsStatus)
     let WS = new WebSocket(wsUrl);
     console.info("Document is \"READY\"")
+
     $("#wsUrlDisplay").text(wsUrl);
     WS.onopen = function () {
         $("#wsUrlDisplay").css("color", "green");
@@ -439,6 +442,29 @@ function initToClassroomClient(WS) {
         urlPath(WS);
         console.log(path);
     }
+}
+
+function buildPWAJson(classId) {
+    fetch("/manifest.json")
+        .then(res => res.json())
+        .then(manifest => {
+            if (classId !== "") {
+                manifest.name = `(${classId}) 大明課托呼叫系統`;
+                manifest.short_name = classId;
+                manifest.start_url = `/index.html#${classId}`
+            } else {
+                manifest.name = "(教師端) 大明課托呼叫系統";
+                manifest.short_name = "教師端";
+                manifest.start_url = "./index.html";
+            }
+            const blob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+            const blobUrl = URL.createObjectURL(blob);
+
+            const manifestLink = document.createElement('link');
+            manifestLink.rel = 'manifest';
+            manifestLink.href = blobUrl;
+            document.head.appendChild(manifestLink);
+        })
 }
 
 function fullScreen(element) {

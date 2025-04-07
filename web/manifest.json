@@ -1,0 +1,16 @@
+{
+  "name": "大明國小課托學生呼叫系統",
+  "short_name": "大明課托呼叫",
+  "start_url": "/",
+  "display": "fullscreen",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "./image/favicon_512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
