@@ -168,14 +168,13 @@ $(document).ready(function () {
             let classNum = this.id;
             console.log(classNum)
             btnGroup.prepend(`<button class="mdc-button mdc-button--raised clsBtn" id="classroom-${classNum}" style="font-weight: bold">${classNum} 教室端</button><br>`)
-            $(".clsBtn").click(function () {
+            $(".clsBtn").on("click", function () {
                 document.getElementById("called-history").style.visibility = "hidden";
                 document.getElementById("call-history").style.visibility = "hidden";
                 document.getElementById("call-history").style.height = "0";
                 document.getElementById("teacherLogin").style.height = "0";
                 document.getElementById("teacherLogin").style.visibility = "hidden";
                 document.getElementById("search-container").style.visibility = "hidden";
-                document.getElementById("searchText").style.visibility = "hidden";
                 $("#identityText").text(`目前身分：${classNum}`);
                 console.log(this.id);
                 $(".classNoBtn").hide();
