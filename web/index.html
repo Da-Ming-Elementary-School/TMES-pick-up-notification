@@ -72,24 +72,28 @@
 <p class="mdc-typography mdc-typography--body2" id="wsStatus"
    style="font-weight: bold;margin-bottom: 0;margin-top: 0;margin-left: 15px">伺服器位址：<code id="wsUrlDisplay"></code>
 </p>
-<div id="header" style="font-weight: bold;margin-bottom: 0;margin-top: 0;margin-left: 15px">
-    <p>
-        <a class="mdc-button mdc-button--raised" id="backtohome"
-           onclick="window.location.href = location.origin + location.pathname"
-           style="font-weight: bold;margin-bottom: 0;margin-top: 0">回首頁</a>
-        <button id="clearStorageUrl" class="mdc-button mdc-button--raised"
-                style="font-weight: bold;text-align: center;margin: 0">重新設定伺服器位址
-        </button>
-        <button id="called-history" class="mdc-button mdc-button--raised"
-                style="font-weight: bold;margin-bottom: 0;margin-top: 0">呼叫歷史
-        </button>
-        <button id="teacherLogin" class="mdc-button mdc-button--raised"
-                style="font-weight: bold;margin-bottom: 0;margin-top: 0">值班教師登入
-        </button>
-    </p>
+<div id="header" style="font-weight: bold;margin-bottom: 0;margin-top: 0;margin-left: 15px;height: fit-content">
+    <br>
+    <a class="mdc-button mdc-button--raised" id="backtohome"
+       onclick="window.location.href = location.origin + location.pathname"
+       style="font-weight: bold;margin-bottom: 0;margin-top: 0">回首頁</a>
+    <button id="clearStorageUrl" class="mdc-button mdc-button--raised"
+            style="font-weight: bold;text-align: center;margin: 0">重新設定伺服器位址
+    </button>
+    <button id="called-history" class="mdc-button mdc-button--raised"
+            style="font-weight: bold;margin-bottom: 0;margin-top: 0">呼叫歷史
+    </button>
+    <div class="search-container" id="history-search-container">
+        <label>
+            <input type="text" placeholder="歷史搜尋..（不含名字）" name="search" id="history-searchBar">
+        </label>
+    </div>
+    <button id="teacherLogin" class="mdc-button mdc-button--raised"
+            style="font-weight: bold;margin-bottom: 0;margin-top: 0">值班教師登入
+    </button>
 </div>
 <br>
-<div id="call-history">
+<div id="call-history" style="margin-top: 20px">
 </div>
 <br>
 <div id="student-call-banner">

@@ -5,6 +5,37 @@ document.getElementById("call-history").style.height = "0";
 document.getElementById("searchResult").style.visibility = "hidden";
 document.getElementById("searchResult").style.height = "0";
 document.getElementById("teacherLogin").style.visibility = "hidden";
+document.getElementById("teacherLogin").style.width = "0";
+document.getElementById("history-search-container").style.visibility = "hidden";
+document.getElementById("history-search-container").addEventListener("input", function () {
+    let dupNum = 0
+    let id = "";
+    if (document.getElementById("history-search-container").hidden === false) {
+        for (let i = 0; document.getElementsByClassName("historyDiv").item(i) != null || dupNum === i; i++) {
+            dupNum = i;
+            id = document.getElementsByClassName("historyDiv").item(dupNum).id;
+            let input = removeUnwantedChars(document.getElementById("history-searchBar").value)
+            if (id.slice(id.indexOf("-") + 1, id.length - 4) === input || id.slice(id.indexOf("-") + 1, id.length - 3) === input || id.slice(id.indexOf("-") + 1, id.length - 2) === input || id.slice(id.indexOf("-") + 1, id.length - 1) === input || id.slice(id.indexOf("-") + 1, id.length) === input) {
+                document.getElementById(id).removeAttribute("style");
+                console.log(id);
+                console.log(id.slice(id.indexOf("-") + 1, id.length - 2));
+                console.log("a")
+                console.log(input)
+            } else if (input === "") {
+                document.getElementById(id).removeAttribute("style");
+            } else {
+                document.getElementById(id).style.visibility = "hidden";
+                document.getElementById(id).style.height = "0";
+                document.getElementById(id).style.width = "0";
+                document.getElementById(id).style.margin = "0";
+                document.getElementById(id).style.padding = "0";
+                console.log(id);
+                console.log(id.slice(id.indexOf("-") + 1, id.length - 2));
+                console.log(input)
+            }
+        }
+    }
+})
 let isFullScreen = false;
 
 
@@ -188,8 +219,7 @@ $(document).ready(function () {
             const results = data["results"];
             if (results.length < 1) {
                 showBanner("failedBox");
-            }
-            else {
+            } else {
                 document.getElementById("searchResult").style.visibility = "visible";
                 document.getElementById("searchResult").style.height = "auto";
                 document.getElementById("searchText").innerText = `查詢到 ${results.length} 則結果！`
@@ -266,21 +296,8 @@ $(document).ready(function () {
 })
 
 
-document.getElementById("called-history").addEventListener("click", function () {
-    let historyDiv = document.getElementById("call-history");
-    let historyBtn = document.getElementById("called-history");
-    if (historyDiv.checkVisibility({visibilityProperty: true}) === false) {
-        historyDiv.style.visibility = "visible";
-        historyDiv.style.height = "auto";
-        historyBtn.textContent = "X";
-        historyBtn.style.backgroundColor = "#ff0000";
-    } else if (historyDiv.checkVisibility({visibilityProperty: false}) === true) {
-        historyDiv.style.visibility = "hidden";
-        historyDiv.style.height = "0";
-        historyBtn.textContent = "呼叫歷史";
-        historyBtn.style.backgroundColor = "#3f51b5";
-    }
-})
+document.getElementById("called-history").addEventListener("click", calledHistory);
+//document.addEventListener("click", calledHistory);
 
 document.getElementById("searchBar").addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
@@ -293,6 +310,28 @@ $("#clearStorageUrl").on("click", function () {
     configServerUrl();
     window.location.reload();
 })
+
+function calledHistory() {
+    let historyDiv = document.getElementById("call-history");
+    let historyBtn = document.getElementById("called-history");
+    let historySearchDiv = document.getElementById("history-search-container");
+    let historySearch = document.getElementById("history-searchBar");
+    if (historyDiv.checkVisibility({visibilityProperty: true}) === false) {
+        historyDiv.style.visibility = "visible";
+        historyDiv.style.height = "auto";
+        historyBtn.textContent = "X";
+        historyBtn.style.backgroundColor = "#ff0000";
+        historySearchDiv.removeAttribute("style");
+    } else if (historyDiv.checkVisibility({visibilityProperty: false}) === true) {
+        historySearchDiv.style.visibility = "hidden";
+        historySearch.value = "";
+        historyDiv.style.visibility = "hidden";
+        historyDiv.style.height = "0";
+        historyBtn.textContent = "呼叫歷史";
+        historyBtn.removeAttribute("style");
+    }
+}
+
 
 function historyBtn(WS, targetClsNo, cls, num, name) {
     if (document.getElementById(`hisDiv-${cls}${num}`) != null) {

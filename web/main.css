@@ -269,7 +269,7 @@ code {
     align-items: center;
 }
 
-.search-container button {
+#search-container button {
     float: right;
     padding: 6px 10px;
     margin-top: 35px;
@@ -280,22 +280,29 @@ code {
     cursor: pointer;
 }
 
-.search-container button:hover {
+#search-container button:hover {
     background: #ccc;
 }
 
-.search-container {
+#search-container {
     float: right;
 }
 
-.search-container input[type=text] {
+#search-container input[type=text] {
     padding: 6px;
     margin-top: 35px;
     font-size: 17px;
     border: none;
 }
 
-.search-container input[type=text]::-webkit-input-placeholder {
+#history-search-container input[type=text] {
+    padding: 6px;
+    font-size: 17px;
+    border: none;
+}
+
+ #history-search-container {
+    display: inline-block;
 }
 
 #searchHint {
