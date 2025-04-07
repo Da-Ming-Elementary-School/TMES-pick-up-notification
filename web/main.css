@@ -327,6 +327,10 @@ code {
     width: fit-content;
 }
 
+#resultSelect {
+    padding: 4px 7px 4px 7px;
+}
+
 @media screen and (max-width: 600px) {
     .search-container input[type=text] {
         float: none;
