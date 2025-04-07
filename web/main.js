@@ -11,45 +11,39 @@ $(document).ready(function () {
     let wsStatus = false;
     let wsUrl = configServerUrl(wsStatus)
     let WS = new WebSocket(wsUrl);
+    let cls = ["1A", "1B", "1C", "1D", "2A", "2B", "2C", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "5A", "5B", "5C", "5D", "6A", "6B", "6C"]
+    let path = window.location.hash.slice(window.location.hash.length - 2, window.location.hash.length);
+    let clsNum = cls.indexOf(path.toUpperCase());
     console.info("Document is \"READY\"")
     $("#wsUrlDisplay").text(wsUrl);
     WS.onopen = function () {
         $("#wsUrlDisplay").css("color", "green");
-        let cls = ["1A", "1B", "1C", "1D", "2A", "2B", "2C", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "5A", "5B", "5C", "5D", "6A", "6B", "6C"]
-        let path = window.location.hash.slice(window.location.hash.length - 2, window.location.hash.length);
-        console.log(path);
-        if (cls.indexOf(path.toUpperCase()) < "") {
+        if (clsNum === -1) {
             WS.send(JSON.stringify({
                 "type": "INIT",
                 "classNo": "777"
             }))
             console.log(path);
-        } else if (cls.indexOf(path.toUpperCase()) !== -1) {
-            document.getElementById("search-container").style.visibility = "hidden";
-            document.getElementById("searchText").style.visibility = "hidden";
+        } else if (clsNum !== -1) {
             urlPath(WS);
             console.log(path);
         }
-        $(window).on('hashchange', function () {
-            let cls = ["1A", "1B", "1C", "1D", "2A", "2B", "2C", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "5A", "5B", "5C", "5D", "6A", "6B", "6C"]
-            let path = window.location.hash.slice(window.location.hash.length - 2, window.location.hash.length);
-            console.log(path);
-            if (cls.indexOf(path.toUpperCase()) < "") {
-                WS.send(JSON.stringify({
-                    "type": "INIT",
-                    "classNo": "777"
-                }))
-                console.log(path);
-            } else if (cls.indexOf(path.toUpperCase()) !== -1) {
-                document.getElementById("search-container").style.visibility = "hidden";
-                document.getElementById("searchText").style.visibility = "hidden";
-                urlPath(WS);
-                console.log(path);
-            }
-        });
         wsStatus = true;
 
     }
+
+    $(window).on('hashchange', function () {
+        /*if (clsNum === -1) {
+            WS.send(JSON.stringify({
+                "type": "INIT",
+                "classNo": "777"
+            }))
+            console.log(path);*/
+        // } else if (clsNum !== -1) {
+        urlPath(WS);
+        console.log(path);
+        // }
+    });
 
     WS.onerror = function (e) {
         console.error(e);
@@ -167,23 +161,23 @@ $(document).ready(function () {
             }
             let classNum = this.id;
             console.log(classNum)
-            btnGroup.prepend(`<button class="mdc-button mdc-button--raised clsBtn" id="classroom-${classNum}" style="font-weight: bold">${classNum} 教室端</button><br>`)
-            $(".clsBtn").on("click", function () {
-                document.getElementById("called-history").style.visibility = "hidden";
-                document.getElementById("call-history").style.visibility = "hidden";
-                document.getElementById("call-history").style.height = "0";
-                document.getElementById("teacherLogin").style.height = "0";
-                document.getElementById("teacherLogin").style.visibility = "hidden";
-                document.getElementById("search-container").style.visibility = "hidden";
-                $("#identityText").text(`目前身分：${classNum}`);
-                console.log(this.id);
-                $(".classNoBtn").hide();
-                $("#btnGroup").hide();
-                WS.send(JSON.stringify({
-                    "type": "INIT",
-                    "classNo": this.id.slice(this.id.indexOf("-") + 1, this.id.length)
-                }))
-            })
+            btnGroup.prepend(`<a href="${location.origin}${location.pathname}#${classNum}"  class="mdc-button mdc-button--raised clsBtn" id="classroom-${classNum}" style="font-weight: bold">${classNum} 教室端</a><br>`)
+            // $(".clsBtn").on("click", function () {
+            //     document.getElementById("called-history").style.visibility = "hidden";
+            //     document.getElementById("call-history").style.visibility = "hidden";
+            //     document.getElementById("call-history").style.height = "0";
+            //     document.getElementById("teacherLogin").style.height = "0";
+            //     document.getElementById("teacherLogin").style.visibility = "hidden";
+            //     document.getElementById("search-container").style.visibility = "hidden";
+            //     $("#identityText").text(`目前身分：${classNum}`);
+            //     console.log(this.id);
+            //     $(".classNoBtn").hide();
+            //     $("#btnGroup").hide();
+            //     WS.send(JSON.stringify({
+            //         "type": "INIT",
+            //         "classNo": this.id.slice(this.id.indexOf("-") + 1, this.id.length)
+            //     }))
+            // })
         })
         if (data["type"] === "CALL_FOR_STUDENT") {
             const time = new Date();
@@ -563,23 +557,21 @@ function showBanner() {
 function urlPath(WS) {
     let cls = ["1A", "1B", "1C", "1D", "2A", "2B", "2C", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "5A", "5B", "5C", "5D", "6A", "6B", "6C"]
     let path = window.location.hash.slice(window.location.hash.length - 2, window.location.hash.length);
-    if (cls.indexOf(path.toUpperCase()) !== -1) {
-        const classNum = cls[cls.indexOf(path.toUpperCase())]
-        document.getElementById("called-history").style.visibility = "hidden";
-        document.getElementById("call-history").style.visibility = "hidden";
-        document.getElementById("call-history").style.height = "0";
-        document.getElementById("teacherLogin").style.height = "0";
-        document.getElementById("teacherLogin").style.visibility = "hidden";
-        $("#identityText").text(`目前身分：${classNum}`);
-        $(".classNoBtn").hide();
-        $("#btnGroup").hide();
-        setTimeout(() => {
-            WS.send(JSON.stringify({
-                "type": "INIT",
-                "classNo": classNum
-            }), 3000)
-        })
-    } else {
-
-    }
+    const classNum = cls[cls.indexOf(path.toUpperCase())]
+    document.getElementById("called-history").style.visibility = "hidden";
+    document.getElementById("call-history").style.visibility = "hidden";
+    document.getElementById("call-history").style.height = "0";
+    document.getElementById("teacherLogin").style.height = "0";
+    document.getElementById("teacherLogin").style.visibility = "hidden";
+    document.getElementById("search-container").style.visibility = "hidden";
+    $("#identityText").text(`目前身分：${classNum}`);
+    console.log(this.id);
+    $(".classNoBtn").hide();
+    $("#btnGroup").hide();
+    setTimeout(() => {
+        WS.send(JSON.stringify({
+            "type": "INIT",
+            "classNo": classNum
+        }), 3000)
+    })
 }

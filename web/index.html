@@ -37,7 +37,7 @@
 <div id="successBox">
     <div id="successMessage"><i class="bi bi-check-circle-fill" style="color: #80ff4c"></i> <b class="successText">呼叫成功！</b></div>
 </div>
-<button onclick="window.location.reload()" style="background:none; border: none;height: fit-content;margin-top: 10px;margin-left: 10px;margin-bottom: 20px"><img src="image/Logo.png" alt="Logo" height="80"></button>
+<button onclick="window.location.href = location.origin + location.pathname" style="background:none; border: none;height: fit-content;margin-top: 10px;margin-left: 10px;margin-bottom: 20px"><img src="image/Logo.png" alt="Logo" height="80"></button>
 <div class="search-container" id="search-container">
             <label>
                 <input type="text" placeholder="搜尋...(記得加空格)" name="search" id="searchBar">
@@ -59,7 +59,7 @@
 <p class="mdc-typography mdc-typography--body2" id="wsStatus" style="font-weight: bold;margin-bottom: 0;margin-top: 0;margin-left: 15px">伺服器位址：<code id="wsUrlDisplay"></code></p>
 <div id="header" style="font-weight: bold;margin-bottom: 0;margin-top: 0;margin-left: 15px">
     <p>
-        <button class="mdc-button mdc-button--raised" id="backtohome" onclick="location.href = ''" style="font-weight: bold;margin-bottom: 0;margin-top: 0">回首頁</button>
+        <a class="mdc-button mdc-button--raised" id="backtohome" onclick="window.location.href = location.origin + location.pathname" style="font-weight: bold;margin-bottom: 0;margin-top: 0">回首頁</a>
         <button id="clearStorageUrl" class="mdc-button mdc-button--raised" style="font-weight: bold;text-align: center;margin: 0">重新設定伺服器位址</button>
         <button id="called-history" class="mdc-button mdc-button--raised" style="font-weight: bold;margin-bottom: 0;margin-top: 0">呼叫歷史</button>
         <button id="teacherLogin" class="mdc-button mdc-button--raised" style="font-weight: bold;margin-bottom: 0;margin-top: 0">值班教師登入</button>
