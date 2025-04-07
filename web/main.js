@@ -256,7 +256,7 @@ $(document).ready(function () {
                 optMode.value = classNo + "-" + seatNo;
                 optMode.id = name;
                 optMode.className = targetClassNo;
-                optMode.text = classNo + "-" + seatNo + " " + name;
+                optMode.text = formatStudentString(classNo, seatNo, name) + ` (${targetClassNo})`;
                 document.getElementById("resultSelect").append(optMode);
             })
             let select = document.querySelector("#resultSelect");
