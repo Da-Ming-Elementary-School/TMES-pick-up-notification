@@ -292,8 +292,9 @@ $(document).ready(function () {
     document.getElementById("submitBtn").addEventListener("click", function () {
         const value = removeUnwantedChars(document.getElementById("searchBar").value);
         const resultSelect = $("#resultSelect")
+        document.getElementById("searchBar").value = value
         resultSelect.empty();
-        resultSelect.append("<option value='0'>請選擇正確的搜尋結果</option>");
+        resultSelect.append("<option value='0' disabled selected>請選擇正確的搜尋結果</option>");
         removeAllListeners(document.querySelector("#resultSelect"), "change");
         if (value !== "") {
             WS.send(JSON.stringify({
