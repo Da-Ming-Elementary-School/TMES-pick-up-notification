@@ -1,0 +1,4 @@
+{
+  "type": "CONNECTION_STATS",
+  "connected_clients": ["1A", "2B", "777"]
+}

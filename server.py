@@ -25,7 +25,7 @@ def data_is_stored(data) -> tuple[bool, str | None]:
 async def send_message(data: dict,
                        message_type: Literal[
                            "INIT", "ERROR", "CALLBACK", "BROADCAST", "STUDENT_LIST", "CALL_FOR_STUDENT", "UNDO",
-                           "SEARCH_RESULT"],
+                           "SEARCH_RESULT", "CONNECTION_STATS"],
                        targets: ServerConnection | list[ServerConnection]):
     data["type"] = message_type
     data_str = dumps(data)
@@ -66,6 +66,7 @@ async def handler(websocket: ServerConnection):
                         logging.error(error_message)
                         await send_message({"message": error_message}, "ERROR", websocket)
                 pprint(CONNECTED_CLIENTS)
+                await update_connection_stats()
             elif msg_type == "BROADCAST":
                 for key in CONNECTED_CLIENTS.keys():
                     if key == client_id:
@@ -86,6 +87,7 @@ async def handler(websocket: ServerConnection):
     except (ConnectionClosedError, ConnectionClosedOK) as e:
         logging.error(f"{type(e).__name__}: {e}")
         remove_ws(websocket)
+        await update_connection_stats()
 
 
 def remove_ws(websocket: ServerConnection):
@@ -120,6 +122,15 @@ def search(criteria: list[str]) -> list[dict]:
     for i in temp:
         search_results.append(INDEX[i])
     return search_results
+
+
+async def update_connection_stats():
+    client_key_list = []
+    for k, v in CONNECTED_CLIENTS.items():
+        if v:
+            client_key_list.append(k)
+    for key in CONNECTED_CLIENTS.keys():
+        await send_message({"connected_clients": client_key_list}, "CONNECTION_STATS", CONNECTED_CLIENTS.get(key))
 
 
 async def main():
