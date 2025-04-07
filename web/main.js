@@ -464,7 +464,7 @@ function fullScreen(element) {
 }
 
 function closeFullscreen() {
-    if (document.exitFullscreen) {
+    if (document.fullscreenEnabled) {
         document.exitFullscreen();
         isFullScreen = false;
     } else if (document.webkitExitFullscreen) { /* Safari */
