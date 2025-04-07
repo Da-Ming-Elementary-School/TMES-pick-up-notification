@@ -328,7 +328,7 @@ code {
 .search-container input[type=text]::-webkit-input-placeholder {
 }
 
-#searchText {
+#searchHint {
     color: #4e4c4c;
     font-size: 9px;
     position: absolute;
