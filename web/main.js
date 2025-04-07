@@ -268,6 +268,22 @@ $(document).ready(function () {
             document.getElementById("successBox").classList.remove("show");
             const cls = data["message"];
             alert(`班級 ${cls.toString().slice(7, 9)} 尚未開啟接收端，請以其他方式通知！`)
+        } else if (data["type"] === "CONNECTION_STATS") {
+            const connectedClassList = data["connected_clients"];
+            const classBtns = document.getElementsByClassName("classNoBtn");
+            for (let i = 0; i < classBtns.length; i++) {
+                classBtns[i].style.backgroundColor = "#b80000";
+                classBtns[i].style.fontStyle = "italic";
+            }
+            for (const classId of connectedClassList) {
+                if (classId === "777"){
+                    continue;
+                }
+                console.log(classId + " is alive");
+                const btn = document.getElementById(classId);
+                btn.style.backgroundColor = "#ea4c89";
+                btn.style.fontStyle = "normal";
+            }
         }
     }
 
