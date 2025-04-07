@@ -2,6 +2,7 @@
     font-family: "Huninn";
     src: url("jf-openhuninn-2.1.ttf");
 }
+
 /*
 "open-huninn" by justfont. Licensed under SIL Open Font License 1.1.
 For more information, please check https://github.com/justfont/open-huninn-font
@@ -132,6 +133,7 @@ code {
     margin-right: 10%;
     margin-left: 10%;
 }
+
 #student-call div {
     border: 10px solid #ff0000;
     display: inline-block;
@@ -246,38 +248,6 @@ code {
     display: none;
 }
 
-/*.clsBtn {*/
-/*    background-color: #1d57ec;*/
-/*    border-radius: 8px;*/
-/*    border-style: none;*/
-/*    box-sizing: border-box;*/
-/*    color: #FFFFFF;*/
-/*    cursor: pointer;*/
-/*    display: inline-block;*/
-/*    !*font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;*!*/
-/*    font-size: 15px;*/
-/*    font-weight: 500;*/
-/*    height: 40px;*/
-/*    line-height: 20px;*/
-/*    list-style: none;*/
-/*    margin: 0;*/
-/*    outline: none;*/
-/*    padding: 8px 10px;*/
-/*    position: relative;*/
-/*    text-align: center;*/
-/*    text-decoration: none;*/
-/*    transition: color 100ms;*/
-/*    vertical-align: baseline;*/
-/*    user-select: none;*/
-/*    -webkit-user-select: none;*/
-/*    touch-action: manipulation;*/
-/*}*/
-
-/*.clsBtn:hover,*/
-/*.clsBtn:focus {*/
-/*    background-color: #00117e;*/
-/*}*/
-
 .confirmBtn {
     text-align: center;
     margin: 0 auto;
@@ -336,7 +306,7 @@ code {
     top: 67px;
 }
 
-#successBox {
+#successBox, #failedBox, #searchBox {
     position: fixed;
     top: -100px; /* 初始在畫面上方看不到 */
     left: 50%;
@@ -345,14 +315,14 @@ code {
     z-index: 1000;
 }
 
-#successBox.show {
-    top: 30px;      /* 滑下位置 */
+#successBox.show, #failedBox.show, #searchBox.show {
+    top: 30px; /* 滑下位置 */
 }
 
-#successMessage {
+#successMessage, #failedMessage, #searchMessage {
     color: #cccccc;
     padding: 10px;
-    background-color: rgba(0,0,0,0.6);
+    background-color: rgba(0, 0, 0, 0.6);
     border-radius: 10px;
     width: fit-content;
 }

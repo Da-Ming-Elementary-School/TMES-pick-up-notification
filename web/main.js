@@ -119,7 +119,7 @@ $(document).ready(function () {
                                 }
                             }))
                             historyBtn(WS, targetClsNo, cls, num, name);
-                            showBanner();
+                            showBanner("successBox");
                         }
                     })
                 })
@@ -186,45 +186,54 @@ $(document).ready(function () {
             warningSound.currentTime = 0
         } else if (data["type"] === "SEARCH_RESULT") {
             const results = data["results"];
-            $.each(results, function (index, value) {
-                const targetClassNo = value["targetClassNo"];
-                const student = value["student"];
-                const classNo = student["classNo"];
-                const seatNo = student["seatNo"];
-                const name = student["name"];
-                const optMode = document.createElement("option");
-                optMode.value = classNo + "-" + seatNo;
-                optMode.id = name;
-                optMode.className = targetClassNo;
-                optMode.text = formatStudentString(classNo, seatNo, name) + ` (${targetClassNo})`;
-                document.getElementById("resultSelect").append(optMode);
-            })
-            let select = document.querySelector("#resultSelect");
-            select.addEventListener("change", function () {
-                if (select.options[select.selectedIndex].value !== "0") {
-                    const targetClass = select.options[select.selectedIndex].className;
-                    const student = select.options[select.selectedIndex].value;
-                    const sendConfirm = confirm(`確定要呼叫 ${select.options[select.selectedIndex].text}？`);
-                    const cls = student.slice(0, student.indexOf("-"));
-                    const seatNo = student.slice(student.indexOf("-") + 1, student.length);
-                    const name = select.options[select.selectedIndex].id;
-                    if (sendConfirm) {
-                        WS.send(JSON.stringify({
-                            "type": "CALL_FOR_STUDENT",
-                            "targetClassNo": targetClass,
-                            "students": {
-                                "classNo": cls,
-                                "seatNo": seatNo,
-                                "name": name
-                            }
-                        }))
-                        historyBtn(WS, targetClass, cls, seatNo, name);
-                        document.getElementById("searchResult").style.visibility = "hidden";
-                        document.getElementById("searchResult").style.height = "0";
-                        showBanner();
+            if (results.length < 1) {
+                showBanner("failedBox");
+            }
+            else {
+                document.getElementById("searchResult").style.visibility = "visible";
+                document.getElementById("searchResult").style.height = "auto";
+                document.getElementById("searchText").innerText = `查詢到 ${results.length} 則結果！`
+                showBanner("searchBox");
+                $.each(results, function (index, value) {
+                    const targetClassNo = value["targetClassNo"];
+                    const student = value["student"];
+                    const classNo = student["classNo"];
+                    const seatNo = student["seatNo"];
+                    const name = student["name"];
+                    const optMode = document.createElement("option");
+                    optMode.value = classNo + "-" + seatNo;
+                    optMode.id = name;
+                    optMode.className = targetClassNo;
+                    optMode.text = formatStudentString(classNo, seatNo, name) + ` (${targetClassNo})`;
+                    document.getElementById("resultSelect").append(optMode);
+                })
+                let select = document.querySelector("#resultSelect");
+                select.addEventListener("change", function () {
+                    if (select.options[select.selectedIndex].value !== "0") {
+                        const targetClass = select.options[select.selectedIndex].className;
+                        const student = select.options[select.selectedIndex].value;
+                        const sendConfirm = confirm(`確定要呼叫 ${select.options[select.selectedIndex].text}？`);
+                        const cls = student.slice(0, student.indexOf("-"));
+                        const seatNo = student.slice(student.indexOf("-") + 1, student.length);
+                        const name = select.options[select.selectedIndex].id;
+                        if (sendConfirm) {
+                            WS.send(JSON.stringify({
+                                "type": "CALL_FOR_STUDENT",
+                                "targetClassNo": targetClass,
+                                "students": {
+                                    "classNo": cls,
+                                    "seatNo": seatNo,
+                                    "name": name
+                                }
+                            }))
+                            historyBtn(WS, targetClass, cls, seatNo, name);
+                            document.getElementById("searchResult").style.visibility = "hidden";
+                            document.getElementById("searchResult").style.height = "0";
+                            showBanner("successBox");
+                        }
                     }
-                }
-            })
+                })
+            }
         } else if (data["type"] === "ERROR") {
             document.getElementById("successBox").classList.remove("show");
             const cls = data["message"];
@@ -244,8 +253,6 @@ $(document).ready(function () {
                 "type": "SEARCH",
                 "criteria": value.split(" ")
             }))
-            document.getElementById("searchResult").style.visibility = "visible";
-            document.getElementById("searchResult").style.height = "auto";
         }
     })
 
@@ -435,8 +442,8 @@ function removeUnwantedChars(str) {
     return str.replace(/[^\d\u4e00-\u9fa5\s]/g, '');
 }
 
-function showBanner() {
-    const banner = document.getElementById("successBox");
+function showBanner(box) {
+    const banner = document.getElementById(box);
 
     banner.classList.add("show");
 
