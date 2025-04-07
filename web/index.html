@@ -43,14 +43,16 @@
                 <input type="text" placeholder="搜尋...(記得加空格)" name="search" id="searchBar">
             </label>
             <button type="submit" id="submitBtn"><i class="fa fa-search"></i></button>
-</div>
-<p id="searchText">（可填入：101 25、王大明、101 王大明、101 25 王大明）</p>
-<div id="searchResult" style="width: 100%;display: flex;justify-content: center;align-items: center;">
+    <br>
+    <p id="searchHint">（可填入：101 25、王大明、101 王大明、101 25 王大明）</p>
+    <br>
+    <div id="searchResult" style="width: 100%;display: flex;justify-content: center;align-items: center;">
     <label>
-        <select id="resultSelect" style="font-size: 15px">
-            <option>請選擇正確的搜尋結果</option>
+        <select id="resultSelect" style="font-size: 15px; width: 100%">
+            <option value="" disabled selected>請選擇正確的搜尋結果</option>
         </select>
     </label>
+</div>
 </div>
 <!--<h1 class="mdc-typography mdc-typography&#45;&#45;headline3" style="font-weight: bold">大明國小 課托學生呼叫系統</h1>-->
 <h4 class="mdc-typography mdc-typography--body2" id="identityText" style="font-weight: bold;margin-bottom: 0;margin-top: 0;margin-left: 15px">目前身分：值班教師</h4>
