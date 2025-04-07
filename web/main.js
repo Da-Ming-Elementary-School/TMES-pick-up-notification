@@ -73,7 +73,6 @@ $(document).ready(function () {
 
 
     WS.onmessage = function (event) {
-        console.info(event.data);
         const data = JSON.parse(event.data);
         // skip "CALLBACK" data
         if (data["type"] === "CALLBACK") {
