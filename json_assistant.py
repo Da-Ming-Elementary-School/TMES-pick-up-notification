@@ -52,7 +52,7 @@ class StudentList:
         for class_no, student_list in all_student_lists.items():
             for student in student_list:
                 index_by_student[
-                    "%d%02d%s" % (student["classNo"], student["seatNo"], student["name"])
+                    "%d-%02d%s" % (student["classNo"], student["seatNo"], student["name"])
                 ] = {"targetClassNo": class_no, "student": student}
         return index_by_student
 
