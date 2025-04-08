@@ -347,6 +347,7 @@ function calledHistory() {
         historyDiv.style.height = "0";
         historyBtn.textContent = "呼叫歷史";
         historyBtn.removeAttribute("style");
+        historyBtn.style.fontWeight = "bold";
     }
 }
 
