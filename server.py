@@ -1,5 +1,6 @@
 # coding=utf-8
 import asyncio
+from functools import partial
 from json import loads, dumps
 from typing import Literal
 import logging
@@ -22,11 +23,21 @@ def data_is_stored(data) -> tuple[bool, str | None]:
     return False, None
 
 
-async def send_message(data: dict,
-                       message_type: Literal[
-                           "INIT", "ERROR", "CALLBACK", "BROADCAST", "STUDENT_LIST", "CALL_FOR_STUDENT", "UNDO",
-                           "SEARCH_RESULT", "CONNECTION_STATS"],
-                       targets: ServerConnection | list[ServerConnection]):
+async def send_message(
+    data: dict,
+    message_type: Literal[
+        "INIT",
+        "ERROR",
+        "CALLBACK",
+        "BROADCAST",
+        "STUDENT_LIST",
+        "CALL_FOR_STUDENT",
+        "UNDO",
+        "SEARCH_RESULT",
+        "CONNECTION_STATS",
+    ],
+    targets: ServerConnection | list[ServerConnection],
+):
     data["type"] = message_type
     data_str = dumps(data)
     if isinstance(targets, ServerConnection):
@@ -47,7 +58,9 @@ async def handler(websocket: ServerConnection):
             if msg_type == "INIT":
                 client_is_stored, k = data_is_stored(websocket)
                 closed = asyncio.ensure_future(websocket.wait_closed())
-                closed.add_done_callback(lambda _: remove_ws(websocket))
+                closed.add_done_callback(
+                    lambda _: asyncio.create_task(partial(remove_ws, websocket))
+                )
                 if client_is_stored:
                     CONNECTED_CLIENTS[k].remove(websocket)
                 if client_id in CONNECTED_CLIENTS.keys():
@@ -58,13 +71,19 @@ async def handler(websocket: ServerConnection):
                     # return student list
                     student_list_callback: dict = {}
                     try:
-                        student_list = json_assistant.StudentList.get_all_student_lists()
+                        student_list = (
+                            json_assistant.StudentList.get_all_student_lists()
+                        )
                         student_list_callback["students"] = student_list
-                        await send_message(student_list_callback, "STUDENT_LIST", websocket)
+                        await send_message(
+                            student_list_callback, "STUDENT_LIST", websocket
+                        )
                     except Exception as e:
                         error_message = f"{type(e).__name__}: {e}"
                         logging.error(error_message)
-                        await send_message({"message": error_message}, "ERROR", websocket)
+                        await send_message(
+                            {"message": error_message}, "ERROR", websocket
+                        )
                 pprint(CONNECTED_CLIENTS)
                 await update_connection_stats()
             elif msg_type == "BROADCAST":
@@ -78,19 +97,22 @@ async def handler(websocket: ServerConnection):
                 target = CONNECTED_CLIENTS.get(target_id, [])
                 if len(target) == 0:
                     logging.error(f"Target {target_id} not found")
-                    await send_message({"message": f"Target {target_id} not found"}, "ERROR", websocket)
+                    await send_message(
+                        {"message": f"Target {target_id} not found"}, "ERROR", websocket
+                    )
                 else:
                     await send_message(data, msg_type, target)
             elif msg_type == "SEARCH":
-                await send_message({"results": search(data["criteria"])}, "SEARCH_RESULT", websocket)
+                await send_message(
+                    {"results": search(data["criteria"])}, "SEARCH_RESULT", websocket
+                )
             await send_message({"received": True}, "CALLBACK", websocket)
     except (ConnectionClosedError, ConnectionClosedOK) as e:
         logging.error(f"{type(e).__name__}: {e}")
-        remove_ws(websocket)
-        await update_connection_stats()
+        await remove_ws(websocket)
 
 
-def remove_ws(websocket: ServerConnection):
+async def remove_ws(websocket: ServerConnection):
     global CONNECTED_CLIENTS
     client_is_stored, k = data_is_stored(websocket)
     if client_is_stored:
@@ -98,6 +120,7 @@ def remove_ws(websocket: ServerConnection):
         logging.info(f"{k} is removed.")
         logging.info(websocket.local_address)
     pprint(CONNECTED_CLIENTS)
+    await update_connection_stats()
 
 
 def search(criteria: list[str]) -> list[dict]:
@@ -130,7 +153,11 @@ async def update_connection_stats():
         if v:
             client_key_list.append(k)
     for key in CONNECTED_CLIENTS.keys():
-        await send_message({"connected_clients": client_key_list}, "CONNECTION_STATS", CONNECTED_CLIENTS.get(key))
+        await send_message(
+            {"connected_clients": client_key_list},
+            "CONNECTION_STATS",
+            CONNECTED_CLIENTS.get(key),
+        )
 
 
 async def main():
