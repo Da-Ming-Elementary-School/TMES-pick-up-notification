@@ -15,6 +15,7 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body class="blur-background" style="height: 100%">
 <style>
@@ -33,8 +34,8 @@
         background-color: var(--mdc-theme-background);
         font-family: 'Roboto', serif;
     }
-
 </style>
+
 <div id="successBox">
     <div id="successMessage"><i class="bi bi-check-circle-fill" style="color: #80ff4c"></i> <b
             id="successText">呼叫成功！</b></div>
@@ -47,6 +48,7 @@
     <div id="searchMessage"><i class="bi bi-check-circle-fill" style="color: #80ff4c"></i> <b
             id="searchText"></b></div>
 </div>
+
 <button onclick="window.location.href = location.origin + location.pathname"
         style="background:none; border: none;height: fit-content;margin-top: 10px;margin-left: 10px;margin-bottom: 20px">
     <img src="image/Logo.png" alt="Logo" height="80"></button>
@@ -66,10 +68,15 @@
         </label>
     </div>
 </div>
-<h4 class="mdc-typography mdc-typography--body2" id="identityText"
-    style="font-weight: bold;margin-bottom: 0;margin-top: 0;margin-left: 15px">目前身分：值班教師</h4>
+<p class="mdc-typography mdc-typography--body2" id="identityText"
+    style="font-weight: bold;margin-bottom: 0;margin-top: 0;margin-left: 15px;text-align: left;">目前身分：值班教師</p>
 <p class="mdc-typography mdc-typography--body2" id="wsStatus"
-   style="font-weight: bold;margin-bottom: 0;margin-top: 0;margin-left: 15px">伺服器位址：<code id="wsUrlDisplay"></code>
+   style="font-weight: bold;margin-bottom: 0;margin-top: 0;margin-left: 15px;text-align: left">伺服器位址：
+    <code id="wsUrlDisplay"></code>
+</p>
+<p class="mdc-typography mdc-typography--body2" id="teacherStatus"
+    style="font-weight: bold;margin-bottom: 0;margin-top: 0;margin-left: 15px;text-align: left;visibility: hidden">值班教師狀態：
+    <span class="mdc-typography mdc-typography--body2" style="font-weight: bold;visibility: hidden" id="teacherStatusDisplay">處理中...</span>
 </p>
 <div id="header" style="font-weight: bold;margin-bottom: 0;margin-top: 0;margin-left: 15px;height: fit-content">
     <br>

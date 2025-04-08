@@ -259,10 +259,6 @@ code {
     margin: 0 auto;
 }
 
-#wsStatus {
-    text-align: left;
-}
-
 #call-history {
     display: block;
     width: 100%;
