@@ -1,4 +1,5 @@
-buildPWAJson(document.location.hash.slice(1))
+// Useless, the browser just skipped the generated "blob" URL
+// buildPWAJson(document.location.hash.slice(1))
 
 const normalSound = new Audio("audio/notify.wav");
 const warningSound = new Audio("audio/warning.wav");
@@ -39,6 +40,7 @@ document.getElementById("history-search-container").addEventListener("input", fu
     }
 })
 let isFullScreen = false;
+let identity = document.location.hash !== "" ? document.location.hash.slice(1) : "777";
 
 
 $(document).ready(function () {
@@ -48,6 +50,17 @@ $(document).ready(function () {
     console.info("Document is \"READY\"")
 
     $("#wsUrlDisplay").text(wsUrl);
+
+    if (identity !== "777") {
+        let testSound = new Audio("audio/notify.wav");
+        testSound.volume = 0;
+        testSound.play().catch(function (e) {
+            console.log("Sound test failed: ", e);
+            alert("注意：音效提示無法運作。請點擊網頁中的任一處以啟用。");
+        });
+        testSound = null;
+    }
+
     WS.onopen = function () {
         $("#wsUrlDisplay").css("color", "green");
         initToClassroomClient(WS)
