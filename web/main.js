@@ -557,7 +557,7 @@ function guidGenerator() {
 }
 
 function removeUnwantedChars(str) {
-    return str.replace(/[^\d\u4e00-\u9fa5\s]/g, '');
+    return str.replace(/[^\d\u4e00-\u9fa5\s-]/g, '');
 }
 
 function showBanner(box) {
