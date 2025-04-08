@@ -1,2 +1,2 @@
-./.venv/Scripts/activate.bat && python server.py
+/.venv/Scripts/activate.bat && python server.py
 pause
