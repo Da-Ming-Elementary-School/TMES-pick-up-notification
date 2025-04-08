@@ -25,7 +25,7 @@ code {
 }
 
 .classNoBtn {
-    background-color: #EA4C89;
+    background-color: #3db530;
     border-radius: 8px;
     border-style: none;
     box-sizing: border-box;
@@ -53,7 +53,7 @@ code {
 
 .classNoBtn:hover,
 .classNoBtn:focus {
-    background-color: #F082AC;
+    background-color: #41bc33;
 }
 
 .classBtnLine {

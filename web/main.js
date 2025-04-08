@@ -296,8 +296,7 @@ $(document).ready(function () {
                 }
                 console.log(classId + " is alive");
                 const btn = document.getElementById(classId);
-                btn.style.backgroundColor = "#ea4c89";
-                btn.style.fontStyle = "normal";
+                btn.removeAttribute("style");
             }
         }
     }
