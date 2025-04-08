@@ -58,8 +58,9 @@ async def handler(websocket: ServerConnection):
             if msg_type == "INIT":
                 client_is_stored, k = data_is_stored(websocket)
                 closed = asyncio.ensure_future(websocket.wait_closed())
+                rm_ws_bound = partial(remove_ws, websocket)
                 closed.add_done_callback(
-                    lambda _: asyncio.create_task(partial(remove_ws, websocket))
+                    lambda future: asyncio.create_task(rm_ws_bound())
                 )
                 if client_is_stored:
                     CONNECTED_CLIENTS[k].remove(websocket)
