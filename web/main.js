@@ -67,6 +67,8 @@ $(document).ready(function () {
 
         $(window).on('hashchange', function () {
             initToClassroomClient(WS)
+            identity = document.location.hash !== "" ? document.location.hash.slice(1) : "777";
+            console.log("Your identity:", identity);
         });
         wsStatus = true;
 
@@ -285,18 +287,32 @@ $(document).ready(function () {
             alert(`班級 ${cls.toString().slice(7, 9)} 尚未開啟接收端，請以其他方式通知！`)
         } else if (data["type"] === "CONNECTION_STATS") {
             const connectedClassList = data["connected_clients"];
-            const classBtns = document.getElementsByClassName("classNoBtn");
-            for (let i = 0; i < classBtns.length; i++) {
-                classBtns[i].style.backgroundColor = "#b80000";
-                classBtns[i].style.fontStyle = "italic";
-            }
-            for (const classId of connectedClassList) {
-                if (classId === "777"){
-                    continue;
+            if (identity === "777") {
+                const classBtns = document.getElementsByClassName("classNoBtn");
+                for (let i = 0; i < classBtns.length; i++) {
+                    classBtns[i].style.backgroundColor = "#b80000";
+                    classBtns[i].style.fontStyle = "italic";
                 }
-                console.log(classId + " is alive");
-                const btn = document.getElementById(classId);
-                btn.removeAttribute("style");
+                for (const classId of connectedClassList) {
+                    if (classId === "777") {
+                        continue;
+                    }
+                    console.log(classId + " is alive");
+                    const btn = document.getElementById(classId);
+                    btn.style.backgroundColor = "#3db530";
+                    btn.style.fontStyle = "normal";
+                }
+            } else {
+                const teacherStatusElement = document.getElementById("teacherStatusDisplay");
+                document.getElementById("teacherStatus").style.visibility = "visible";
+                teacherStatusElement.style.visibility = "visible";
+                if (connectedClassList.includes("777")) {
+                    teacherStatusElement.textContent = "已連線";
+                    teacherStatusElement.style.color = "green";
+                } else {
+                    teacherStatusElement.textContent = "未連線";
+                    teacherStatusElement.style.color = "red";
+                }
             }
         }
     }
@@ -542,7 +558,7 @@ function showBanner(box) {
 
     setTimeout(() => {
         banner.classList.remove("show");
-    }, 1300);
+    }, 1500);
 }
 
 function urlPath(WS) {
