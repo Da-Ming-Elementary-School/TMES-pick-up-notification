@@ -44,6 +44,8 @@ let identity = document.location.hash !== "" ? document.location.hash.slice(1) :
 
 
 $(document).ready(function () {
+    autoSwitchToClassPage()
+
     let wsStatus = false;
     let wsUrl = configServerUrl(wsStatus)
     let WS = new WebSocket(wsUrl);
@@ -69,6 +71,8 @@ $(document).ready(function () {
             initToClassroomClient(WS)
             identity = document.location.hash !== "" ? document.location.hash.slice(1) : "777";
             console.log("Your identity:", identity);
+
+            autoSwitchToClassPage()
         });
         wsStatus = true;
 
@@ -407,6 +411,11 @@ function historyBtn(WS, targetClsNo, cls, num, name) {
 
 $(document).ready(configServerUrl);
 
+document.getElementById("backtohome").addEventListener("click", function (event) {
+    window.localStorage.setItem("latestClassHash", "");
+    window.location.href = location.origin + location.pathname;
+})
+
 function configServerUrl(status) {
     const storage = window.localStorage;
     let wsUrl = storage.getItem("wsUrl");
@@ -580,5 +589,17 @@ function urlPath(WS) {
                 "classNo": classNum
             }), 3000)
         })
+    }
+}
+
+function autoSwitchToClassPage() {
+    const storage = window.localStorage;
+    const latestClassHash = storage.getItem("latestClassHash");
+    console.log("Last time hash:", latestClassHash);
+    if (latestClassHash !== null && latestClassHash !== "" && latestClassHash !== document.location.hash) {
+        document.location.hash = latestClassHash;
+    }
+    if (document.location.hash !== "") {
+        storage.setItem("latestClassHash", document.location.hash);
     }
 }
