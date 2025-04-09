@@ -95,6 +95,7 @@ class StudentList:
                 with open(path.join(StudentList.STUDENT_LIST_DIR, "new_data", f"{class_no}.csv"), mode="w", newline="",
                           encoding="utf-8-sig") as f2:
                     new_class_data = DictWriter(f2, fieldnames=old_class_data.fieldnames)
+                    new_class_data.writeheader()
                     for row in old_class_data:
                         for student in school_data:
                             if row["姓名"] == student["姓名"]:
@@ -105,11 +106,11 @@ class StudentList:
 
 if __name__ == '__main__':
     start_time = time.time()
-    # for f in os.listdir(StudentList.STUDENT_LIST_DIR):
-    #     if not f.endswith(".csv") or len(f) > 6:
-    #         continue
-    #     print(f)
-    #     StudentList.read_student_lists_from_csv(class_no=f[:2])
+    for f in os.listdir(StudentList.STUDENT_LIST_DIR):
+        if not f.endswith(".csv") or len(f) > 6:
+            continue
+        print(f)
+        StudentList.read_student_lists_from_csv(class_no=f[:2])
 
-    pprint(StudentList.index_all_student_lists())
+    # pprint(StudentList.index_all_student_lists())
     print("Done. Time Taken:", time.time() - start_time)
