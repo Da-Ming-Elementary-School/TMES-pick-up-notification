@@ -93,7 +93,6 @@ $(document).ready(function () {
         wsStatus = false;
     }
 
-
     WS.onmessage = function (event) {
         const data = JSON.parse(event.data);
         // skip "CALLBACK" data
@@ -179,7 +178,7 @@ $(document).ready(function () {
                 }
                 let classNum = this.id;
                 console.log(classNum)
-                btnGroup.prepend(`<a href="${location.origin}${location.pathname}#${classNum}"  class="mdc-button mdc-button--raised clsBtn" id="classroom-${classNum}" style="font-weight: bold">${classNum} 教室端</a><br>`)
+                btnGroup.prepend(`<a href="${location.origin}${location.pathname}#${classNum}" class="mdc-button mdc-button--raised clsBtn" id="classroom-${classNum}" style="font-weight: bold">${classNum} 教室端</a><br>`)
             })
         } else if (data["type"] === "CALL_FOR_STUDENT") {
             const time = new Date();
@@ -298,7 +297,7 @@ $(document).ready(function () {
                     classBtns[i].style.fontStyle = "italic";
                 }
                 for (const classId of connectedClassList) {
-                    if (classId === "777") {
+                    if (classId === "777" || classId === "GENERAL") {
                         continue;
                     }
                     console.log(classId + " is alive");
@@ -319,6 +318,10 @@ $(document).ready(function () {
                 }
             }
         }
+
+        document.getElementById("enterGeneralClass").addEventListener("click", function () {
+
+        })
     }
 
     document.getElementById("submitBtn").addEventListener("click", function () {
@@ -465,8 +468,8 @@ function formatStudentString(classNo, seatNo, name) {
 }
 
 function initToClassroomClient(WS) {
-    const cls = ["1A", "1B", "1C", "1D", "2A", "2B", "2C", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "5A", "5B", "5C", "5D", "6A", "6B", "6C"]
-    const path = window.location.hash.slice(window.location.hash.length - 2, window.location.hash.length);
+    const cls = ["1A", "1B", "1C", "1D", "2A", "2B", "2C", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "5A", "5B", "5C", "5D", "6A", "6B", "6C", "GENERAL"]
+    const path = window.location.hash.slice(1);
     console.log(path);
     if (cls.indexOf(path.toUpperCase()) < "") {
         WS.send(JSON.stringify({
@@ -571,8 +574,8 @@ function showBanner(box) {
 }
 
 function urlPath(WS) {
-    let cls = ["1A", "1B", "1C", "1D", "2A", "2B", "2C", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "5A", "5B", "5C", "5D", "6A", "6B", "6C"]
-    let path = window.location.hash.slice(window.location.hash.length - 2, window.location.hash.length);
+    let cls = ["1A", "1B", "1C", "1D", "2A", "2B", "2C", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "5A", "5B", "5C", "5D", "6A", "6B", "6C", "GENERAL"]
+    let path = window.location.hash.slice(1);
     if (cls.indexOf(path.toUpperCase()) !== -1) {
         const classNum = cls[cls.indexOf(path.toUpperCase())]
         document.getElementById("called-history").style.visibility = "hidden";
