@@ -47,7 +47,7 @@ $(document).ready(function () {
     autoSwitchToClassPage()
 
     let wsStatus = false;
-    let wsUrl = configServerUrl(wsStatus)
+    let wsUrl = configServerUrl(true);
     let WS = new WebSocket(wsUrl);
     console.info("Document is \"READY\"")
 
@@ -81,7 +81,6 @@ $(document).ready(function () {
             autoSwitchToClassPage()
         });
         wsStatus = true;
-
     }
 
     WS.onerror = function (e) {
@@ -370,7 +369,7 @@ document.getElementById("enterGeneralClass").addEventListener("click", function 
 
 $("#clearStorageUrl").on("click", function () {
     window.localStorage.removeItem("wsUrl");
-    configServerUrl();
+    configServerUrl(false);
     window.location.reload();
 })
 
@@ -429,18 +428,25 @@ document.getElementById("backtohome").addEventListener("click", function (event)
     window.location.href = location.origin + location.pathname;
 })
 
-function configServerUrl(status) {
+function configServerUrl(auto) {
     const storage = window.localStorage;
-    let wsUrl = storage.getItem("wsUrl");
-    if (wsUrl === null) {
-        wsUrl = prompt("請輸入伺服器端的 IP 及端口 (如：ws://localhost:8001)");
-        storage.setItem("wsUrl", wsUrl);
-    } else if (status === false && wsUrl != null) {
-        wsUrl = `ws://${document.location.hostname}:8001`;
-        storage.setItem("wsUrl", wsUrl);
-        return configServerUrl();
+    if (auto) {
+        let wsUrl = storage.getItem("wsUrl");
+        console.log("wsUrl:", wsUrl);
+        if (wsUrl === null || wsUrl === undefined || wsUrl === "") {
+            wsUrl = `ws://${document.location.hostname}:8001`;
+            storage.setItem("wsUrl", wsUrl);
+        }
+        return wsUrl;
+    } else {
+        const tempInput = prompt("請輸入伺服器端的 IP 及端口 (如：ws://localhost:8001)");
+        if (tempInput === null || tempInput === undefined || tempInput === "") {
+            return configServerUrl();
+        } else {
+            storage.setItem("wsUrl", tempInput);
+            return tempInput;
+        }
     }
-    return wsUrl;
 }
 
 function setBigBanner(student, timestamp) {
