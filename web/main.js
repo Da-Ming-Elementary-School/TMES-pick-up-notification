@@ -62,6 +62,9 @@ $(document).ready(function () {
         });
         testSound = null;
     }
+    if (identity === "GENERAL") {
+        document.getElementById("enterGeneralClass").style.visibility = "hidden";
+    }
 
     WS.onopen = function () {
         $("#wsUrlDisplay").css("color", "green");
@@ -71,6 +74,9 @@ $(document).ready(function () {
             initToClassroomClient(WS)
             identity = document.location.hash !== "" ? document.location.hash.slice(1) : "777";
             console.log("Your identity:", identity);
+            if (identity === "GENERAL") {
+                document.getElementById("enterGeneralClass").style.visibility = "hidden";
+            }
 
             autoSwitchToClassPage()
         });
@@ -314,7 +320,7 @@ $(document).ready(function () {
                     teacherStatusElement.style.color = "green";
                 } else {
                     teacherStatusElement.textContent = "未連線";
-                    teacherStatusElement.style.color = "red";
+                    teacherStatusElement.style.color = "#b80000";
                 }
             }
         }
@@ -354,8 +360,12 @@ document.getElementById("called-history").addEventListener("click", calledHistor
 
 document.getElementById("searchBar").addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
-        document.getElementById("submitBtn").click()
+        document.getElementById("submitBtn").click();
     }
+})
+
+document.getElementById("enterGeneralClass").addEventListener("click", function (event) {
+    window.localStorage.setItem("latestClassHash", "#GENERAL");
 })
 
 $("#clearStorageUrl").on("click", function () {
