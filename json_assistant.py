@@ -81,7 +81,7 @@ class StudentList:
                         "name": row[2]
                     }
                 )
-                print(row)
+                # print(row)
         student_list_obj.write_data(student_list_data)
 
     @staticmethod
