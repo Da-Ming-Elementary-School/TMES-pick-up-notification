@@ -441,7 +441,7 @@ function configServerUrl(auto) {
     } else {
         const tempInput = prompt("請輸入伺服器端的 IP 及端口 (如：ws://localhost:8001)");
         if (tempInput === null || tempInput === undefined || tempInput === "") {
-            return configServerUrl();
+            return configServerUrl(true);
         } else {
             storage.setItem("wsUrl", tempInput);
             return tempInput;
