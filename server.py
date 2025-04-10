@@ -72,10 +72,8 @@ async def handler(websocket: ServerConnection):
                     # return student list
                     student_list_callback: dict = {}
                     try:
-                        student_list = (
-                            json_assistant.StudentList.get_all_student_lists()
-                        )
-                        student_list_callback["students"] = student_list
+                        student_list_callback["students"] = json_assistant.StudentList.get_all_student_lists()
+                        student_list_callback["classrooms"] = json_assistant.StudentList.get_all_classrooms()
                         await send_message(
                             student_list_callback, "STUDENT_LIST", websocket
                         )

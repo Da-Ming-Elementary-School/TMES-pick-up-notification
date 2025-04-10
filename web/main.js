@@ -105,9 +105,11 @@ $(document).ready(function () {
             return;
         }
         if (data["type"] === "STUDENT_LIST") {
-            let clsArray = null;
+            let clsArray;
+            let classroomArray;
             try {
                 clsArray = data["students"];
+                classroomArray = data["classrooms"];
             } catch (e) {
                 console.log(data)
                 return;
@@ -136,9 +138,10 @@ $(document).ready(function () {
                         }
                     }
                     lastGradeNo = currentGradeNo
+                    const classroom = classroomArray[index]
                     let btnGroupContainer = $(`#G${currentGradeNo}`)
                     btnGroupContainer.append(
-                        `<button class="classNoBtn" id="${index}">${index}</button>`
+                        `<button class="classNoBtn" id="${index}">${index}<br />${classroom}</button>`
                     )
                 }
             )

@@ -6,15 +6,13 @@ from csv import reader, DictReader, DictWriter
 import os
 from os import path
 import sys
-from pprint import pprint
-from itertools import tee
 
 BASE_DIR = os.path.dirname(sys.argv[0])
 
 
 class StudentList:
     STUDENT_LIST_DIR = path.join(BASE_DIR, 'student_list')
-    EMPTY_DATA = {"students": []}
+    EMPTY_DATA = {"students": [], "classroom": ""}
 
     def __init__(self, class_no: str):
         self.class_no: str = class_no
@@ -22,9 +20,12 @@ class StudentList:
         if not path.exists(self.file_path):
             raise FileNotFoundError(f'{self.file_path} not found')
         self.student_list: list = []
+        self.classroom: str = ""
 
         with open(self.file_path, mode="r", encoding="utf-8") as f:
-            self.student_list = load(f).get("students", [])
+            json_data = load(f)
+            self.student_list = json_data.get("students", [])
+            self.classroom = json_data.get("classroom", "")
 
     def write_data(self, data: dict):
         with open(self.file_path, mode="w", encoding="utf-8") as f:
@@ -32,6 +33,9 @@ class StudentList:
 
     def get_student_list(self):
         return self.student_list
+
+    def get_classroom(self):
+        return self.classroom
 
     @staticmethod
     def get_all_student_lists():
@@ -44,6 +48,16 @@ class StudentList:
         with open("all_student_lists.json", "w", encoding="utf-8") as f:
             dump(all_student_lists, f, indent=4, ensure_ascii=False)
         return all_student_lists
+
+    @staticmethod
+    def get_all_classrooms():
+        all_classrooms = {}
+        for file in os.listdir(StudentList.STUDENT_LIST_DIR):
+            if not file.startswith('class_'):
+                continue
+            class_no = file.replace('class_', '').replace('.json', '')
+            all_classrooms[class_no] = StudentList(class_no=class_no).get_classroom()
+        return all_classrooms
 
     @staticmethod
     def index_all_student_lists():

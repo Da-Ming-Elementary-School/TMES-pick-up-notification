@@ -1,5 +1,6 @@
 {
   "type": "STUDENT_LIST",
+  "classroom": "101",
   "students": {
     "3A": [
       {
