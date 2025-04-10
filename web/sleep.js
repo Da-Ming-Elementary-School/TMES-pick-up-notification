@@ -55,7 +55,7 @@ let sleep = {
         this._video.appendChild(source_mp4);
 
         let source_ogg = document.createElement('source');
-        source_ogg.setAttribute('src', 'muted-blank.ogv');
+        source_ogg.setAttribute('src', './sleep_js_resources/muted-blank.ogv');
         source_ogg.setAttribute('type', 'video/ogg');
         this._video.appendChild(source_ogg);
 
