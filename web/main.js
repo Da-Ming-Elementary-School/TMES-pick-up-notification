@@ -1,6 +1,10 @@
 // Useless, the browser just skipped the generated "blob" URL
 // buildPWAJson(document.location.hash.slice(1))
-
+let synth = window.speechSynthesis;
+let utter = new SpeechSynthesisUtterance();
+utter.lang = "zh-TW"
+utter.rate = 0.5;
+utter.pitch = 1;
 const normalSound = new Audio("audio/notify.wav");
 const warningSound = new Audio("audio/warning.wav");
 Notification.requestPermission().then(permission => {
@@ -196,10 +200,6 @@ $(document).ready(function () {
                 btnGroup.prepend(`<a href="${location.origin}${location.pathname}#${classNum}" class="mdc-button mdc-button--raised clsBtn" id="classroom-${classNum}" style="font-weight: bold">${classNum} 教室端</a><br>`)
             })
         } else if (data["type"] === "CALL_FOR_STUDENT") {
-            const synth = window.speechSynthesis;
-            const utter = new SpeechSynthesisUtterance();
-            utter.lang = "zh-TW"
-            utter.rate = 0.5;
             const time = new Date();
             const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
             const studentDic = data["students"];
@@ -207,14 +207,14 @@ $(document).ready(function () {
             const clsNum = studentDic["classNo"];
             const seatNum = studentDic["seatNo"];
             const name = studentDic["name"];
+            showNotification(clsNum + "班 " + seatNum + "號 " + name);
             let dupNum = 0
-            showNotification();
             for (let i = 0; document.getElementById("student-call").children.namedItem(`${clsNum}-${seatNum}-${i}`) != null && i === dupNum; i++) {
                 dupNum++;
             }
             setBigBanner(`${formatStudentString(clsNum, seatNum, name)}`, currentTime)
             utter.text = digitToChinese(clsNum) + "班，" + removeZero(seatNum) + "號，" + name;
-            synth.speak(utter)
+            synth.speak(utter);
             $("#student-call").prepend(`<div id="${formatStudentString(clsNum, seatNum, null)}-${dupNum}" class="calledDiv${formatStudentString(clsNum, seatNum, null)}"><h2 id="calledTitle${formatStudentString(clsNum, seatNum, null)}">${formatStudentString(clsNum, seatNum, name)}</h2><p id="btnText${formatStudentString(clsNum, seatNum, null)}-${dupNum}"><button id="confirmBtn${formatStudentString(clsNum, seatNum, null)}-${dupNum}" class="btn3" style="margin: 0 auto; text-align: center; display: block" onclick="function confirmBtn() {}">確認</button></p><p id="calledTime${formatStudentString(clsNum, seatNum, null)}">${currentTime}</p></div>`)
             document.getElementById(`confirmBtn${formatStudentString(clsNum, seatNum, null)}-${dupNum}`).addEventListener("click", function () {
                     this.style.visibility = "hidden";
@@ -236,6 +236,9 @@ $(document).ready(function () {
             const clsNum = studentDic["classNo"];
             const seatNum = studentDic["seatNo"];
             const name = studentDic["name"];
+            showNotification("呼叫錯誤：" + clsNum + "班 " + seatNum + "號 " + name);
+            utter.text = digitToChinese(clsNum) + "班，" + removeZero(seatNum) + "號，" + name + "呼叫錯誤";
+            synth.speak(utter);
             document.getElementById("student-call").childNodes.forEach(function (value, key, parent) {
                 if (new RegExp(`${formatStudentString(clsNum, seatNum, null)}-*`).test(value.id)) {
                     value.style.borderColor = "#ffe600";
@@ -254,8 +257,8 @@ $(document).ready(function () {
                 }
             });
             setUndoBanner(`${formatStudentString(clsNum, seatNum, name)}`, currentTime)
-            warningSound.play()
-            warningSound.currentTime = 0
+            //warningSound.play()
+            //warningSound.currentTime = 0
         } else if (data["type"] === "SEARCH_RESULT") {
             const results = data["results"];
             if (results.length < 1) {
@@ -655,10 +658,10 @@ function digitToChinese(num) {
     return String(num).split('').map(d => numerals[Number(d)]).join('');
 }
 
-function showNotification() {
+function showNotification(body) {
     if (Notification.permission === "granted") {
-        new Notification("這是一則通知", {
-            body: "內容可以是任何訊息，例如提醒、警告、更新等",
+        new Notification("大明國小課托學生呼叫系統", {
+            body: body,
             icon: "favicon.ico" // 可選：通知的圖示
         });
     }
