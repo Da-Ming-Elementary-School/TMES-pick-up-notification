@@ -189,6 +189,10 @@ $(document).ready(function () {
                 btnGroup.prepend(`<a href="${location.origin}${location.pathname}#${classNum}" class="mdc-button mdc-button--raised clsBtn" id="classroom-${classNum}" style="font-weight: bold">${classNum} 教室端</a><br>`)
             })
         } else if (data["type"] === "CALL_FOR_STUDENT") {
+            const synth = window.speechSynthesis;
+            const utter = new SpeechSynthesisUtterance();
+            utter.lang = "zh-TW"
+            utter.rate = 0.5;
             const time = new Date();
             const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
             const studentDic = data["students"];
@@ -201,7 +205,10 @@ $(document).ready(function () {
                 dupNum++;
             }
             setBigBanner(`${formatStudentString(clsNum, seatNum, name)}`, currentTime)
-
+            utter.text = digitToChinese(clsNum) + "班";
+            synth.speak(utter)
+            utter.text =+ removeZero(seatNum) + "號" + name;
+            synth.speak(utter);
             $("#student-call").prepend(`<div id="${formatStudentString(clsNum, seatNum, null)}-${dupNum}" class="calledDiv${formatStudentString(clsNum, seatNum, null)}"><h2 id="calledTitle${formatStudentString(clsNum, seatNum, null)}">${formatStudentString(clsNum, seatNum, name)}</h2><p id="btnText${formatStudentString(clsNum, seatNum, null)}-${dupNum}"><button id="confirmBtn${formatStudentString(clsNum, seatNum, null)}-${dupNum}" class="btn3" style="margin: 0 auto; text-align: center; display: block" onclick="function confirmBtn() {}">確認</button></p><p id="calledTime${formatStudentString(clsNum, seatNum, null)}">${currentTime}</p></div>`)
             document.getElementById(`confirmBtn${formatStudentString(clsNum, seatNum, null)}-${dupNum}`).addEventListener("click", function () {
                     this.style.visibility = "hidden";
@@ -214,8 +221,8 @@ $(document).ready(function () {
                     btnTextStyle.height = "30px";
                 }
             )
-            normalSound.play();
-            normalSound.currentTime = 0;
+            //normalSound.play();
+            //normalSound.currentTime = 0;
         } else if (data["type"] === "UNDO") {
             const time = new Date();
             const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
@@ -624,4 +631,20 @@ function autoSwitchToClassPage() {
     if (document.location.hash !== "") {
         storage.setItem("latestClassHash", document.location.hash);
     }
+}
+
+function removeZero(num) {
+    if (num < 10) {
+        console.log(num.toString().slice(1,2));
+        return parseInt(num.toString().slice(1,2));
+    }
+    else {
+        return num;
+    }
+}
+
+
+function digitToChinese(num) {
+    const numerals = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+    return String(num).split('').map(d => numerals[Number(d)]).join('');
 }
