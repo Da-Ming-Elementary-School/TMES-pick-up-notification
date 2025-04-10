@@ -3,6 +3,13 @@
 
 const normalSound = new Audio("audio/notify.wav");
 const warningSound = new Audio("audio/warning.wav");
+Notification.requestPermission().then(permission => {
+    if (permission === "granted") {
+        console.log("已獲得通知權限！");
+    } else {
+        console.log("使用者拒絕通知權限。");
+    }
+});
 document.getElementById("call-history").style.visibility = "hidden";
 document.getElementById("call-history").style.height = "0";
 document.getElementById("searchResult").style.visibility = "hidden";
@@ -201,14 +208,13 @@ $(document).ready(function () {
             const seatNum = studentDic["seatNo"];
             const name = studentDic["name"];
             let dupNum = 0
+            showNotification();
             for (let i = 0; document.getElementById("student-call").children.namedItem(`${clsNum}-${seatNum}-${i}`) != null && i === dupNum; i++) {
                 dupNum++;
             }
             setBigBanner(`${formatStudentString(clsNum, seatNum, name)}`, currentTime)
-            utter.text = digitToChinese(clsNum) + "班";
+            utter.text = digitToChinese(clsNum) + "班，" + removeZero(seatNum) + "號，" + name;
             synth.speak(utter)
-            utter.text =+ removeZero(seatNum) + "號" + name;
-            synth.speak(utter);
             $("#student-call").prepend(`<div id="${formatStudentString(clsNum, seatNum, null)}-${dupNum}" class="calledDiv${formatStudentString(clsNum, seatNum, null)}"><h2 id="calledTitle${formatStudentString(clsNum, seatNum, null)}">${formatStudentString(clsNum, seatNum, name)}</h2><p id="btnText${formatStudentString(clsNum, seatNum, null)}-${dupNum}"><button id="confirmBtn${formatStudentString(clsNum, seatNum, null)}-${dupNum}" class="btn3" style="margin: 0 auto; text-align: center; display: block" onclick="function confirmBtn() {}">確認</button></p><p id="calledTime${formatStudentString(clsNum, seatNum, null)}">${currentTime}</p></div>`)
             document.getElementById(`confirmBtn${formatStudentString(clsNum, seatNum, null)}-${dupNum}`).addEventListener("click", function () {
                     this.style.visibility = "hidden";
@@ -647,4 +653,13 @@ function removeZero(num) {
 function digitToChinese(num) {
     const numerals = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
     return String(num).split('').map(d => numerals[Number(d)]).join('');
+}
+
+function showNotification() {
+    if (Notification.permission === "granted") {
+        new Notification("這是一則通知", {
+            body: "內容可以是任何訊息，例如提醒、警告、更新等",
+            icon: "favicon.ico" // 可選：通知的圖示
+        });
+    }
 }
