@@ -354,10 +354,6 @@ $(document).ready(function () {
                 }
             }
         }
-
-        document.getElementById("enterGeneralClass").addEventListener("click", function () {
-
-        })
     }
 
     document.getElementById("submitBtn").addEventListener("click", function () {
