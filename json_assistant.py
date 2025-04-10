@@ -71,7 +71,7 @@ class StudentList:
         return index_by_student
 
     @staticmethod
-    def read_student_lists_from_csv(class_no: str):
+    def import_from_csv(class_no: str):
         try:
             student_list_obj = StudentList(class_no=class_no)
         except FileNotFoundError:
@@ -88,6 +88,8 @@ class StudentList:
                 i += 1
                 if i == 1:
                     continue
+                if i == 2:
+                    student_list_data["classroom"] = row[3]
                 student_list_data["students"].append(
                     {
                         "classNo": int(row[0]),
@@ -124,7 +126,7 @@ if __name__ == '__main__':
         if not f.endswith(".csv") or len(f) > 6:
             continue
         print(f)
-        StudentList.read_student_lists_from_csv(class_no=f[:2])
+        StudentList.import_from_csv(class_no=f[:2])
 
     # pprint(StudentList.index_all_student_lists())
     print("Done. Time Taken:", time.time() - start_time)
