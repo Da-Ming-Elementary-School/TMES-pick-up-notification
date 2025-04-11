@@ -1,10 +1,6 @@
 // Useless, the browser just skipped the generated "blob" URL
 // buildPWAJson(document.location.hash.slice(1))
 let synth = window.speechSynthesis;
-let utter = new SpeechSynthesisUtterance();
-utter.lang = "zh-TW"
-utter.rate = 0.5;
-utter.pitch = 1;
 const normalSound = new Audio("audio/notify.wav");
 const warningSound = new Audio("audio/warning.wav");
 document.getElementById("call-history").style.visibility = "hidden";
@@ -13,6 +9,7 @@ document.getElementById("searchResult").style.visibility = "hidden";
 document.getElementById("searchResult").style.height = "0";
 document.getElementById("teacherLogin").style.visibility = "hidden";
 document.getElementById("teacherLogin").style.width = "0";
+document.getElementById("backToLastPage").style.visibility = "hidden";
 document.getElementById("history-search-container").style.visibility = "hidden";
 document.getElementById("history-search-container").addEventListener("input", function () {
     let dupNum = 0
@@ -212,6 +209,10 @@ $(document).ready(function () {
                 btnGroup.prepend(`<a href="${location.origin}${location.pathname}#${classNum}" class="mdc-button mdc-button--raised clsBtn" id="classroom-${classNum}" style="font-weight: bold">${classNum} 教室端</a><br>`)
             })
         } else if (data["type"] === "CALL_FOR_STUDENT") {
+            let utter = new SpeechSynthesisUtterance();
+            utter.lang = "zh-TW"
+            utter.rate = 0.5;
+            utter.pitch = 1;
             const time = new Date();
             const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
             const studentDic = data["students"];
@@ -219,15 +220,15 @@ $(document).ready(function () {
             const clsNum = studentDic["classNo"];
             const seatNum = studentDic["seatNo"];
             const name = studentDic["name"];
-            showNotification(clsNum + "班 " + seatNum + "號 " + name);
+            showNotification(numberToChinese(clsNum.slice(0,1)) + "年" + numberToChinese(clsNum.slice(1,3)) + "班 " + removeZero(seatNum) + "號" + name);
             let dupNum = 0
             for (let i = 0; document.getElementById("student-call").children.namedItem(`${clsNum}-${seatNum}-${i}`) != null && i === dupNum; i++) {
                 dupNum++;
             }
             setBigBanner(`${formatStudentString(clsNum, seatNum, name)}`, currentTime)
-            utter.text = digitToChinese(clsNum) + "班，" + removeZero(seatNum) + "號，" + name;
+            utter.text = clsNum.slice(0,1) + "年" + numberToChinese(clsNum.slice(1,3)) + "班，" + removeZero(seatNum) + "號，" + name;
             synth.speak(utter);
-            $("#student-call").prepend(`<div id="${formatStudentString(clsNum, seatNum, null)}-${dupNum}" class="calledDiv${formatStudentString(clsNum, seatNum, null)}"><h2 id="calledTitle${formatStudentString(clsNum, seatNum, null)}">${formatStudentString(clsNum, seatNum, name)}</h2><p id="btnText${formatStudentString(clsNum, seatNum, null)}-${dupNum}"><button id="confirmBtn${formatStudentString(clsNum, seatNum, null)}-${dupNum}" class="btn3" style="margin: 0 auto; text-align: center; display: block" onclick="function confirmBtn() {}">確認</button></p><p id="calledTime${formatStudentString(clsNum, seatNum, null)}">${currentTime}</p></div>`)
+            $("#student-call").prepend(`<div id="${formatStudentString(clsNum, seatNum, null)}-${dupNum}" class="calledDiv"><h2 id="calledTitle${formatStudentString(clsNum, seatNum, null)}">${formatStudentString(clsNum, seatNum, name)}</h2><p id="btnText${formatStudentString(clsNum, seatNum, null)}-${dupNum}" class="btnText"><button id="confirmBtn${formatStudentString(clsNum, seatNum, null)}-${dupNum}" class="btn3" style="margin: 0 auto; text-align: center; display: block" onclick="function confirmBtn() {}">確認</button></p><p id="calledTime${formatStudentString(clsNum, seatNum, null)}">${currentTime}</p></div>`)
             document.getElementById(`confirmBtn${formatStudentString(clsNum, seatNum, null)}-${dupNum}`).addEventListener("click", function () {
                     this.style.visibility = "hidden";
                     document.getElementById(`${this.id.slice(10, this.id.length)}`).style.borderColor = "#00dc01";
@@ -242,15 +243,19 @@ $(document).ready(function () {
             //normalSound.play();
             //normalSound.currentTime = 0;
         } else if (data["type"] === "UNDO") {
+            let utter2 = new SpeechSynthesisUtterance();
+            utter2.lang = "zh-TW"
+            utter2.rate = 0.5;
+            utter2.pitch = 1;
             const time = new Date();
             const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
             const studentDic = data["student"];
             const clsNum = studentDic["classNo"];
             const seatNum = studentDic["seatNo"];
             const name = studentDic["name"];
-            showNotification("呼叫錯誤：" + clsNum + "班 " + seatNum + "號 " + name);
-            utter.text = digitToChinese(clsNum) + "班，" + removeZero(seatNum) + "號，" + name + "呼叫錯誤";
-            synth.speak(utter);
+            showNotification("呼叫錯誤：" + numberToChinese(clsNum.slice(0,1)) + "年" + numberToChinese(clsNum.slice(1,3)) + "班 " + removeZero(seatNum) + "號" + name);
+            utter2.text = numberToChinese(clsNum.slice(0,1)) + "年" + numberToChinese(clsNum.slice(1,3)) + "班 " + removeZero(seatNum) + "號" + name + "呼叫錯誤";
+            synth.speak(utter2);
             document.getElementById("student-call").childNodes.forEach(function (value, key, parent) {
                 if (new RegExp(`${formatStudentString(clsNum, seatNum, null)}-*`).test(value.id)) {
                     value.style.borderColor = "#ffe600";
@@ -343,8 +348,8 @@ $(document).ready(function () {
                 }
             } else {
                 const teacherStatusElement = document.getElementById("teacherStatusDisplay");
-                document.getElementById("teacherStatus").style.visibility = "visible";
-                teacherStatusElement.style.visibility = "visible";
+                // document.getElementById("teacherStatus").style.visibility = "visible";
+                // teacherStatusElement.style.visibility = "visible";
                 if (connectedClassList.includes("777")) {
                     teacherStatusElement.textContent = "已連線";
                     teacherStatusElement.style.color = "green";
@@ -515,13 +520,61 @@ function initToClassroomClient(WS) {
     const path = window.location.hash.slice(1);
     console.log(path);
     if (cls.indexOf(path.toUpperCase()) < "") {
+        if (document.getElementById("ytBtn") !== null) {
+            document.getElementById("ytBtn").id = "submitBtn";
+            document.getElementById("submitBtn").innerHTML = `<i class="fa fa-search"></i>`
+        }
         WS.send(JSON.stringify({
             "type": "INIT",
             "classNo": "777"
         }))
         console.log(path);
     } else if (cls.indexOf(path.toUpperCase()) !== -1) {
-        document.getElementById("search-container").style.visibility = "hidden";
+        if (document.getElementById("submitBtn") !== null) {
+            removeAllListeners(document.getElementById("submitBtn"), "click");
+            document.getElementById("submitBtn").id = "ytBtn";
+            document.getElementById("ytBtn").innerHTML = `<i class="fab fa-youtube" style="color: red;"></i>`
+            document.getElementById("searchBar").placeholder = "YouTube搜尋..."
+            document.getElementById("ytBtn").addEventListener("click", function () {
+                const studentCall = {
+                    display: "grid",
+                    gridAutoFlow: "column",
+                    gridAutoColumns: "min-content",
+                    gap: "16px",
+                    position: "absolute",
+                    top: "10px",
+                    left: "10px",
+                    height: "160px",
+                    width: "1150px",
+                    overflowY: "auto",
+                    justifyContent: "start",
+                }
+                const backBtn = {
+                    visibility: "visible",
+                    // display: "flex",
+                    position: "fixed",
+                    bottom: "10px",
+                    right: "70px",
+                }
+                let ids = ["header", "iconBtn", "identityText", "wsStatus", "teacherStatus", "teacherStatusDisplay", "student-call-banner"];
+                ids.forEach(id => {
+                    const el = document.getElementById(id);
+                    el.style.visibility = "hidden";
+                });
+                document.getElementById("ytBtn").addEventListener("click", search);
+                Object.assign(document.getElementById("student-call").style, studentCall);
+                document.getElementById("header").append("")
+                Object.assign(document.getElementById("backToLastPage").style, backBtn);
+                document.getElementById("backToLastPage").addEventListener("click", function () {
+                    ids.forEach(id => {
+                        const el = document.getElementById(id);
+                        el.style.visibility = "visible";
+                        document.getElementById("backToLastPage").remove();
+                    })
+
+                });
+            })
+        }
         document.getElementById("searchHint").style.visibility = "hidden";
         urlPath(WS);
         console.log(path);
@@ -647,6 +700,9 @@ function autoSwitchToClassPage() {
     }
     if (document.location.hash !== "") {
         storage.setItem("latestClassHash", document.location.hash);
+        const teacherStatusElement = document.getElementById("teacherStatusDisplay");
+        document.getElementById("teacherStatus").style.visibility = "visible";
+        teacherStatusElement.style.visibility = "visible";
     }
 }
 
@@ -661,10 +717,55 @@ function removeZero(num) {
 }
 
 
-function digitToChinese(num) {
+function numberToChinese(num) {
     const numerals = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
-    return String(num).split('').map(d => numerals[Number(d)]).join('');
+    const units = ['', '十', '百', '千'];
+    const bigUnits = ['', '萬', '億', '兆']; // 可擴充
+
+    if (num === 0) return numerals[0];
+
+    let str = String(num);
+    let result = '';
+    let sectionCount = 0;
+
+    while (str.length > 0) {
+        let section = str.slice(-4);  // 每 4 位數為一段
+        str = str.slice(0, -4);
+
+        let sectionStr = '';
+        let zeroFlag = false;
+
+        for (let i = section.length - 1; i >= 0; i--) {
+            const digit = Number(section[i]);
+            if (digit === 0) {
+                zeroFlag = true;
+            } else {
+                if (zeroFlag) {
+                    sectionStr = numerals[0] + sectionStr;
+                    zeroFlag = false;
+                }
+                sectionStr = numerals[digit] + units[section.length - 1 - i] + sectionStr;
+            }
+        }
+
+        if (sectionStr) {
+            result = sectionStr + bigUnits[sectionCount] + result;
+        }
+
+        sectionCount++;
+    }
+
+    // 處理「一十」開頭變「十」的情況
+    if (result.startsWith('一十')) {
+        result = result.slice(1);
+    }
+
+    // 移除多餘「零」
+    result = result.replace(/零+/g, '零').replace(/零$/g, '');
+
+    return result;
 }
+
 
 function showNotification(body) {
     if (Notification.permission === "granted") {

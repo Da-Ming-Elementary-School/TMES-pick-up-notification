@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body class="blur-background" style="height: 100%">
 <style>
@@ -49,7 +50,7 @@
             id="searchText"></b></div>
 </div>
 
-<button onclick="window.location.href = location.origin + location.pathname"
+<button id="iconBtn" onclick="window.location.href = location.origin + location.pathname"
         style="background:none; border: none;height: fit-content;margin-top: 10px;margin-left: 10px;margin-bottom: 20px">
     <img src="image/Logo.png" alt="Logo" height="80"></button>
 <div class="search-container" id="search-container">
@@ -99,6 +100,12 @@
     <button id="teacherLogin" class="mdc-button mdc-button--raised"
             style="font-weight: bold;margin-bottom: 0;margin-top: 0">值班教師登入
     </button>
+    <a class="mdc-button mdc-button--raised" id="backToLastPage"
+       style="font-weight: bold;margin-bottom: 0;margin-top: 0">回上一頁</a>
+</div>
+<div id="player-container" style="margin: 30px 0;">
+    <iframe id="player" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+    </iframe>
 </div>
 <br>
 <div id="call-history" style="margin-top: 20px">
@@ -112,6 +119,7 @@
 </div>
 <div id="btnGroup" class="btnGroup2">
 </div>
+<div id="results"></div>
 <button id="fullscreenBtn" onclick="fullScreen(document.documentElement)"
         style="background:none; border: none;height: fit-content;position: absolute;bottom: 10px;right: 10px;"><img
         src="image/fullscreen.svg" alt="fullscreen" height="30" width="30"></button>
@@ -119,7 +127,7 @@
 <script src="main.js"></script>
 <script src="material-components-web.min.js"></script>
 <script src="sleep.js"></script>
-<script type="text/javascript">
+<script src="YouTube_API.js">
 </script>
 
 <footer style="text-align: center;position: page;bottom: 10px;left: 0;right: 0;font-size: 10px;color: #4e4c4c">
