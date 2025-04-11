@@ -18,8 +18,6 @@ if %ERRORLEVEL% EQU 1 goto update_and_run
 
 :update_and_run
 update.bat
-run.bat
-goto end
 
 :run
 run.bat
