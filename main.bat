@@ -18,6 +18,8 @@ if %ERRORLEVEL% EQU 1 goto update_and_run
 
 :update_and_run
 update.bat
+echo "update_and_run finished"
+run.bat
 
 :run
 run.bat
