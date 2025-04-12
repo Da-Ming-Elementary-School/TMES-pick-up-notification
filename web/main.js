@@ -552,38 +552,26 @@ function buildPWAJson(classId) {
 }
 
 function fullScreen(element) {
-    document.fullscreenEnabled = document.fullscreenEnabled || document.mozFullScreenEnabled || document.documentElement.webkitRequestFullScreen;
-    const fullscreenBtn = document.getElementById("fullscreenBtn");
-    fullscreenBtn.childNodes.item(0).src = "image/fullscreen-exit.svg";
-    //fullscreenBtn.append("<img src=\"image/fullscreen-exit.svg\" alt=\"full screen-exit\" height=\"30\">")
-    if (window.innerHeight !== screen.height) {
-        if (element.requestFullscreen && isFullScreen === false) {
-            element.requestFullscreen();
-            isFullScreen = true;
-        } else if (element.mozRequestFullScreen && isFullScreen === false) {
-            element.mozRequestFullScreen();
-            isFullScreen = true;
-        } else if (element.webkitRequestFullScreen && isFullScreen === false) {
-            element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-            isFullScreen = true;
-        } else if (isFullScreen) {
-            closeFullscreen()
-            fullscreenBtn.childNodes.item(0).src = "image/fullscreen.svg";
-        }
-    }
+    // document.fullscreenEnabled = document.fullscreenEnabled || document.mozFullScreenEnabled || document.documentElement.webkitRequestFullScreen;
+    // const fullscreenBtn = document.getElementById("fullscreenBtn");
+    // fullscreenBtn.childNodes.item(0).src = "image/fullscreen-exit.svg";
+    // //fullscreenBtn.append("<img src=\"image/fullscreen-exit.svg\" alt=\"full screen-exit\" height=\"30\">")
+    // console.log(isFullScreen)
+    // if (!isFullScreen) {
+    //     element.requestFullscreen();
+    //     element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+    //     isFullScreen = true;
+    // } else {
+    //     closeFullscreen();
+    //     fullscreenBtn.childNodes.item(0).src = "image/fullscreen.svg";
+    // }
+    console.log("Wrong one!")
 }
 
 function closeFullscreen() {
-    if (document.fullscreenEnabled) {
-        document.exitFullscreen();
-        isFullScreen = false;
-    } else if (document.webkitExitFullscreen) { /* Safari */
-        document.webkitExitFullscreen();
-        isFullScreen = false;
-    } else if (document.msExitFullscreen) { /* IE11 */
-        document.msExitFullscreen();
-        isFullScreen = false;
-    }
+    document.exitFullscreen();
+    document.webkitExitFullscreen();
+    isFullScreen = false;
 }
 
 function removeAllListeners(target, event) {
