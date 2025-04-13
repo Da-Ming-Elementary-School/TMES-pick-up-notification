@@ -169,4 +169,6 @@ async def main():
 
 
 if __name__ == "__main__":
+    import socket
+    print("Your IP:", socket.gethostbyname(socket.gethostname()))
     asyncio.run(main())
