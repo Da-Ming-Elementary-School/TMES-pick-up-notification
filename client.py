@@ -1,5 +1,8 @@
 # coding=utf-8
 import asyncio
+import ssl
+import os
+import sys
 import logging
 from concurrent.futures import ThreadPoolExecutor
 from json import loads, dumps
@@ -10,9 +13,15 @@ from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
 
 import logger
 
-CLASS_NO: int = 0
+CLASS_NO: str = ""
 CONNECTED: bool = False
 LOGGER: logging.Logger = logger.create_logger()
+BASE_DIR = os.path.dirname(sys.argv[0])
+SSL_CONTEXT = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+SSL_CONTEXT.load_cert_chain(
+    certfile=os.path.join(BASE_DIR, "cert", "cert.pem"),
+    keyfile=os.path.join(BASE_DIR, "cert", "key.pem")
+)
 
 
 def send_messages(websocket):
@@ -32,9 +41,9 @@ def receive_messages(websocket):
         print(f"來自Server的訊息: {data}")
 
 
-def main(class_no: int):
+def main(class_no: str):
     global CONNECTED, CLASS_NO
-    with connect("ws://localhost:8001/", ping_interval=None, ping_timeout=None) as websocket:
+    with connect("wss://192.168.112.104:8001/", ping_interval=None, ping_timeout=None, ssl=SSL_CONTEXT) as websocket:
         if not CONNECTED:
             websocket.send(dumps(
                 {"type": "INIT",
@@ -49,4 +58,4 @@ def main(class_no: int):
 
 
 if __name__ == "__main__":
-    main(int(input("輸入班級編號：")))
+    main(input("輸入班級編號："))
