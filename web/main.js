@@ -461,7 +461,11 @@ function configServerUrl(auto) {
         let wsUrl = storage.getItem("wsUrl");
         console.log("wsUrl:", wsUrl);
         if (wsUrl === null || wsUrl === undefined || wsUrl === "") {
-            wsUrl = `ws://${document.location.hostname}:8001`;
+            if (location.protocol === "http:") {
+                wsUrl = `ws://${document.location.hostname}:8001`;
+            } else {
+                wsUrl = `wss://${document.location.hostname}:8001`;
+            }
             storage.setItem("wsUrl", wsUrl);
         }
         return wsUrl;
