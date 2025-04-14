@@ -1,5 +1,8 @@
 # coding=utf-8
 import asyncio
+import ssl
+import os
+import sys
 from functools import partial
 from json import loads, dumps
 from typing import Literal
@@ -14,6 +17,12 @@ import json_assistant
 CONNECTED_CLIENTS: dict[str, list[ServerConnection]] = {}
 LOGGER = logger.create_logger()
 INDEX: dict = {}
+BASE_DIR = os.path.dirname(sys.argv[0])
+SSL_CONTEXT = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+SSL_CONTEXT.load_cert_chain(
+    certfile=os.path.join(BASE_DIR, "cert", "cert.pem"),
+    keyfile=os.path.join(BASE_DIR, "cert", "key.pem")
+)
 
 
 def data_is_stored(data) -> tuple[bool, str | None]:
@@ -90,18 +99,23 @@ async def handler(websocket: ServerConnection):
                 pprint(CONNECTED_CLIENTS)
                 await update_connection_stats()
             elif msg_type == "WHO_AM_I":
+                print(websocket.remote_address[0])
+                is_found = False
                 for class_no, v in CONNECTED_CLIENTS.items():
                     for client in v:
-                        if client.remote_address[0] == websocket.remote_address[0]:
+                        print(" ", client.remote_address[0])
+                        if client.remote_address[0] == websocket.remote_address[0] and class_no != "777":
                             await send_message({"classNo": class_no}, "INIT", websocket)
-                            return
-                await send_message(
-                    {
-                        "message": f"Class with IP {websocket.remote_address[0]} not found"
-                    },
-                    "ERROR",
-                    websocket,
-                )
+                            is_found = True
+                            break
+                if not is_found:
+                    await send_message(
+                        {
+                            "message": f"Class with IP {websocket.remote_address[0]} not found"
+                        },
+                        "ERROR",
+                        websocket,
+                    )
             elif msg_type == "BROADCAST":
                 for key in CONNECTED_CLIENTS.keys():
                     if key == client_id:
@@ -183,7 +197,7 @@ async def main():
     INDEX = json_assistant.StudentList.index_all_student_lists()
     # while True:
     #     pprint(search(input("輸入關鍵字 (以空格分隔)：").split(" ")))
-    async with serve(handler, "", 8001, ping_timeout=None) as server:
+    async with serve(handler, "", 8001, ping_timeout=None, ssl=SSL_CONTEXT) as server:
         await asyncio.Future()
 
 
