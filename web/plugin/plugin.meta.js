@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         大明學生呼叫系統 (無邊際通知)
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.1.1
 // @description  即使在不同網頁，也能接收呼叫通知
 // @author       Michael Xu & Allen Wei
 // @match        https://*/*
