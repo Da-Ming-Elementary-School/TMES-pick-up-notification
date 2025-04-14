@@ -72,8 +72,12 @@ async def handler(websocket: ServerConnection):
                     # return student list
                     student_list_callback: dict = {}
                     try:
-                        student_list_callback["students"] = json_assistant.StudentList.get_all_student_lists()
-                        student_list_callback["classrooms"] = json_assistant.StudentList.get_all_classrooms()
+                        student_list_callback["students"] = (
+                            json_assistant.StudentList.get_all_student_lists()
+                        )
+                        student_list_callback["classrooms"] = (
+                            json_assistant.StudentList.get_all_classrooms()
+                        )
                         await send_message(
                             student_list_callback, "STUDENT_LIST", websocket
                         )
@@ -89,7 +93,15 @@ async def handler(websocket: ServerConnection):
                 for class_no, v in CONNECTED_CLIENTS.items():
                     for client in v:
                         if client.remote_address[0] == websocket.remote_address[0]:
-                            await send_message({"type": "INIT", "classNo": class_no}, "INIT", websocket)
+                            await send_message({"classNo": class_no}, "INIT", websocket)
+                            return
+                await send_message(
+                    {
+                        "message": f"Class with IP {websocket.remote_address[0]} not found"
+                    },
+                    "ERROR",
+                    websocket,
+                )
             elif msg_type == "BROADCAST":
                 for key in CONNECTED_CLIENTS.keys():
                     if key == client_id:
@@ -98,7 +110,9 @@ async def handler(websocket: ServerConnection):
             elif msg_type == "CALL_FOR_STUDENT" or msg_type == "UNDO":
                 msg_type: Literal["CALL_FOR_STUDENT", "UNDO"]
                 target_id = data.get("targetClassNo", -1)
-                target = CONNECTED_CLIENTS.get(target_id, []) + CONNECTED_CLIENTS.get("GENERAL", [])
+                target = CONNECTED_CLIENTS.get(target_id, []) + CONNECTED_CLIENTS.get(
+                    "GENERAL", []
+                )
                 if len(target) == 0:
                     logging.error(f"Target {target_id} not found")
                     await send_message(
@@ -175,5 +189,6 @@ async def main():
 
 if __name__ == "__main__":
     import socket
+
     print("Your IP:", socket.gethostbyname(socket.gethostname()))
     asyncio.run(main())
