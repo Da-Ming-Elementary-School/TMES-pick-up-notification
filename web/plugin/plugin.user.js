@@ -17,7 +17,7 @@
     let isPUS;
     // 檢查造訪之網頁是否為呼叫系統
     try {
-        isPUS = document.head.querySelector("[property~=isPUS][content]").content === "1";
+        isPUS = document.head.querySelector("[property~=is-pus][content]").content === "1";
     } catch (e) {
         isPUS = false;
     }
