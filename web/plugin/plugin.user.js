@@ -12,7 +12,27 @@
 // ==/UserScript==
 
 (function connectWS() {
-    const socket = new WebSocket("wss://192.168.112.104:8001");
+    const storage = window.localStorage;
+
+    let isPUS;
+    // 檢查造訪之網頁是否為呼叫系統
+    try {
+        isPUS = document.head.querySelector("[property~=isPUS][content]").content === "1";
+    } catch (e) {
+        isPUS = false;
+    }
+    if (isPUS) {
+        storage.setItem("wsUrl", "wss://" + window.location.hostname + ":8001");
+    } else {
+        console.log("網頁非呼叫系統");
+    }
+
+    let wsUrl = storage.getItem("wsUrl");
+    if (wsUrl === null || wsUrl === undefined || wsUrl === "") {
+        wsUrl = "wss://192.168.112.104:8001";
+    }
+
+    const socket = new WebSocket(wsUrl);
     socket.onopen = () => {
         console.log("✅ WebSocket 連線成功！");
         socket.send(JSON.stringify({
