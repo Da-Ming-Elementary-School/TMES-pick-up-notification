@@ -1,76 +1,62 @@
 // ==UserScript==
-// @name         WebSocket Message Display
+// @name         大明學生呼叫系統 (無邊際通知)
 // @namespace    http://tampermonkey.net/
-// @version      0.1
-// @description  接收 WebSocket 訊息並在網頁中顯示
-// @author       Your Name
-// @match        *://*/*
+// @version      1.0
+// @description  即使在不同網頁，也能接收呼叫通知
+// @author       Michael Xu
+// @author       Allen Wei
+// @match        https://*/*
+// @match        http://*/*
 // @grant        none
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function connectWS() {
+    const socket = new WebSocket("wss://192.168.112.104:8001");
+    socket.onopen = () => {
+        console.log("✅ WebSocket 連線成功！");
+        socket.send(JSON.stringify({
+            "type": "WHO_AM_I",
+            // "classNo": "1A"
+        }))
+    };
 
-    // -------------------- 配置 --------------------
-    const displayContainerId = "websocket-message-container";
-    const messageDuration = 5000; // 訊息顯示的毫秒數 (5 秒)
-
-    // -------------------- 樣式 --------------------
-    const containerStyle = `
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        z-index: 9999;
-        background-color: rgba(0, 0, 0, 0.7);
-        color: white;
-        padding: 10px;
-        border-radius: 5px;
-        font-size: 14px;
-        line-height: 1.5;
-        max-width: 300px;
-        overflow: hidden;
-        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    `;
-
-    const messageStyle = `
-        margin-bottom: 5px;
-        opacity: 1;
-        transition: opacity 0.5s ease-in-out;
-    `;
-
-    // -------------------- 函數 --------------------
-    function createDisplayContainer() {
-        let container = document.getElementById(displayContainerId);
-        if (!container) {
-            container = document.createElement('div');
-            container.id = displayContainerId;
-            container.style.cssText = containerStyle;
-            document.body.appendChild(container);
+    socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data["type"] === "INIT"){
+        socket.send(JSON.stringify(data));
         }
-        return container;
+        console.log(data);
+        showToast(data);
+    };
+
+    socket.onerror = (err) => {
+        console.error("WebSocket 發生錯誤：", err);
+    };
+
+
+    // 顯示通知的小提示框
+    function showToast(msg) {
+        const el = document.createElement("div");
+        el.className = "websocket-toast";
+        el.textContent = msg;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 1000);
     }
 
-    function displayMessage(messageText) {
-        const container = createDisplayContainer();
-        const messageElement = document.createElement('div');
-        messageElement.style.cssText = messageStyle;
-        messageElement.textContent = messageText;
-        container.prepend(messageElement); // 將新訊息添加到最上方
-
-        // 設定過一段時間後淡出並移除訊息
-        setTimeout(() => {
-            messageElement.style.opacity = 0;
-            setTimeout(() => {
-                container.removeChild(messageElement);
-                if (container.children.length === 0) {
-                    // 可選：如果沒有訊息了，可以移除容器
-                    container.remove();
-                }
-            }, 500); // 等待淡出動畫完成
-        }, messageDuration);
-    }
-
-    window.addEventListener('message', function (event) {
-        displayMessage(event.data);
-    });
+    // 設定簡單的 CSS 樣式，讓通知能顯示出來
+    const style = document.createElement("style");
+    style.textContent = `
+        .websocket-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #007bff;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 16px;
+            z-index: 99999;
+        }
+    `;
+    document.head.appendChild(style);
 })();
