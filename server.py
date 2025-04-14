@@ -18,11 +18,6 @@ CONNECTED_CLIENTS: dict[str, list[ServerConnection]] = {}
 LOGGER = logger.create_logger()
 INDEX: dict = {}
 BASE_DIR = os.path.dirname(sys.argv[0])
-SSL_CONTEXT = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-SSL_CONTEXT.load_cert_chain(
-    certfile=os.path.join(BASE_DIR, "cert", "cert.pem"),
-    keyfile=os.path.join(BASE_DIR, "cert", "key.pem")
-)
 
 
 def data_is_stored(data) -> tuple[bool, str | None]:
@@ -192,17 +187,36 @@ async def update_connection_stats():
         )
 
 
-async def main():
+async def main(ip_address: str, port: int, ssl_context: ssl.SSLContext = None):
     global INDEX
     INDEX = json_assistant.StudentList.index_all_student_lists()
     # while True:
     #     pprint(search(input("輸入關鍵字 (以空格分隔)：").split(" ")))
-    async with serve(handler, "", 8001, ping_timeout=None, ssl=SSL_CONTEXT) as server:
+    async with serve(handler, ip_address, port, ping_timeout=None, ssl=ssl_context) as server:
         await asyncio.Future()
 
 
 if __name__ == "__main__":
     import socket
+    import configparser
+
+    config = configparser.ConfigParser()
+    config.read("config.ini")
 
     print("Your IP:", socket.gethostbyname(socket.gethostname()))
-    asyncio.run(main())
+    if config.getboolean("ssl", "is-enabled"):
+        ssl_cert = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        ssl_cert.load_cert_chain(
+            certfile=os.path.join(BASE_DIR, config.get("ssl", "certfile")),
+            keyfile=os.path.join(BASE_DIR, config.get("ssl", "keyfile")),
+        )
+        asyncio.run(main(
+            ip_address=config.get("server", "ip"),
+            port=config.getint("server", "port", fallback=8001),
+            ssl_context=ssl_cert,
+        ))
+    else:
+        asyncio.run(main(
+            ip_address=config.get("server", "ip"),
+            port=config.getint("server", "port", fallback=8001),
+        ))
