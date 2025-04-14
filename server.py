@@ -85,6 +85,11 @@ async def handler(websocket: ServerConnection):
                         )
                 pprint(CONNECTED_CLIENTS)
                 await update_connection_stats()
+            elif msg_type == "WHO_AM_I":
+                for class_no, v in CONNECTED_CLIENTS.items():
+                    for client in v:
+                        if client.remote_address[0] == websocket.remote_address[0]:
+                            await send_message({"type": "INIT", "classNo": class_no}, "INIT", websocket)
             elif msg_type == "BROADCAST":
                 for key in CONNECTED_CLIENTS.keys():
                     if key == client_id:
@@ -117,7 +122,7 @@ async def remove_ws(websocket: ServerConnection):
     if client_is_stored:
         CONNECTED_CLIENTS[k].remove(websocket)
         logging.info(f"{k} is removed.")
-        logging.info(websocket.local_address)
+        logging.info(websocket.remote_address)
     pprint(CONNECTED_CLIENTS)
     await update_connection_stats()
 
