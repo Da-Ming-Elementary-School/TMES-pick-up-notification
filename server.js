@@ -18,6 +18,6 @@ app.get('/profile', (req, res) => {
     res.sendFile(path.join(__dirname + "/web/cert", 'install-profile.mobileconfig'));
 });
 
-app.listen(8080, () => {
+app.listen(80, () => {
     console.log('Server running at http://localhost:8080');
 });
