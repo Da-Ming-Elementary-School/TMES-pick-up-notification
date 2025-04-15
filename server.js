@@ -13,6 +13,11 @@ app.get('/plugin', (req, res) => {
     res.sendFile(path.join(__dirname, 'plugin', 'index.html'));
 });
 
-app.listen(80, () => {
-    console.log('Server running at http://localhost:80');
+app.get('/profile', (req, res) => {
+    res.set('Content-Type', 'application/x-apple-aspen-config');
+    res.sendFile(path.join(__dirname + "/web/cert", 'install-profile.mobileconfig'));
+});
+
+app.listen(8080, () => {
+    console.log('Server running at http://localhost:8080');
 });
