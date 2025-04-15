@@ -19,5 +19,5 @@ app.get('/profile', (req, res) => {
 });
 
 app.listen(80, () => {
-    console.log('Server running at http://localhost:8080');
+    console.log('Server running at http://localhost:80');
 });
