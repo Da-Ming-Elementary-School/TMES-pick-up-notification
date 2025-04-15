@@ -19,8 +19,8 @@ app.get('/ios', (req, res) => {
 });
 
 app.get('/android', (req, res) => {
-    res.set('Content-Type', 'application/x-x509-ca-cert');
-    res.sendFile(path.join(__dirname + "/web/cert", 'cert.crt'));
+    res.set('Content-Type', 'application/x-pkcs12');
+    res.sendFile(path.join(__dirname + "/web/cert", 'cert.p12'));
 });
 
 app.listen(80, () => {
