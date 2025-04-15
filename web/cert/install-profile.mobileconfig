@@ -38,7 +38,7 @@
       <key>PayloadType</key>
       <string>com.apple.security.root</string>
       <key>PayloadUUID</key>
-      <string>FILL-WITH-UUID</string>
+      <string>95b0cfd9-bbc9-468a-973d-6eff37ee9719</string>
       <key>PayloadVersion</key>
       <integer>1</integer>
     </dict>
@@ -49,8 +49,8 @@
   <string>com.example.profile</string>
   <key>PayloadType</key>
   <string>Configuration</string>
-  <key>95b0cfd9-bbc9-468a-973d-6eff37ee9719</key>
-  <string>FILL-WITH-UUID</string>
+  <key>PayloadUUID</key>
+  <string>95b0cfd9-bbc9-468a-973d-6eff37ee9719</string>
   <key>PayloadVersion</key>
   <integer>1</integer>
 </dict>
