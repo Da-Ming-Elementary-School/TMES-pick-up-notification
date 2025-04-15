@@ -18,8 +18,15 @@ app.get('/ios', (req, res) => {
     res.sendFile(path.join(__dirname + "/web/cert", 'install-profile.mobileconfig'));
 });
 
+app.get('/cert', (req, res) => {
+    res.set('Content-Type', 'application/x-x509-ca-cert');
+    res.setHeader('Content-Disposition', 'attachment; filename="cert.crt"');
+    res.sendFile(path.join(__dirname + "/web/cert", 'cert.crt'));
+});
+
 app.get('/android', (req, res) => {
     res.set('Content-Type', 'application/x-pkcs12');
+    res.set('Content-Disposition', 'attachment; filename="cert.p12"');
     res.sendFile(path.join(__dirname + "/web/cert", 'cert.p12'));
 });
 
