@@ -22,7 +22,11 @@
         isPUS = false;
     }
     if (isPUS) {
-        storage.setItem("wsUrl", "wss://" + window.location.hostname + ":8001");
+        if (location.protocol === "http:") {
+            storage.setItem("wsUrl", "ws://" + window.location.hostname + ":8001");
+        } else {
+            storage.setItem("wsUrl", "wss://" + window.location.hostname + ":8001");
+        }
     } else {
         console.log("網頁非呼叫系統");
     }
