@@ -23,6 +23,6 @@ app.get('/android', (req, res) => {
     res.sendFile(path.join(__dirname + "/web/cert", 'cert.crt'));
 });
 
-app.listen(8080, () => {
-    console.log('Server running at http://localhost:8080');
+app.listen(80, () => {
+    console.log('Server running at http://localhost:80');
 });
