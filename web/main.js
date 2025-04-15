@@ -1,5 +1,8 @@
 // Useless, the browser just skipped the generated "blob" URL
 // buildPWAJson(document.location.hash.slice(1))
+console.log("✅ main.js 開始執行！");
+
+const $ = require('jquery');
 let synth = window.speechSynthesis;
 let utter = new SpeechSynthesisUtterance();
 utter.lang = "zh-TW"
@@ -52,7 +55,7 @@ $(document).ready(function () {
 
     let wsStatus = false;
     let wsUrl = configServerUrl(true);
-    let WS = new WebSocket(wsUrl);
+    let WS = new WebSocket("ws://0.0.0.0:8001");
     console.info("Document is \"READY\"")
 
     $("#wsUrlDisplay").text(wsUrl);
