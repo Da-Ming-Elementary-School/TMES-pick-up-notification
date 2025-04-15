@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+    "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>PayloadContent</key>
+  <array>
+    <dict>
+      <key>PayloadCertificateFileName</key>
+      <string>your-cert.cer</string>
+      <key>PayloadContent</key>
+      <data>
+        MIIDVTCCAj0CFDvTkmP+aD6Ie7a+CUVWMocIeYEoMA0GCSqGSIb3DQEBCwUAMGcx
+        CzAJBgNVBAYTAlhYMQ4wDAYDVQQIDAVMb2NhbDEOMAwGA1UEBwwFTG9jYWwxDjAM
+        BgNVBAoMBUxvY2FsMQ4wDAYDVQQLDAVMb2NhbDEYMBYGA1UEAwwPMTkyLjE2OC4x
+        MTIuMTA0MB4XDTI1MDQxNDA3MDExOFoXDTI2MDQxNDA3MDExOFowZzELMAkGA1UE
+        BhMCWFgxDjAMBgNVBAgMBUxvY2FsMQ4wDAYDVQQHDAVMb2NhbDEOMAwGA1UECgwF
+        TG9jYWwxDjAMBgNVBAsMBUxvY2FsMRgwFgYDVQQDDA8xOTIuMTY4LjExMi4xMDQw
+        ggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQD244jwiFKmqbJ3cfhXziJg
+        A7TadYtctvfUG4Eez9MQ0mj2DaTcyJcOgc3Y77k5+Xj9n2Kfyx96Z17E/cQm6trj
+        fPsnkUf10dPIUEsUduN6xLPVUFoEGDyew4ObBjX/MAuUYFlKusBis2KBaJwr0oM8
+        ogxiYm4OBFPbcvCxvzhAcV0sp6TWlXy78WyGdUttnuE6uPfmifT6fxbP5mg/dYbi
+        jLM+0BLdrKeGMUvJxIdRAe7G5TiXIKy/5qJBNkvv2LTPgaQ69b6OgPF/7qDNmU2o
+        w+XpfTQ73kmOoc5bNKXXhx+EhPvLr0wPF2gZZZ/orXEhiQGGuMFbrhRon9zGEUXz
+        AgMBAAEwDQYJKoZIhvcNAQELBQADggEBAJfkqZV/VauBW13eBO0NIVH81s9iXXFs
+        wOanEoDOSlJ26DWQ5mM7Qb09cgu6LK1Qj89IffZgToqMt5DsOurvHy23RX6iEV0E
+        66D2NrsTM3VtISXmniFgGb4n+uMUnAPXdq2O+96Mc+aneE+6cbaSBRBerIvTCeYC
+        nkHh9Zo1Y1+HXEs67WiH47tjVip5Qdw6JGrV6Okc0LHeP7OgEXb3Mc+YYhh2HAHh
+        KwFNUicWzzI8VX5RNxy/YYo9sFskJG3FuSnRn5WHXItvgcCxK4PX/6C1/bb26Qrk
+        JnJG0JKK2QRnVwWd9RCX52X1ZUPWkygeB3y0+c8gHQenCndlfvSfiS4=
+      </data>
+      <key>PayloadDescription</key>
+      <string>Adds a CA root certificate</string>
+      <key>PayloadDisplayName</key>
+      <string>Root CA</string>
+      <key>PayloadIdentifier</key>
+      <string>com.example.rootca</string>
+      <key>PayloadType</key>
+      <string>com.apple.security.root</string>
+      <key>PayloadUUID</key>
+      <string>FILL-WITH-UUID</string>
+      <key>PayloadVersion</key>
+      <integer>1</integer>
+    </dict>
+  </array>
+  <key>PayloadDisplayName</key>
+  <string>Install Root CA</string>
+  <key>PayloadIdentifier</key>
+  <string>com.example.profile</string>
+  <key>PayloadType</key>
+  <string>Configuration</string>
+  <key>95b0cfd9-bbc9-468a-973d-6eff37ee9719</key>
+  <string>FILL-WITH-UUID</string>
+  <key>PayloadVersion</key>
+  <integer>1</integer>
+</dict>
+</plist>
