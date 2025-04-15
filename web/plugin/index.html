@@ -52,6 +52,9 @@
         if (/android/i.test(ua)) {
             console.log("這是 Android");
             path = window.location.origin + "/android";
+            certBtn.addEventListener('click', () => {
+                alert("密碼：1234")
+            })
             certBtn.href = path;
         } else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
             console.log("這是 iOS");
