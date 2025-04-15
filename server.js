@@ -13,11 +13,16 @@ app.get('/plugin', (req, res) => {
     res.sendFile(path.join(__dirname, 'plugin', 'index.html'));
 });
 
-app.get('/profile', (req, res) => {
+app.get('/ios', (req, res) => {
     res.set('Content-Type', 'application/x-apple-aspen-config');
     res.sendFile(path.join(__dirname + "/web/cert", 'install-profile.mobileconfig'));
 });
 
-app.listen(80, () => {
-    console.log('Server running at http://localhost:80');
+app.get('/android', (req, res) => {
+    res.set('Content-Type', 'application/x-x509-ca-cert');
+    res.sendFile(path.join(__dirname + "/web/cert", 'cert.crt'));
+});
+
+app.listen(8080, () => {
+    console.log('Server running at http://localhost:8080');
 });
