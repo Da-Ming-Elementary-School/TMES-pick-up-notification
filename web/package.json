@@ -2,6 +2,7 @@
   "name": "tmes-pickup",
   "version": "1.0.0",
   "main": "electron.js",
+  "bin": "./electron.js",
   "scripts": {
     "start": "electron .",
     "build:win": "electron-builder --win",
@@ -13,7 +14,7 @@
   },
   "build": {
     "appId": "com.daming.notify",
-    "productName": "DaMing通知",
+    "productName": "大明學生呼叫通知",
     "files": [
       "**/*"
     ],
@@ -28,6 +29,7 @@
     }
   },
   "dependencies": {
-    "jquery": "^3.7.1"
+    "jquery": "^3.7.1",
+    "smalltalk": "^4.1.2"
   }
 }
