@@ -3,7 +3,8 @@
 console.log("✅ main.js 開始執行！");
 
 const $ = require('jquery');
-const smalltalk = require("smalltalk");
+const Dialogs = require("dialogs");
+const dialogs = Dialogs();
 
 let synth = window.speechSynthesis;
 let utter = new SpeechSynthesisUtterance();
@@ -57,7 +58,7 @@ $(document).ready(function () {
 
     let wsStatus = false;
     let wsUrl = configServerUrl(true);
-    let WS = new WebSocket("ws://0.0.0.0:8001");
+    let WS = new WebSocket(wsUrl);
     console.info("Document is \"READY\"")
 
     $("#wsUrlDisplay").text(wsUrl);
@@ -67,7 +68,7 @@ $(document).ready(function () {
         testSound.volume = 0;
         testSound.play().catch(function (e) {
             console.log("Sound test failed: ", e);
-            smalltalk.alert("警告", "音效提示無法運作。請點擊網頁中的任一處以啟用。");
+            dialogs.alert("注意：音效提示無法運作。請點擊網頁中的任一處以啟用。");
         });
         testSound = null;
     }
@@ -80,7 +81,7 @@ $(document).ready(function () {
             console.log("Notify is granted");
         } else if (result.state === "prompt") {
             console.log("Notify is not granted, sending request");
-            smalltalk.alert("提示", "稍後將跳出「通知權限」視窗，請按下「允許」以便啟用桌面通知。");
+            dialogs.alert("稍後將跳出「通知權限」視窗，請按下「允許」以便啟用桌面通知。");
             Notification.requestPermission().then(permission => {
                 if (permission === "granted") {
                     console.log("Notify is granted");
@@ -90,7 +91,7 @@ $(document).ready(function () {
             });
         } else {
             console.log("Notify is denied");
-            smalltalk.alert("警告", "尚未給予通知權限，桌面通知將無法使用。");
+            dialogs.alert("注意：尚未給予通知權限，桌面通知將無法使用。");
         }
     })
 
@@ -113,14 +114,14 @@ $(document).ready(function () {
 
     WS.onerror = function (e) {
         console.error(e);
-        smalltalk.alert("警告", "與伺服器連接失敗。請嘗試重新整理網頁，或檢查伺服器位址是否正確。");
+        dialogs.alert("與伺服器連接失敗。請嘗試重新整理網頁，或檢查伺服器位址是否正確。");
         $("#wsUrlDisplay").css("color", "red");
         wsStatus = false;
     }
 
     WS.onclose = function (e) {
         if (e.code > 1001 && wsStatus) {
-            smalltalk.alert("警告", `與伺服器的連線中斷。請嘗試重新整理網頁，或檢查伺服器位址是否正確。\n錯誤代碼：${e.code}`)
+            dialogs.alert(`與伺服器的連線中斷。請嘗試重新整理網頁，或檢查伺服器位址是否正確。\n錯誤代碼：${e.code}`)
         }
         $("#wsUrlDisplay").css("color", "red");
         wsStatus = false;
@@ -195,21 +196,21 @@ $(document).ready(function () {
                             const cls = this.id.slice(0, this.id.indexOf("-"));
                             const num = this.id.slice(this.id.indexOf("-") + 1, this.id.length);
                             const name = this.value.slice(this.id.length, this.value.length);
-                            smalltalk.confirm("呼叫確認", `確定要呼叫 ${formatStudentString(cls, num, name)}？`,
-                                {cancel: false},)
-                                .then(() => {
-                                    WS.send(JSON.stringify({
-                                        "type": "CALL_FOR_STUDENT",
-                                        "targetClassNo": targetClsNo,
-                                        "students": {
-                                            "classNo": cls,
-                                            "seatNo": num,
-                                            "name": name
-                                        }
-                                    }))
-                                    historyBtn(WS, targetClsNo, cls, num, name);
-                                    showBanner("successBox");
-                                });
+                            dialogs.confirm(`確定要呼叫 ${formatStudentString(cls, num, name)}？`, sendConfirm => {
+                               if (sendConfirm) {
+                                WS.send(JSON.stringify({
+                                    "type": "CALL_FOR_STUDENT",
+                                    "targetClassNo": targetClsNo,
+                                    "students": {
+                                        "classNo": cls,
+                                        "seatNo": num,
+                                        "name": name
+                                    }
+                                }))
+                                historyBtn(WS, targetClsNo, cls, num, name);
+                                showBanner("successBox");
+                            }
+                            });
                         })
                     })
                 }
@@ -304,23 +305,25 @@ $(document).ready(function () {
                     if (select.options[select.selectedIndex].value !== "0") {
                         const targetClass = select.options[select.selectedIndex].className;
                         const student = select.options[select.selectedIndex].value;
-                        smalltalk.confirm("呼叫確認", `確定要呼叫 ${select.options[select.selectedIndex].text}？`, {cancel: false}).then(() => {
+                        dialogs.confirm(`確定要呼叫 ${select.options[select.selectedIndex].text}？`, sendConfirm => {
                             const cls = student.slice(0, student.indexOf("-"));
                             const seatNo = student.slice(student.indexOf("-") + 1, student.length);
                             const name = select.options[select.selectedIndex].id;
-                            WS.send(JSON.stringify({
-                                "type": "CALL_FOR_STUDENT",
-                                "targetClassNo": targetClass,
-                                "students": {
-                                    "classNo": cls,
-                                    "seatNo": seatNo,
-                                    "name": name
-                                }
-                            }))
-                            historyBtn(WS, targetClass, cls, seatNo, name);
-                            document.getElementById("searchResult").style.visibility = "hidden";
-                            document.getElementById("searchResult").style.height = "0";
-                            showBanner("successBox");
+                            if (sendConfirm) {
+                                WS.send(JSON.stringify({
+                                    "type": "CALL_FOR_STUDENT",
+                                    "targetClassNo": targetClass,
+                                    "students": {
+                                        "classNo": cls,
+                                        "seatNo": seatNo,
+                                        "name": name
+                                    }
+                                }))
+                                historyBtn(WS, targetClass, cls, seatNo, name);
+                                document.getElementById("searchResult").style.visibility = "hidden";
+                                document.getElementById("searchResult").style.height = "0";
+                                showBanner("successBox");
+                            }
                         });
                     }
                 })
@@ -328,7 +331,7 @@ $(document).ready(function () {
         } else if (data["type"] === "ERROR") {
             document.getElementById("successBox").classList.remove("show");
             const cls = data["message"];
-            smalltalk.alert("警告", `班級 ${cls.toString().slice(7, 9)} 尚未開啟接收端，請以其他方式通知！`)
+            dialogs.alert(`班級 ${cls.toString().slice(7, 9)} 尚未開啟接收端，請以其他方式通知！`)
         } else if (data["type"] === "CONNECTION_STATS") {
             const connectedClassList = data["connected_clients"];
             if (identity === "777") {
@@ -436,7 +439,8 @@ function historyBtn(WS, targetClsNo, cls, num, name) {
     const currentTime = time.toLocaleDateString() + " " + time.toLocaleTimeString();
     $("#call-history").prepend(`<div id="hisDiv-${cls}${num}" class="historyDiv"><p style="height: 34px;margin:4px 0 0 0">${cls}-${num}${name} <button class="btn3" id="historyBtn${cls}-${num}">撤銷呼叫</button></p><p style="font-size: 10px; height: 10px;margin: 0">上次呼叫時間：</p><p id="historyTime${cls}-${num}" style="font-size: 10px; height: 10px;margin: 0 0 3px 0">${currentTime}</p> </div>`)
     document.getElementById(`historyBtn${cls}-${num}`).addEventListener("click", function () {
-        smalltalk.confirm("撤銷確認", `確定要撤銷 ${formatStudentString(cls, num, name)} 的呼叫？`, {cancel: false}).then(() => {
+        dialogs.confirm(`確定要撤銷 ${formatStudentString(cls, num, name)} 的呼叫？`, sendConfirm => {
+           if (sendConfirm) {
             document.getElementById(`hisDiv-${cls}${num}`).remove();
             WS.send(JSON.stringify({
                 "type": "UNDO",
@@ -447,6 +451,7 @@ function historyBtn(WS, targetClsNo, cls, num, name) {
                     "name": name
                 }
             }))
+        }
         });
     })
 
@@ -465,18 +470,20 @@ function configServerUrl(auto) {
         let wsUrl = storage.getItem("wsUrl");
         console.log("wsUrl:", wsUrl);
         if (wsUrl === null || wsUrl === undefined || wsUrl === "") {
-            if (location.protocol === "http:") {
-                wsUrl = `ws://${document.location.hostname}:8001`;
+            if (location.protocol === "https:") {
+                // wsUrl = `ws://${document.location.hostname}:8001`;
+                wsUrl = "wss://localhost:8001";
             } else {
-                wsUrl = `wss://${document.location.hostname}:8001`;
+                // wsUrl = `wss://${document.location.hostname}:8001`;
+                wsUrl = "ws://localhost:8001"
             }
             storage.setItem("wsUrl", wsUrl);
         }
         return wsUrl;
     } else {
-        smalltalk.prompt("設定伺服器位址", "請輸入伺服器端的 IP 及端口 (如：ws://localhost:8001)", "ws://localhost:8001").then((tempInput) => {
+        dialogs.prompt("請輸入伺服器端的 IP 及端口 (如：ws://localhost:8001)", tempInput => {
             if (tempInput === null || tempInput === undefined || tempInput === "") {
-                return configServerUrl(false);
+                return configServerUrl(true);
             } else {
                 storage.setItem("wsUrl", tempInput);
                 return tempInput;
