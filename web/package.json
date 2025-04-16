@@ -25,7 +25,8 @@
       "target": "dmg"
     },
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "icon": "./image/favicon.ico"
     }
   },
   "dependencies": {
