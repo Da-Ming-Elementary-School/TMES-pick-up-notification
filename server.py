@@ -204,7 +204,7 @@ if __name__ == "__main__":
     config.read("config.ini")
 
     print("Your IP:", socket.gethostbyname(socket.gethostname()))
-    if config.getboolean("ssl", "is-enabled"):
+    if config.getboolean("ssl", "is-enabled", fallback=False):
         ssl_cert = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
         ssl_cert.load_cert_chain(
             certfile=os.path.join(BASE_DIR, config.get("ssl", "certfile")),
