@@ -1,6 +1,10 @@
 {
   "name": "tmes-pickup",
   "description": "「大明國小課托呼叫系統」的可執行版客戶端，無須網頁伺服器即可獨立運作。",
+  "author": {
+    "name": "Da Ming Elementary School",
+    "url": "https://tmes.tc.edu.tw/"
+  },
   "contributors": [
     {"name": "Michael Xu"},
     {"name": "Allen Wei"}
