@@ -23,7 +23,7 @@
   },
   "build": {
     "appId": "com.daming.notify",
-    "productName": "大明學生呼叫通知",
+    "productName": "大明國小課托呼叫系統 客戶端",
     "files": [
       "**/*"
     ],
