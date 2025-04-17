@@ -30,7 +30,7 @@
       "target": "dmg"
     },
     "win": {
-      "target": "nsis",
+      "target": "msi",
       "icon": "./image/favicon.ico"
     }
   },
