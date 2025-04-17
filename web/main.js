@@ -405,7 +405,6 @@ document.getElementById("enterGeneralClass").addEventListener("click", function 
 $("#clearStorageUrl").on("click", function () {
     window.localStorage.removeItem("wsUrl");
     configServerUrl(false);
-    window.location.reload();
 })
 
 function calledHistory() {
@@ -481,13 +480,13 @@ function configServerUrl(auto) {
         }
         return wsUrl;
     } else {
-        dialogs.prompt("請輸入伺服器端的 IP 及端口 (如：ws://localhost:8001)", tempInput => {
+        dialogs.prompt("請輸入伺服器端的 IP 及端口 (如：ws://localhost:8001)", "ws://localhost:8001", tempInput => {
             if (tempInput === null || tempInput === undefined || tempInput === "") {
-                return configServerUrl(true);
+                configServerUrl(true);
             } else {
                 storage.setItem("wsUrl", tempInput);
-                return tempInput;
             }
+            window.location.reload();
         });
     }
 }
