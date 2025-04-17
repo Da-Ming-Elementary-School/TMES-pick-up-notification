@@ -1,6 +1,11 @@
 {
   "name": "tmes-pickup",
-  "version": "1.0.0",
+  "description": "「大明國小課托呼叫系統」的可執行版客戶端，無須網頁伺服器即可獨立運作。",
+  "contributors": [
+    {"name": "Michael Xu"},
+    {"name": "Allen Wei"}
+  ],
+  "version": "1.0.1-beta",
   "main": "electron.js",
   "bin": "./electron.js",
   "scripts": {
