@@ -1,0 +1,346 @@
+@font-face {
+    font-family: "Huninn";
+    src: url("jf-openhuninn-2.1.ttf");
+}
+
+/*
+"open-huninn" by justfont. Licensed under SIL Open Font License 1.1.
+For more information, please check https://github.com/justfont/open-huninn-font
+*/
+.blur-background {
+    height: 100%;
+    background-size: 100% 100% !important;
+    background: linear-gradient(135deg, rgba(197, 121, 162, 0.8), rgba(114, 162, 191, 0.8)) fixed;
+    background-position: center center !important;
+    background-repeat: repeat;
+}
+
+
+code {
+    font-family: monospace;
+}
+
+* {
+    font-family: "Huninn", serif;
+}
+
+.classNoBtn {
+    background-color: #3db530;
+    border-radius: 8px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    /*font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;*/
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 20px;
+    list-style: none;
+    margin: 0 6px 0 6px;
+    outline: none;
+    padding: 10px 26px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    transition: color 100ms;
+    vertical-align: baseline;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.classNoBtn:hover,
+.classNoBtn:focus {
+    background-color: #41bc33;
+}
+
+.classBtnLine {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    margin: auto 6px auto 6px;
+}
+
+.btnGroupL {
+    /*border-right: 1px solid #4e4c4c;*/
+    /*padding-right: 5px;*/
+    padding-bottom: 0;
+}
+
+.btnGroupR {
+    /*border-left: 1px solid #4e4c4c;*/
+    /*padding-left: 5px;*/
+    padding-bottom: 0;
+}
+
+.btn2 {
+    align-items: center;
+    background-clip: padding-box;
+    background-color: #fa6400;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    /*font-family: system-ui, -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;*/
+    font-size: 18px;
+    font-weight: 500;
+    justify-content: center;
+    line-height: 1.25;
+    margin: 1%;
+    min-height: 3rem;
+    padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+    position: relative;
+    text-decoration: none;
+    transition: all 250ms;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: baseline;
+    width: auto;
+}
+
+.btn2:hover,
+.btn2:focus {
+    background-color: #b62929;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+
+.btn2:hover {
+    transform: translateY(-1px);
+}
+
+.btn2:active {
+    background-color: #c85000;
+    box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+    transform: translateY(0);
+}
+
+
+.btnGroup {
+    height: 10%;
+    text-align: center;
+}
+
+.btnGroup2 {
+    height: 10%;
+    text-align: center;
+    margin-right: 10%;
+    margin-left: 10%;
+}
+
+#student-call div {
+    border: 10px solid #ff0000;
+    display: inline-block;
+    margin-left: 1%;
+    padding-left: 1%;
+    padding-right: 1%;
+    margin-bottom: 1%;
+}
+
+.historyDiv {
+    border: 5px solid #000000;
+    display: inline-block;
+    margin-left: 1%;
+    padding-left: 1%;
+    padding-right: 1%;
+    margin-bottom: 1%;
+}
+
+.historyDiv p {
+    text-align: left;
+}
+
+#student-call-banner {
+    width: 100%;
+    align-items: center;
+}
+
+.bigBannerDiv {
+    border: 10px solid #ff0000;
+    display: block;
+    padding-left: 1%;
+    padding-right: 1%;
+    margin-bottom: 1%;
+}
+
+.undoBannerDiv {
+    border: 10px solid #ffe600;
+    display: block;
+    padding-left: 1%;
+    padding-right: 1%;
+    margin-bottom: 1%;
+}
+
+.bigBannerDiv, .undoBannerDiv h1, h2, h3, h5 {
+    text-align: center;
+}
+
+#student-call div h2, p {
+    text-align: center;
+}
+
+#header {
+    position: relative;
+    display: inline-block;
+    text-align: left;
+}
+
+.btn3 {
+    appearance: none;
+    background-color: #FAFBFC;
+    border: 1px solid rgba(27, 31, 35, 0.15);
+    border-radius: 6px;
+    box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+    box-sizing: border-box;
+    color: #24292E;
+    cursor: pointer;
+    display: inline-block;
+    /*font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";*/
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    list-style: none;
+    padding: 6px 16px;
+    position: relative;
+    transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    white-space: nowrap;
+    word-wrap: break-word;
+}
+
+.btn3:hover {
+    background-color: #F3F4F6;
+    text-decoration: none;
+    transition-duration: 0.1s;
+}
+
+.btn3:disabled {
+    background-color: #FAFBFC;
+    border-color: rgba(27, 31, 35, 0.15);
+    color: #959DA5;
+    cursor: default;
+}
+
+.btn3:active {
+    background-color: #EDEFF2;
+    box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+    transition: none 0s;
+}
+
+.btn3:focus {
+    outline: 1px transparent;
+}
+
+.btn3:before {
+    display: none;
+}
+
+.btn3::-webkit-details-marker {
+    display: none;
+}
+
+.confirmBtn {
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+}
+
+#confirmBtn {
+    text-align: center;
+    margin: 0 auto;
+}
+
+#call-history {
+    display: block;
+    width: 100%;
+    align-items: center;
+}
+
+#search-container button {
+    float: right;
+    padding: 6px 10px;
+    margin-top: 35px;
+    margin-right: 30px;
+    background: #ddd;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+}
+
+#search-container button:hover {
+    background: #ccc;
+}
+
+#search-container {
+    float: right;
+}
+
+#search-container input[type=text] {
+    padding: 6px;
+    margin-top: 35px;
+    font-size: 17px;
+    border: none;
+}
+
+#history-search-container input[type=text] {
+    padding: 6px;
+    font-size: 17px;
+    border: none;
+}
+
+ #history-search-container {
+    display: inline-block;
+}
+
+#searchHint {
+    color: #4e4c4c;
+    font-size: 9px;
+    position: absolute;
+    right: 33px;
+    top: 67px;
+}
+
+#successBox, #failedBox, #searchBox {
+    position: fixed;
+    top: -100px; /* 初始在畫面上方看不到 */
+    left: 50%;
+    transform: translateX(-50%);
+    transition: top 0.5s ease, opacity 0.5s ease;
+    z-index: 1000;
+}
+
+#successBox.show, #failedBox.show, #searchBox.show {
+    top: 30px; /* 滑下位置 */
+}
+
+#successMessage, #failedMessage, #searchMessage {
+    color: #cccccc;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    width: fit-content;
+}
+
+#resultSelect {
+    padding: 4px 7px 4px 7px;
+}
+
+@media screen and (max-width: 600px) {
+    .search-container input[type=text] {
+        float: none;
+        display: block;
+        text-align: left;
+        width: 100%;
+        margin: 0;
+        padding: 14px;
+        border: 1px solid #ccc;
+    }
+}
