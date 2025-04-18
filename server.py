@@ -1,8 +1,11 @@
 # coding=utf-8
 import asyncio
+import platform
 import ssl
 import os
 import sys
+import time
+import psutil
 from functools import partial
 from json import loads, dumps
 from typing import Literal
@@ -39,6 +42,7 @@ async def send_message(
         "UNDO",
         "SEARCH_RESULT",
         "CONNECTION_STATS",
+        "SERVER_STATS",
     ],
     targets: ServerConnection | list[ServerConnection],
 ):
@@ -187,13 +191,36 @@ async def update_connection_stats():
         )
 
 
-async def main(ip_address: str, port: int, ssl_context: ssl.SSLContext = None):
+async def update_server_stats():
+    while True:
+        target = CONNECTED_CLIENTS.get("monitor", [])
+        if target:
+            logging.info("Gathering server stats")
+            report = {"python_version": sys.version,
+                      "os_version": platform.platform() + platform.release(),
+                      "cpu_usage": psutil.cpu_percent(),
+                      "memory_usage": {
+                          "total": psutil.virtual_memory().total,
+                          "used": psutil.virtual_memory().used,
+                      },
+                      "timestamp": time.time()}
+            await send_message(report, "SERVER_STATS", target)
+        else:
+            logging.info("No monitor found, skipping")
+        await asyncio.sleep(10)
+
+
+async def main(ip_address: str, port: int, ssl_context: ssl.SSLContext = None, monitor: bool = False):
     global INDEX
     INDEX = json_assistant.StudentList.index_all_student_lists()
     # while True:
     #     pprint(search(input("輸入關鍵字 (以空格分隔)：").split(" ")))
-    async with serve(handler, ip_address, port, ping_timeout=None, ssl=ssl_context) as server:
-        await asyncio.Future()
+    if monitor:
+        async with serve(handler, ip_address, port, ping_timeout=None, ssl=ssl_context) as server:
+            await asyncio.gather(update_server_stats(), server.serve_forever())
+    else:
+        async with serve(handler, ip_address, port, ping_timeout=None, ssl=ssl_context) as server:
+            await asyncio.Future()
 
 
 if __name__ == "__main__":
@@ -214,9 +241,11 @@ if __name__ == "__main__":
             ip_address=config.get("server", "ip"),
             port=config.getint("server", "port", fallback=8001),
             ssl_context=ssl_cert,
+            monitor=config.getboolean("server", "monitor-enabled", fallback=False),
         ))
     else:
         asyncio.run(main(
             ip_address=config.get("server", "ip"),
             port=config.getint("server", "port", fallback=8001),
+            monitor=config.getboolean("server", "monitor-enabled", fallback=False),
         ))
