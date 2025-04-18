@@ -4,6 +4,5 @@
 /student_list
 /web/API_Key.txt
 /config.ini
-/web/node_modules/
-/node_modules/
+#/web/node_modules/
 /web/dist/

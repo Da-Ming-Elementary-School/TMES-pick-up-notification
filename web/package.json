@@ -31,7 +31,8 @@
     "appId": "com.daming.notify",
     "productName": "大明國小課托呼叫系統 客戶端",
     "files": [
-      "**/*"
+      "**/*",
+      "./node_modules/*"
     ],
     "directories": {
       "output": "dist"
