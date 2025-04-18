@@ -6,8 +6,12 @@
     "url": "https://tmes.tc.edu.tw/"
   },
   "contributors": [
-    {"name": "Michael Xu"},
-    {"name": "Allen Wei"}
+    {
+      "name": "Michael Xu"
+    },
+    {
+      "name": "Allen Wei"
+    }
   ],
   "version": "1.0.1-beta",
   "repository": "github:Da-Ming-Elementary-School/TMES-pick-up-notification",
@@ -37,12 +41,15 @@
     },
     "win": {
       "target": "nsis",
-      "publish": ["github"],
+      "publish": [
+        "github"
+      ],
       "icon": "./image/favicon.ico"
     }
   },
   "dependencies": {
     "dialogs": "^2.0.1",
+    "electron-updater": "^6.6.2",
     "jquery": "^3.7.1"
   }
 }
