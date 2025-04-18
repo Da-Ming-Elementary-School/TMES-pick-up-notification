@@ -43,7 +43,7 @@ def receive_messages(websocket):
 
 def main(class_no: str):
     global CONNECTED, CLASS_NO
-    with connect("wss://192.168.112.104:8001/", ping_interval=None, ping_timeout=None, ssl=SSL_CONTEXT) as websocket:
+    with connect("ws://localhost:8001", ping_interval=None, ping_timeout=None) as websocket:
         if not CONNECTED:
             websocket.send(dumps(
                 {"type": "INIT",
