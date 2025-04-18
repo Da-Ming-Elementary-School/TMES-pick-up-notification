@@ -3,6 +3,10 @@ const { app, BrowserWindow } = require('electron');
 const { autoUpdater } = require('electron-updater');
 // const path = require('path');
 
+autoUpdater.logger = require("electron-log");
+autoUpdater.logger.transports.file.level = "debug";
+autoUpdater.checkForUpdatesAndNotify();
+
 function createWindow () {
     const win = new BrowserWindow({
         autoHideMenuBar: true,
@@ -19,7 +23,6 @@ function createWindow () {
 }
 
 app.whenReady().then(() => {
-    autoUpdater.checkForUpdates();
     createWindow();
 
     app.on('activate', () => {

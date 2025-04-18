@@ -50,6 +50,7 @@
   },
   "dependencies": {
     "dialogs": "^2.0.1",
+    "electron-log": "^5.3.3",
     "electron-updater": "^6.6.2",
     "jquery": "^3.7.1"
   }
