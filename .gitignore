@@ -4,3 +4,6 @@
 /student_list
 /web/API_Key.txt
 /config.ini
+/tmes-capacitor-app/www/dist/
+/node_modules/
+/tmes-capacitor-app/node_modules/
