@@ -5,7 +5,7 @@ const { autoUpdater } = require('electron-updater');
 
 app.setAppUserModelId("DMES.PickUpNotification");
 
-autoUpdater.logger = require("electron-log");
+autoUpdater.logger = require("electron-log/main");
 autoUpdater.logger.transports.file.level = "debug";
 autoUpdater.autoDownload = true;
 autoUpdater.autoInstallOnAppQuit = true;
