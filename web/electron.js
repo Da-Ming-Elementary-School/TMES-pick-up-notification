@@ -1,11 +1,17 @@
 // electron.js
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, Notification } = require('electron');
 const { autoUpdater } = require('electron-updater');
 // const path = require('path');
 
+app.setAppUserModelId("DMES.PickUpNotification");
+
 autoUpdater.logger = require("electron-log");
 autoUpdater.logger.transports.file.level = "debug";
-autoUpdater.checkForUpdatesAndNotify();
+autoUpdater.autoDownload = true;
+autoUpdater.autoInstallOnAppQuit = true;
+autoUpdater.checkForUpdatesAndNotify().then((result) => {
+    console.log(result.isUpdateAvailable);
+});
 
 function createWindow () {
     const win = new BrowserWindow({
