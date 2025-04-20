@@ -13,7 +13,7 @@
       "name": "Allen Wei"
     }
   ],
-  "version": "1.0.4",
+  "version": "1.0.5",
   "repository": "github:Da-Ming-Elementary-School/TMES-pick-up-notification",
   "main": "electron.js",
   "bin": "./electron.js",
