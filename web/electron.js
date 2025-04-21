@@ -10,7 +10,7 @@ autoUpdater.logger.transports.file.level = "debug";
 autoUpdater.autoDownload = true;
 autoUpdater.autoInstallOnAppQuit = true;
 autoUpdater.checkForUpdatesAndNotify(
-    {title: "偵測到更新！", body: "已偵測到新版本。系統將自動於程式關閉後自動安裝更新。"}
+    {title: "偵測到更新！", body: "已偵測到新版本。系統將於程式關閉後自動安裝更新。"}
 ).then((result) => {
     console.log(result.isUpdateAvailable);
 });
