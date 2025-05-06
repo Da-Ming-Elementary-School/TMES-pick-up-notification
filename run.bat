@@ -1,4 +1,6 @@
 @echo off
 echo 透過虛擬環境啟動伺服器...
-".venv/Scripts/activate.bat" && python server.py
+call ".venv/Scripts/activate.bat"
+call pip install r requirements.txt
+call python server.py
 pause
