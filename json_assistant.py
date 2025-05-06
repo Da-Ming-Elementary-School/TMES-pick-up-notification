@@ -38,7 +38,7 @@ class StudentList:
         return self.classroom
 
     @staticmethod
-    def get_all_student_lists():
+    def get_all_student_lists() -> dict[str, list[dict[str, int | str]]]:
         all_student_lists = {}
         for file in os.listdir(StudentList.STUDENT_LIST_DIR):
             if not file.startswith('class_'):
@@ -50,7 +50,7 @@ class StudentList:
         return all_student_lists
 
     @staticmethod
-    def get_all_classrooms():
+    def get_all_classrooms() -> dict:
         all_classrooms = {}
         for file in os.listdir(StudentList.STUDENT_LIST_DIR):
             if not file.startswith('class_'):
