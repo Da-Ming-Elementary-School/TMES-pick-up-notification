@@ -412,13 +412,13 @@ function calledHistory() {
     let historyBtn = document.getElementById("called-history");
     let historySearchDiv = document.getElementById("history-search-container");
     let historySearch = document.getElementById("history-searchBar");
-    if (historyDiv.checkVisibility({visibilityProperty: true}) === false) {
+    if (historyDiv.style.visibility === "hidden") {
         historyDiv.style.visibility = "visible";
         historyDiv.style.height = "auto";
         historyBtn.textContent = "X";
         historyBtn.style.backgroundColor = "#ff0000";
         historySearchDiv.removeAttribute("style");
-    } else if (historyDiv.checkVisibility({visibilityProperty: false}) === true) {
+    } else {
         historySearchDiv.style.visibility = "hidden";
         historySearch.value = "";
         historyDiv.style.visibility = "hidden";
