@@ -1,11 +1,32 @@
 const express = require('express');
+const expressBasicAuth = require("express-basic-auth");
 const path = require('path');
-const app = express();
+const fs = require('fs');
 
-app.use(express.static('web'));
+const app = express();
+let admin_password = "admin"
+try {
+    admin_password = fs.readFileSync("admin_password.txt").toString()
+} catch (e) {
+    console.warn(`無法讀取 admin_password.txt，管理頁面之存取密碼設為 ${admin_password}`);
+    console.error(e);
+}
+const auth = expressBasicAuth({
+    users: {
+        "admin": admin_password
+    },
+    challenge: true
+})
+
+app.use(auth, express.static("web"));
+
 // 導到首頁
-app.get('/', (req, res) => {
+app.get('/', auth, (req, res) => {
     res.sendFile(path.join(__dirname, 'web', 'index.html'));
+});
+
+app.get('/manage', auth, (req, res) => {
+    res.sendFile(path.join(__dirname, 'web', 'manage.html'));
 });
 
 // 通知頁面
