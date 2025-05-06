@@ -76,7 +76,7 @@ async def handler(websocket: ServerConnection):
                     CONNECTED_CLIENTS[client_id].append(websocket)
                 else:
                     CONNECTED_CLIENTS[client_id] = [websocket]
-                if client_id == "777":
+                if client_id == "777" or client_id == "admin":
                     # return student list
                     student_list_callback: dict = {}
                     try:
