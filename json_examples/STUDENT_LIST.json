@@ -1,13 +1,15 @@
 {
   "type": "STUDENT_LIST",
-  "classroom": "101",
   "students": {
     "3A": [
       {
-        "classNo": 301,
-        "seatNo": 0,
-        "name": "王以翔"
+        "classNo": 304,
+        "seatNo": 19,
+        "name": "徐米米"
       }
     ]
+  },
+  "classrooms": {
+    "3A": "304"
   }
 }
