@@ -9,16 +9,18 @@
 <h1>學生資訊管理</h1>
 <p>伺服器位址：<code id="ws-url-display"></code></p>
 <div id="class-select">
-  <label for="class-selector">選擇班級：</label>
-  <select name="class" id="class-selector" required>
-    <option value="" selected disabled>選擇班級</option>
-  </select>
+    <label for="class-selector">選擇班級：</label>
+    <select name="class" id="class-selector" required>
+        <option value="" selected disabled>選擇班級</option>
+    </select>
 </div>
 <hr>
 <div id="class-data-editor" style="visibility: hidden;">
     <h2 id="class-id-title">課托班 1A 的資料</h2>
-    <label for="classroom-input">所在教室：</label>
-    <input type="text" id="classroom-input" value="304" required>
+    <div id="classroom-div">
+        <label for="classroom-input">所在教室：</label>
+        <input type="text" id="classroom-input" value="304" required>
+    </div>
     <p>學生清單：</p>
     <table id="student-table" style="width: 100%;">
         <tr>
