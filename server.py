@@ -213,7 +213,7 @@ async def update_server_stats():
     while True:
         target = CONNECTED_CLIENTS.get("monitor", [])
         if target:
-            logging.info("Gathering server stats")
+            logging.debug("Gathering server stats")
             report = {"python_version": sys.version,
                       "os_version": platform.platform() + platform.release(),
                       "cpu_usage": psutil.cpu_percent(),
@@ -224,7 +224,7 @@ async def update_server_stats():
                       "timestamp": time.time()}
             await send_message(report, "SERVER_STATS", target)
         else:
-            logging.info("No monitor found, skipping")
+            logging.debug("No monitor found, skipping")
         await asyncio.sleep(10)
 
 
