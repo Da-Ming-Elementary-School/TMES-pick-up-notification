@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>管理系統</title>
+    <link rel="stylesheet" href="manage.css">
+</head>
+<body>
+<h1>學生資訊管理</h1>
+<p>伺服器位址：<code id="ws-url-display"></code></p>
+<div id="class-select">
+  <label for="class-selector">選擇班級：</label>
+  <select name="class" id="class-selector" required>
+    <option value="" selected disabled>選擇班級</option>
+  </select>
+</div>
+<hr>
+<div id="class-data" style="visibility: hidden;">
+    <h2 id="class-id-title">課托班 1A 的資料</h2>
+    <label for="classroom-input">所在教室：</label>
+    <input type="text" id="classroom-input" value="304" required>
+    <p>學生清單：</p>
+    <table id="student-table" style="width: 100%;">
+        <tr>
+            <th style="width: 20%">原班級</th>
+            <th style="width: 15%">座號</th>
+            <th style="width: 40%">姓名</th>
+            <th style="width: 25%">動作</th>
+        </tr>
+    </table>
+</div>
+
+<script src="manage.js" defer></script>
+</body>
+</html>

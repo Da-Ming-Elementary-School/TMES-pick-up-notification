@@ -1,0 +1,41 @@
+@font-face {
+    font-family: "Huninn";
+    src: url("jf-openhuninn-2.1.ttf");
+}
+
+/*
+"open-huninn" by justfont. Licensed under SIL Open Font License 1.1.
+For more information, please check https://github.com/justfont/open-huninn-font
+*/
+
+* {
+    font-family: "Huninn", serif;
+}
+
+code {
+    font-family: monospace;
+}
+
+table, th, td {
+    border: 1px solid #000000;
+    border-collapse: collapse;
+}
+
+tr {
+    height: 3.5vh;
+}
+
+th {
+    font-family: Serif, serif;
+    font-size: 18px;
+    height: 5vh;
+}
+
+input, select {
+    font-size: inherit;
+}
+
+.action-btn {
+    margin-left: 0.5vw;
+    margin-right: 0.5vw;
+}
