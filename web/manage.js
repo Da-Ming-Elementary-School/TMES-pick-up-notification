@@ -145,6 +145,15 @@ function saveStudent(studentId) {
         if (cell.className === "btn-cell") {
             continue;
         }
+        if (cell.childNodes[0].value === "") {
+            alert("所有欄位皆須輸入值！")
+            return
+        }
+    }
+    for (const cell of row.cells) {
+        if (cell.className === "btn-cell") {
+            continue;
+        }
         cell.childNodes[0].disabled = true
     }
     const newData = {
