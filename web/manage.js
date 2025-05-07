@@ -66,16 +66,19 @@ document.getElementById("class-select").addEventListener("change", (event) => {
         const newRow = studentTable.insertRow()
         newRow.id = `row-${studentId}`
         const classNoInput = document.createElement("input")
-        classNoInput.type = "text"
+        classNoInput.type = "number"
         classNoInput.disabled = true
+        classNoInput.required = true
         classNoInput.value = student["classNo"]
         const seatNoInput = document.createElement("input")
-        seatNoInput.type = "text"
+        seatNoInput.type = "number"
         seatNoInput.disabled = true
+        seatNoInput.required = true
         seatNoInput.value = student["seatNo"]
         const nameInput = document.createElement("input")
         nameInput.type = "text"
         nameInput.disabled = true
+        nameInput.required = true
         nameInput.value = student["name"]
         newRow.insertCell().appendChild(classNoInput)
         newRow.insertCell().appendChild(seatNoInput)
@@ -94,7 +97,7 @@ document.getElementById("class-select").addEventListener("change", (event) => {
         saveBtn.id = `saveBtn-${studentId}`
         saveBtn.className = "action-btn"
         saveBtn.textContent = "儲存"
-        saveBtn.style.visibility = "hidden"
+        saveBtn.disabled = true
         saveBtn.addEventListener("click", () => {
             saveStudent(studentId)
         })
@@ -120,23 +123,55 @@ function editStudent(studentId) {
         }
         cell.childNodes[0].disabled = false
     }
-    document.getElementById(`editBtn-${studentId}`).style.visibility = "hidden"
-    document.getElementById(`saveBtn-${studentId}`).style.visibility = "visible"
+    document.getElementById(`editBtn-${studentId}`).disabled = true
+    document.getElementById(`saveBtn-${studentId}`).disabled = false
 }
 
 function saveStudent(studentId) {
     const row = document.getElementById(`row-${studentId}`)
-    EDITOR_DATA[studentId]["after"] = {
-        "classNo": row.cells[0].childNodes[0].value,
-        "seatNo": row.cells[1].childNodes[0].value,
+    for (const cell of row.cells) {
+        if (cell.className === "btn-cell") {
+            continue;
+        }
+        cell.childNodes[0].disabled = true
+    }
+    const newData = {
+        "classNo": parseInt(row.cells[0].childNodes[0].value),
+        "seatNo": parseInt(row.cells[1].childNodes[0].value),
         "name": row.cells[2].childNodes[0].value
     }
-    document.getElementById(`editBtn-${studentId}`).style.visibility = "visible"
-    document.getElementById(`saveBtn-${studentId}`).style.visibility = "hidden"
+    if (!dataIsTheSame(EDITOR_DATA[studentId]["before"], newData)) {
+        EDITOR_DATA[studentId]["after"] = newData
+        row.style.backgroundColor = "#f5ffb6"
+    } else {
+        delete EDITOR_DATA[studentId]["after"]
+        row.style.backgroundColor = null
+    }
+    document.getElementById(`editBtn-${studentId}`).disabled = false
+    document.getElementById(`saveBtn-${studentId}`).disabled = true
 }
 
 function deleteStudent(studentId) {
+    const row = document.getElementById(`row-${studentId}`)
+    for (const cell of row.cells) {
+        if (cell.className === "btn-cell") {
+            continue;
+        }
+        cell.childNodes[0].disabled = true
+    }
+    if (EDITOR_DATA[studentId]["after"] !== null) {
+        EDITOR_DATA[studentId]["after"] = null
+        row.style.backgroundColor = "#ffb6b6"
+    } else {
+        delete EDITOR_DATA[studentId]["after"]
+        row.style.backgroundColor = null
+    }
+}
 
+function dataIsTheSame(data1, data2) {
+    return (data1["classNo"] === data2["classNo"]
+         && data1["seatNo"] === data2["seatNo"]
+         && data1["name"] === data2["name"])
 }
 
 function formatStudentId(classNo, seatNo) {
