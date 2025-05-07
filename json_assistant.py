@@ -37,6 +37,14 @@ class StudentList:
     def get_classroom(self):
         return self.classroom
 
+    def sort_students(self):
+        student_list = self.get_student_list()
+        student_list.sort(key=lambda s: (s["classNo"], s["seatNo"]))
+        self.write_data({
+            "classroom": self.get_classroom(),
+            "students": student_list,
+        })
+
     @staticmethod
     def get_all_student_lists() -> dict[str, list[dict[str, int | str]]]:
         all_student_lists = {}
@@ -123,10 +131,11 @@ class StudentList:
 if __name__ == '__main__':
     start_time = time.time()
     for f in os.listdir(StudentList.STUDENT_LIST_DIR):
-        if not f.endswith(".csv") or len(f) > 6:
+        if not f.endswith(".json"):
             continue
         print(f)
-        StudentList.import_from_csv(class_no=f[:2])
+        class_obj = StudentList(class_no=f[6:8])
+        class_obj.sort_students()
 
     # pprint(StudentList.index_all_student_lists())
     print("Done. Time Taken:", time.time() - start_time)
