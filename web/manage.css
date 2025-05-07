@@ -39,3 +39,10 @@ input, select {
     margin-left: 0.5vw;
     margin-right: 0.5vw;
 }
+
+#classroom-div {
+    width: fit-content;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    padding-right: 1vw;
+}
