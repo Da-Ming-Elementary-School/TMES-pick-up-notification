@@ -40,6 +40,22 @@ input, select {
     margin-right: 0.5vw;
 }
 
+#create-student-button {
+    width: 100%;
+    margin-top: 0.5vw;
+    padding: 0.5%;
+    font-size: inherit;
+    color: white;
+    background-color: gray;
+    border: none;
+    transition-duration: 0.2s;
+}
+
+#create-student-button:hover {
+    color: black;
+    background-color: lightgray;
+}
+
 #classroom-div {
     width: fit-content;
     padding-top: 1vh;
