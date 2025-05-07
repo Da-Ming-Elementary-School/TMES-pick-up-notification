@@ -2,17 +2,19 @@
   "type": "EDIT",
   "password": "YWRtaW4=",
   "classNo": "3A",
-  "newClassroom": "305",
-  "newStudentData": [
-    {
-      "classNo": 304,
-      "seatNo": 19,
-      "name": "徐米米"
-    },
-    {
-      "classNo": 304,
-      "seatNo": 29,
-      "name": "魏紘思"
-    }
-  ]
+  "newData": {
+    "classroom": "305",
+    "students": [
+      {
+        "classNo": 304,
+        "seatNo": 19,
+        "name": "徐米米"
+      },
+      {
+        "classNo": 304,
+        "seatNo": 29,
+        "name": "魏紘思"
+      }
+    ]
+  }
 }
