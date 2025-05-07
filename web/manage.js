@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 document.getElementById("class-select").addEventListener("change", (event) => {
-    const classDataDiv = document.getElementById("class-data")
+    const classDataDiv = document.getElementById("class-data-editor")
     const classNo = event.target.value
     const studentList = STUDENT_DATA[classNo]
     const studentTable = document.getElementById("student-table");
