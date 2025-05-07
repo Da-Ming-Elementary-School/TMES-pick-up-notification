@@ -59,7 +59,7 @@ document.getElementById("class-select").addEventListener("change", (event) => {
     for (let i = 0; i < (rowCount - 1); i++) {
         studentTable.deleteRow(-1);
     }
-    EDITOR_DATA = {}
+    EDITOR_DATA = {"classroom": {"before": CLASSROOM_DATA[classNo]}}
     for (const student of studentList) {
         const studentId = formatStudentId(student["classNo"], student["seatNo"])
         EDITOR_DATA[studentId] = {"before": student}
@@ -113,6 +113,18 @@ document.getElementById("class-select").addEventListener("change", (event) => {
         btnCell.appendChild(deleteBtn)
     }
     classDataDiv.style.visibility = "visible";
+})
+
+document.getElementById("classroom-input").addEventListener("change", () => {
+    const classroomDiv = document.getElementById("classroom-div")
+    const classroomInput = document.getElementById("classroom-input")
+    if (classroomInput.value !== EDITOR_DATA["classroom"]["before"]) {
+        EDITOR_DATA["classroom"]["after"] = classroomInput.value
+        classroomDiv.style.backgroundColor = "#f5ffb6"
+    } else {
+        delete EDITOR_DATA["classroom"]["after"]
+        classroomDiv.style.backgroundColor = null
+    }
 })
 
 function editStudent(studentId) {
