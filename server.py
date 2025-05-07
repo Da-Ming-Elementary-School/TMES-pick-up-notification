@@ -8,6 +8,7 @@ import time
 import psutil
 from functools import partial
 from json import loads, dumps
+from base64 import b64encode
 from typing import Literal
 import logging
 from pprint import pprint
@@ -21,6 +22,12 @@ CONNECTED_CLIENTS: dict[str, list[ServerConnection]] = {}
 LOGGER = logger.create_logger()
 INDEX: dict = {}
 BASE_DIR = os.path.dirname(sys.argv[0])
+ADMIN_PASSWORD: str = ""
+try:
+    with open("admin_password.txt") as f:
+        ADMIN_PASSWORD = f.read()
+except FileNotFoundError:
+    ADMIN_PASSWORD = "admin"
 
 
 def data_is_stored(data) -> tuple[bool, str | None]:
@@ -137,6 +144,17 @@ async def handler(websocket: ServerConnection):
                 await send_message(
                     {"results": search(data["criteria"])}, "SEARCH_RESULT", websocket
                 )
+            elif msg_type == "EDIT":
+                if data["password"] == b64encode(ADMIN_PASSWORD.encode("utf-8")).decode("utf-8"):
+                    class_obj = json_assistant.StudentList(data["classNo"])
+                    new_data = data["newStudentData"]
+                    raw_data = {
+                        "classroom": new_data["newClassroom"],
+                        "students": new_data["newStudentData"],
+                    }
+                    class_obj.write_data(raw_data)
+                else:
+                    await send_message({"message": "Password incorrect"}, "ERROR", websocket)
             await send_message({"received": True}, "CALLBACK", websocket)
     except (ConnectionClosedError, ConnectionClosedOK) as e:
         logging.error(f"{type(e).__name__}: {e}")
