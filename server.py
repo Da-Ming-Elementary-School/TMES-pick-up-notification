@@ -22,12 +22,14 @@ CONNECTED_CLIENTS: dict[str, list[ServerConnection]] = {}
 LOGGER = logger.create_logger()
 INDEX: dict = {}
 BASE_DIR = os.path.dirname(sys.argv[0])
-ADMIN_PASSWORD: str = ""
+ADMIN_PASSWORD: str = "admin"
 try:
     with open("admin_password.txt") as f:
         ADMIN_PASSWORD = f.read()
-except FileNotFoundError:
-    ADMIN_PASSWORD = "admin"
+except Exception as error:
+    logging.warning("An error occurred while trying to read the admin_password.txt; admin password will be set as "
+                    f"\"{ADMIN_PASSWORD}\".")
+    logging.warning(error)
 
 
 def data_is_stored(data) -> tuple[bool, str | None]:
