@@ -42,18 +42,32 @@ input, select {
 
 #create-student-button {
     width: 100%;
-    margin-top: 0.5vw;
+    margin-top: 1vh;
     padding: 0.5%;
     font-size: inherit;
     color: white;
-    background-color: gray;
+    background-color: #7e7e7e;
     border: none;
     transition-duration: 0.2s;
 }
 
 #create-student-button:hover {
-    color: black;
-    background-color: lightgray;
+    background-color: #8e8e8e;
+}
+
+#upload-button {
+    width: 100%;
+    margin-top: 1vh;
+    padding: 0.5%;
+    font-size: 1.8em;
+    color: white;
+    background-color: #baa968;
+    border: none;
+    transition-duration: 0.2s;
+}
+
+#upload-button:hover {
+    background-color: #cfbb6d;
 }
 
 #classroom-div {
