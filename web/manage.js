@@ -141,6 +141,7 @@ function editStudent(studentId) {
 
 function saveStudent(studentId) {
     const row = document.getElementById(`row-${studentId}`)
+    row.cells[2].childNodes[0].value = row.cells[2].childNodes[0].value.replaceAll(" ", "")
     for (const cell of row.cells) {
         if (cell.className === "btn-cell") {
             continue;
