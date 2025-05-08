@@ -18,10 +18,10 @@ const auth = expressBasicAuth({
     challenge: true
 })
 
-app.use(auth, express.static("web"));
+app.use(express.static("web"));
 
 // 導到首頁
-app.get('/', auth, (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'web', 'index.html'));
 });
 
