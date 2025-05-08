@@ -21,7 +21,9 @@ class StudentList:
             raise FileNotFoundError(f'{self.file_path} not found')
         self.student_list: list = []
         self.classroom: str = ""
+        self.load_data()
 
+    def load_data(self):
         with open(self.file_path, mode="r", encoding="utf-8") as f:
             json_data = load(f)
             self.student_list = json_data.get("students", [])
@@ -30,6 +32,7 @@ class StudentList:
     def write_data(self, data: dict):
         with open(self.file_path, mode="w", encoding="utf-8") as f:
             dump(data, f, indent=4, ensure_ascii=False)
+        self.load_data()
 
     def get_student_list(self):
         return self.student_list
