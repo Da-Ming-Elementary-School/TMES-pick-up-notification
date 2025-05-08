@@ -5,6 +5,15 @@
     <title>管理系統</title>
     <link rel="stylesheet" href="manage.css">
 </head>
+<div id="upload-confirm" style="visibility: hidden;">
+    <div id="password-popup">
+        <label for="upload-password-input">輸入 admin 密碼以繼續：</label>
+        <br><br>
+        <input type="password" id="upload-password-input" required>
+        <button id="submit-password-button">確定</button>
+        <button id="cancel-password-button">取消</button>
+    </div>
+</div>
 <body>
 <h1>學生資訊管理</h1>
 <p>伺服器位址：<code id="ws-url-display"></code></p>
