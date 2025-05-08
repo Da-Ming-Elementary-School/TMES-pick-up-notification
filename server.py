@@ -148,6 +148,8 @@ async def handler(websocket: ServerConnection):
                 if data["password"] == b64encode(ADMIN_PASSWORD.encode("utf-8")).decode("utf-8"):
                     class_obj = json_assistant.StudentList(data["classNo"])
                     class_obj.write_data(data["newData"])
+                    class_obj.sort_students()
+                    await send_message({"success": True}, "CALLBACK", websocket)
                 else:
                     await send_message({"message": "Password incorrect"}, "ERROR", websocket)
             await send_message({"received": True}, "CALLBACK", websocket)
