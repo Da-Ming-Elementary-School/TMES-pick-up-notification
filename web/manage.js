@@ -1,18 +1,20 @@
+let WS = null;
+
 let STUDENT_DATA = {}
 let CLASSROOM_DATA = {}
 let EDITOR_DATA = {}
 
 document.addEventListener("DOMContentLoaded", () => {
     const wsUrl = window.localStorage.getItem("wsUrl") || `ws://${window.location.hostname}:8001`
-    const ws = new WebSocket(wsUrl);
+    WS = new WebSocket(wsUrl);
 
     const wsUrlDisplay = document.getElementById('ws-url-display');
     wsUrlDisplay.textContent = wsUrl
     wsUrlDisplay.style.color = 'gray';
 
-    ws.onopen = () => {
-        console.log(`WS connected to ${ws.url}`);
-        ws.send(JSON.stringify(
+    WS.onopen = () => {
+        console.log(`WS connected to ${WS.url}`);
+        WS.send(JSON.stringify(
             {
                 "type": "INIT",
                 "classNo": "admin"
@@ -21,17 +23,24 @@ document.addEventListener("DOMContentLoaded", () => {
         wsUrlDisplay.style.color = 'green';
     }
 
-    ws.onclose = (event) => {
+    WS.onclose = (event) => {
         wsUrlDisplay.style.color = 'red';
         if (event.code !== 1000) {
             console.error(`WS connection closed: ${event.code}`);
         }
     }
 
-    ws.onmessage = (event) => {
+    WS.onmessage = (event) => {
         const data = JSON.parse(event.data);
+        console.log(data)
         if (data["type"] === "CALLBACK") {
-            return;
+            if (data["success"] === true) {
+                document.getElementById("upload-confirm").style.visibility = "hidden";
+                const doReload = confirm(`已儲存 ${EDITOR_DATA["classNo"]} 的資料！是否立即重整以反映變更？`);
+                if (doReload) {
+                    window.location.reload();
+                }
+            }
         }
         if (data["type"] === "STUDENT_LIST") {
             STUDENT_DATA = data["students"]
@@ -43,13 +52,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 classOption.value = k
                 classSelector.add(classOption)
             }
+        } else if (data["type"] === "ERROR") {
+            alert(`輸入的密碼錯誤。\n錯誤訊息：${data["message"]}`);
         }
     }
 })
 
 document.getElementById("class-select").addEventListener("change", (event) => {
-    const classDataDiv = document.getElementById("class-data-editor")
+    const changesCount = calculateChanges()
     const classNo = event.target.value
+    if (EDITOR_DATA["classNo"] !== classNo && (changesCount["edit"] !== 0 || changesCount["delete"] !== 0)) {
+        const doContinue = confirm(`目前尚有未上傳的變更。\n是否放棄對 ${EDITOR_DATA["classNo"]} 的變更，並切換班級至 ${classNo}？`)
+        if (!doContinue) {
+            event.target.value = EDITOR_DATA["classNo"]
+            return
+        }
+    }
+    const classDataDiv = document.getElementById("class-data-editor")
     const studentList = STUDENT_DATA[classNo]
     const studentTable = document.getElementById("student-table");
     classDataDiv.style.visibility = "hidden";
@@ -59,7 +78,7 @@ document.getElementById("class-select").addEventListener("change", (event) => {
     for (let i = 0; i < (rowCount - 1); i++) {
         studentTable.deleteRow(-1);
     }
-    EDITOR_DATA = {"classroom": {"before": CLASSROOM_DATA[classNo]}}
+    EDITOR_DATA = {"classNo": classNo, "classroom": {"before": CLASSROOM_DATA[classNo]}}
     for (const student of studentList) {
         addRow(studentTable, student)
     }
@@ -81,6 +100,52 @@ document.getElementById("classroom-input").addEventListener("change", () => {
 document.getElementById("create-student-button").addEventListener("click", () => {
     const studentId = addRow(document.getElementById("student-table"))
     document.getElementById(`editBtn-${studentId}`).click()
+})
+
+document.getElementById("upload-button").addEventListener("click", () => {
+    const edits = calculateChanges()
+    if (edits["edit"] === 0 && edits["delete"] === 0) {
+        alert("目前尚無任何變更。請進行編輯 / 刪除 / 新增後再行上傳。")
+    } else {
+        document.getElementById("upload-confirm").style.visibility = "visible"
+    }
+})
+
+document.getElementById("cancel-password-button").addEventListener("click", () => {
+    document.getElementById("upload-confirm").style.visibility = "hidden"
+})
+
+document.getElementById("submit-password-button").addEventListener("click", () => {
+    const newData = {
+        "classroom": EDITOR_DATA["classroom"]["after"] || EDITOR_DATA["classroom"]["before"],
+        "students": []
+    }
+    for (const [k, v] of Object.entries(EDITOR_DATA)) {
+        if (k === "classroom" || k === "classNo") {
+            continue;
+        }
+        if ("after" in v) {
+            if (v["after"] !== null) {
+                newData["students"].push(v["after"])
+            }
+        } else {
+            if (!dataIsTheSame(v["before"], {
+                "classNo": "",
+                "seatNo": "",
+                "name": ""
+            }))
+                newData["students"].push(v["before"])
+        }
+    }
+    console.log(newData)
+    const editedData = {
+        "type": "EDIT",
+        "password": btoa(document.getElementById("upload-password-input").value),
+        "classNo": EDITOR_DATA["classNo"],
+        "newData": newData
+    }
+    console.log(editedData)
+    WS.send(JSON.stringify(editedData))
 })
 
 function addRow(table, student) {
@@ -213,10 +278,28 @@ function deleteStudent(studentId) {
     document.getElementById(`saveBtn-${studentId}`).disabled = true
 }
 
+function calculateChanges() {
+    let result = {"edit": 0, "delete": 0}
+    for (const [k, v] of Object.entries(EDITOR_DATA)) {
+        if (k === "classNo") {
+            continue;
+        }
+        if ("after" in v) {
+            if (v["after"] !== null) {
+                result["edit"]++
+            } else if (v["after"] === null && k.length < 6) {
+                result["delete"]++
+            }
+        }
+    }
+    console.log(`${result["edit"]} edits and ${result["delete"]} deletions are made.`)
+    return result
+}
+
 function dataIsTheSame(data1, data2) {
     return (data1["classNo"] === data2["classNo"]
-         && data1["seatNo"] === data2["seatNo"]
-         && data1["name"] === data2["name"])
+        && data1["seatNo"] === data2["seatNo"]
+        && data1["name"] === data2["name"])
 }
 
 function formatStudentId(classNo, seatNo) {
