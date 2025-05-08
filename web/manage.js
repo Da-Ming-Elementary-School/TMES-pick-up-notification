@@ -61,56 +61,7 @@ document.getElementById("class-select").addEventListener("change", (event) => {
     }
     EDITOR_DATA = {"classroom": {"before": CLASSROOM_DATA[classNo]}}
     for (const student of studentList) {
-        const studentId = formatStudentId(student["classNo"], student["seatNo"])
-        EDITOR_DATA[studentId] = {"before": student}
-        const newRow = studentTable.insertRow()
-        newRow.id = `row-${studentId}`
-        const classNoInput = document.createElement("input")
-        classNoInput.type = "number"
-        classNoInput.disabled = true
-        classNoInput.required = true
-        classNoInput.value = student["classNo"]
-        const seatNoInput = document.createElement("input")
-        seatNoInput.type = "number"
-        seatNoInput.disabled = true
-        seatNoInput.required = true
-        seatNoInput.value = student["seatNo"]
-        const nameInput = document.createElement("input")
-        nameInput.type = "text"
-        nameInput.disabled = true
-        nameInput.required = true
-        nameInput.value = student["name"]
-        newRow.insertCell().appendChild(classNoInput)
-        newRow.insertCell().appendChild(seatNoInput)
-        newRow.insertCell().appendChild(nameInput)
-        const btnCell = newRow.insertCell()
-        btnCell.className = "btn-cell"
-        btnCell.style.textAlign = "center"
-        const editBtn = document.createElement("button")
-        editBtn.id = `editBtn-${studentId}`
-        editBtn.className = "action-btn"
-        editBtn.textContent = "編輯"
-        editBtn.addEventListener("click", () => {
-            editStudent(studentId)
-        })
-        const saveBtn = document.createElement("button")
-        saveBtn.id = `saveBtn-${studentId}`
-        saveBtn.className = "action-btn"
-        saveBtn.textContent = "儲存"
-        saveBtn.disabled = true
-        saveBtn.addEventListener("click", () => {
-            saveStudent(studentId)
-        })
-        const deleteBtn = document.createElement("button")
-        deleteBtn.id = `deleteBtn-${studentId}`
-        deleteBtn.className = "action-btn"
-        deleteBtn.textContent = "刪除"
-        deleteBtn.addEventListener("click", () => {
-            deleteStudent(studentId)
-        })
-        btnCell.appendChild(editBtn)
-        btnCell.appendChild(saveBtn)
-        btnCell.appendChild(deleteBtn)
+        addRow(studentTable, student)
     }
     classDataDiv.style.visibility = "visible";
 })
@@ -126,6 +77,76 @@ document.getElementById("classroom-input").addEventListener("change", () => {
         classroomDiv.style.backgroundColor = null
     }
 })
+
+document.getElementById("create-student-button").addEventListener("click", () => {
+    const studentId = addRow(document.getElementById("student-table"))
+    document.getElementById(`editBtn-${studentId}`).click()
+})
+
+function addRow(table, student) {
+    let studentId;
+    if (student === undefined || student === null) {
+        studentId = guidGenerator()
+        student = {
+            "classNo": "",
+            "seatNo": "",
+            "name": ""
+        }
+    } else {
+        studentId = formatStudentId(student["classNo"], student["seatNo"])
+    }
+    EDITOR_DATA[studentId] = {"before": student}
+    const newRow = table.insertRow()
+    newRow.id = `row-${studentId}`
+    const classNoInput = document.createElement("input")
+    classNoInput.type = "number"
+    classNoInput.disabled = true
+    classNoInput.required = true
+    classNoInput.value = student["classNo"]
+    const seatNoInput = document.createElement("input")
+    seatNoInput.type = "number"
+    seatNoInput.disabled = true
+    seatNoInput.required = true
+    seatNoInput.value = student["seatNo"]
+    const nameInput = document.createElement("input")
+    nameInput.type = "text"
+    nameInput.disabled = true
+    nameInput.required = true
+    nameInput.value = student["name"]
+    newRow.insertCell().appendChild(classNoInput)
+    newRow.insertCell().appendChild(seatNoInput)
+    newRow.insertCell().appendChild(nameInput)
+    const btnCell = newRow.insertCell()
+    btnCell.className = "btn-cell"
+    btnCell.style.textAlign = "center"
+    const editBtn = document.createElement("button")
+    editBtn.id = `editBtn-${studentId}`
+    editBtn.className = "action-btn"
+    editBtn.textContent = "編輯"
+    editBtn.addEventListener("click", () => {
+        editStudent(studentId)
+    })
+    const saveBtn = document.createElement("button")
+    saveBtn.id = `saveBtn-${studentId}`
+    saveBtn.className = "action-btn"
+    saveBtn.textContent = "儲存"
+    saveBtn.disabled = true
+    saveBtn.addEventListener("click", () => {
+        saveStudent(studentId)
+    })
+    const deleteBtn = document.createElement("button")
+    deleteBtn.id = `deleteBtn-${studentId}`
+    deleteBtn.className = "action-btn"
+    deleteBtn.textContent = "刪除"
+    deleteBtn.addEventListener("click", () => {
+        deleteStudent(studentId)
+    })
+    btnCell.appendChild(editBtn)
+    btnCell.appendChild(saveBtn)
+    btnCell.appendChild(deleteBtn)
+
+    return studentId
+}
 
 function editStudent(studentId) {
     const row = document.getElementById(`row-${studentId}`)
