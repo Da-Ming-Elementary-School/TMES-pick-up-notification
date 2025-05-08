@@ -209,6 +209,8 @@ function deleteStudent(studentId) {
         delete EDITOR_DATA[studentId]["after"]
         row.style.backgroundColor = null
     }
+    document.getElementById(`editBtn-${studentId}`).disabled = false
+    document.getElementById(`saveBtn-${studentId}`).disabled = true
 }
 
 function dataIsTheSame(data1, data2) {
