@@ -34,15 +34,17 @@
         <label for="classroom-input">所在教室：</label>
         <input type="text" id="classroom-input" value="304" required>
     </div>
-    <p>學生清單：</p>
-    <table id="student-table" style="width: 100%;">
-        <tr>
-            <th style="width: 20%">原班級</th>
-            <th style="width: 15%">座號</th>
-            <th style="width: 40%">姓名</th>
-            <th style="width: 25%">動作</th>
-        </tr>
-    </table>
+    <div id="student-div">
+        <label style="display: block; padding: 1vh 0">學生清單：</label>
+        <table id="student-table" style="width: 100%;">
+            <tr>
+                <th style="width: 20%">原班級</th>
+                <th style="width: 15%">座號</th>
+                <th style="width: 40%">姓名</th>
+                <th style="width: 25%">動作</th>
+            </tr>
+        </table>
+    </div>
     <button id="create-student-button">➕ 新增學生</button>
     <button id="upload-button">⬆️ 上傳變更</button>
 </div>
