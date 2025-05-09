@@ -70,24 +70,24 @@ $(document).ready(function () {
         document.getElementById("enterGeneralClass").style.visibility = "hidden";
     }
 
-    navigator.permissions.query({name: "notifications"}).then(function (result) {
-        if (result.state === "granted") {
-            console.log("Notify is granted");
-        } else if (result.state === "prompt") {
-            console.log("Notify is not granted, sending request");
-            alert("稍後將跳出「通知權限」視窗，請按下「允許」以便啟用桌面通知。");
-            Notification.requestPermission().then(permission => {
-                if (permission === "granted") {
-                    console.log("Notify is granted");
-                } else {
-                    console.log("Notify is denied");
-                }
-            });
-        } else {
-            console.log("Notify is denied");
-            alert("注意：尚未給予通知權限，桌面通知將無法使用。");
-        }
-    })
+    // navigator.permissions.query({name: "notifications"}).then(function (result) {
+    //     if (result.state === "granted") {
+    //         console.log("Notify is granted");
+    //     } else if (result.state === "prompt") {
+    //         console.log("Notify is not granted, sending request");
+    //         alert("稍後將跳出「通知權限」視窗，請按下「允許」以便啟用桌面通知。");
+    //         Notification.requestPermission().then(permission => {
+    //             if (permission === "granted") {
+    //                 console.log("Notify is granted");
+    //             } else {
+    //                 console.log("Notify is denied");
+    //             }
+    //         });
+    //     } else {
+    //         console.log("Notify is denied");
+    //         alert("注意：尚未給予通知權限，桌面通知將無法使用。");
+    //     }
+    // })
 
     WS.onopen = function () {
         $("#wsUrlDisplay").css("color", "green");
