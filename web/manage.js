@@ -74,18 +74,18 @@ document.getElementById("class-select").addEventListener("change", (event) => {
     classDataDiv.style.visibility = "hidden";
     document.getElementById("classroom-input").value = CLASSROOM_DATA[classNo];
     document.getElementById("class-id-title").textContent = `課托班 ${classNo} 的資料`;
-    const rowCount = studentTable.rows.length
-    for (let i = 0; i < (rowCount - 1); i++) {
-        studentTable.deleteRow(-1);
-    }
+    cleanTable(studentTable)
     EDITOR_DATA = {"classNo": classNo, "classroom": {"before": CLASSROOM_DATA[classNo]}}
     for (const student of studentList) {
         addRow(studentTable, student)
     }
+    onClassroomEdited()
     classDataDiv.style.visibility = "visible";
 })
 
-document.getElementById("classroom-input").addEventListener("change", () => {
+document.getElementById("classroom-input").addEventListener("change", onClassroomEdited)
+
+function onClassroomEdited() {
     const classroomDiv = document.getElementById("classroom-div")
     const classroomInput = document.getElementById("classroom-input")
     if (classroomInput.value !== EDITOR_DATA["classroom"]["before"]) {
@@ -95,6 +95,42 @@ document.getElementById("classroom-input").addEventListener("change", () => {
         delete EDITOR_DATA["classroom"]["after"]
         classroomDiv.style.backgroundColor = null
     }
+}
+
+document.getElementById("csv-file-input").addEventListener("change", (event) => {
+    const file = event.target.files[0]
+    const doContinue = confirm(`匯入 CSV 將取代此班級目前的所有資料。是否確定匯入 ${file.name}？`)
+    if (!doContinue) {
+        event.target.value = null
+        return
+    }
+    const studentTable = document.getElementById("student-table");
+    const classNo = document.getElementById("class-selector").value
+    cleanTable(studentTable)
+    Papa.parse(file,
+        {
+            complete: (result) => {
+                console.log(result)
+                const rawData = result["data"]
+                const classroom = rawData[1][3] || ""
+                EDITOR_DATA = {"classNo": classNo, "classroom": {"after": classroom}}
+                document.getElementById("classroom-input").value = classroom
+                onClassroomEdited()
+                for (let i = 0; i < rawData.length; i++) {
+                    const row = rawData[i]
+                    if (i === 0) {
+                        continue
+                    }
+                    addRow(studentTable, {
+                        "classNo": row[0],
+                        "seatNo": row[1],
+                        "name": row[2],
+                    }, true)
+                }
+            },
+            dynamicTyping: true,
+            skipEmptyLines: true,
+        })
 })
 
 document.getElementById("create-student-button").addEventListener("click", () => {
@@ -148,7 +184,8 @@ document.getElementById("submit-password-button").addEventListener("click", () =
     WS.send(JSON.stringify(editedData))
 })
 
-function addRow(table, student) {
+function addRow(table, student, isImported) {
+    isImported = isImported || false
     let studentId;
     if (student === undefined || student === null) {
         studentId = guidGenerator()
@@ -160,8 +197,13 @@ function addRow(table, student) {
     } else {
         studentId = formatStudentId(student["classNo"], student["seatNo"])
     }
-    EDITOR_DATA[studentId] = {"before": student}
     const newRow = table.insertRow()
+    if (isImported) {
+        EDITOR_DATA[studentId] = {"after": student}
+        newRow.style.backgroundColor = "#f5ffb6"
+    } else {
+        EDITOR_DATA[studentId] = {"before": student}
+    }
     newRow.id = `row-${studentId}`
     const classNoInput = document.createElement("input")
     classNoInput.type = "number"
@@ -211,6 +253,13 @@ function addRow(table, student) {
     btnCell.appendChild(deleteBtn)
 
     return studentId
+}
+
+function cleanTable(table) {
+    const rowCount = table.rows.length
+    for (let i = 0; i < (rowCount - 1); i++) {
+        table.deleteRow(-1);
+    }
 }
 
 function editStudent(studentId) {

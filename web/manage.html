@@ -26,6 +26,10 @@
 <hr>
 <div id="class-data-editor" style="visibility: hidden;">
     <h2 id="class-id-title">課托班 1A 的資料</h2>
+    <div id="import-csv-div" style="padding-bottom: 1vh;">
+        <label for="csv-file-input">匯入 CSV 檔案：</label>
+        <input type="file" id="csv-file-input" accept=".csv">
+    </div>
     <div id="classroom-div">
         <label for="classroom-input">所在教室：</label>
         <input type="text" id="classroom-input" value="304" required>
@@ -43,6 +47,7 @@
     <button id="upload-button">⬆️ 上傳變更</button>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.js"></script>
 <script src="manage.js" defer></script>
 </body>
 </html>
