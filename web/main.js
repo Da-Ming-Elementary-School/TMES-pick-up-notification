@@ -399,7 +399,12 @@ document.getElementById("searchBar").addEventListener("keypress", function (even
 })
 
 document.getElementById("enterGeneralClass").addEventListener("click", function (event) {
-    window.localStorage.setItem("latestClassHash", "#GENERAL");
+    dialogs.confirm("你即將進入「值班教室」模式。此模式只應該在 302 教室使用。\n是否仍要進入「值班教室」模式？", toGeneral => {
+        if (toGeneral) {
+            window.location.hash = "GENERAL";
+            window.localStorage.setItem("latestClassHash", "#GENERAL");
+        }
+    })
 })
 
 $("#clearStorageUrl").on("click", function () {
