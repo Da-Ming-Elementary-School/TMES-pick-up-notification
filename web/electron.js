@@ -8,12 +8,15 @@ app.setAppUserModelId("DMES.PickUpNotification");
 autoUpdater.logger = require("electron-log/main");
 autoUpdater.logger.transports.file.level = "debug";
 autoUpdater.autoDownload = true;
-autoUpdater.autoInstallOnAppQuit = true;
+autoUpdater.autoRunAppAfterInstall = true
 autoUpdater.checkForUpdatesAndNotify(
     {title: "偵測到更新！", body: "已偵測到新版本。系統將於程式關閉後自動安裝更新。"}
 ).then((result) => {
     console.log(result.isUpdateAvailable);
 });
+autoUpdater.on("update-downloaded", () => {
+    autoUpdater.quitAndInstall()
+})
 
 function createWindow () {
     const win = new BrowserWindow({
