@@ -2,5 +2,8 @@
 /.venv
 /.idea
 /student_list
+/node_modules
+/web/node_modules
 /web/API_Key.txt
+/admin_password.txt
 /config.ini
